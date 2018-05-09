@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd"
+        xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:mobile="http://www.baidu.com/schemas/sitemap-mobile/1/">
+    <url>
+        <loc>https://www.chkui.com/article/vertx/vertx_source_code_how_to_create_cluster</loc>
+        <mobile:mobile type="pc,mobile"/>
+        <lastmod>2018-05-06T01:53:21+00:00</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.6</priority>
+    </url>
+    <url>
+        <loc>https://www.chkui.com/article/vertx/vertx_source_mongdb_config</loc>
+        <mobile:mobile type="pc,mobile"/>
+        <lastmod>2018-05-06T11:53:21+00:00</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.6</priority>
+    </url>
+    <url>
+        <loc>https://www.chkui.com/article/vertx/vertx_metrics_using_dropwizard</loc>
+        <mobile:mobile type="pc,mobile"/>
+        <lastmod>2018-05-07T16:19:21+00:00</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.6</priority>
+    </url>
+</urlset>
