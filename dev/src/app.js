@@ -3,10 +3,14 @@
  */
 'use strict';
 import React from 'react'
-import { Layout } from 'antd';
+import {Layout} from 'antd';
+const {Content} = Layout;
 import {Route, Switch} from 'pwfe-dom/router'
 import bundle from 'pwfe-dom/bundle'
 import {isElement} from 'pwfe-dom/util'
+import Header from './layout/header'
+import Sider from './layout/sider'
+const cn = require('classnames/bind').bind(require('./app.scss'));
 
 const element = (el) => {
     if (isElement(el)) {
@@ -33,24 +37,29 @@ const element = (el) => {
 const App = props => {
     const {init, routes, className, header, children, footer} = props;
     return (
-        <Layout id="pwfe-app-root" className={className}>
-            {element(header)}
-            {element(children)}
-            <Switch>
-                {routes.map(i => {
-                    const params = i.url ? {
-                        key: i.id,
-                        component: bundle(init.id === i.id && init.comp, i.component),
-                        exact: true,
-                        path: i.url
-                    } : {
-                        key: i.id,
-                        component: bundle(init.id === i.id && init.comp, i.component)
-                    }
-                    return (<Route {...params} />)
-                })}
-            </Switch>
-            {element(footer)}
+        <Layout className={cn('app-root','ant-layout-has-sider')} >
+            <Sider/>
+            <Layout>
+                <Header />
+                <Content className={cn('content')}>
+                    <Switch>
+                        {routes.map(i => {
+                            const params = i.url ? {
+                                key: i.id,
+                                component: bundle(init.id === i.id && init.comp, i.component),
+                                exact: true,
+                                path: i.url
+                            } : {
+                                key: i.id,
+                                component: bundle(init.id === i.id && init.comp, i.component)
+                            }
+                            return (<Route {...params} />)
+                        })}
+                    </Switch>
+                </Content>
+            </Layout>
+            {/*{element(children)}
+            {element(footer)}*/}
         </Layout>
     )
 }
