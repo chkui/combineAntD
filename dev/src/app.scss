@@ -1,8 +1,9 @@
+@import './style/define';
 .app-root{
     height:100%;
 }
 .content{
-    margin: 24px 16px;
-    padding: 24px;
+    margin: $ContentMargin;
+    padding: $ContentPadding;
     background: #fff;
 }

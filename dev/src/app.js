@@ -4,7 +4,6 @@
 'use strict';
 import React from 'react'
 import {Layout} from 'antd';
-const {Content} = Layout;
 import {Route, Switch} from 'pwfe-dom/router'
 import bundle from 'pwfe-dom/bundle'
 import {isElement} from 'pwfe-dom/util'
@@ -37,11 +36,11 @@ const element = (el) => {
 const App = props => {
     const {init, routes, className, header, children, footer} = props;
     return (
-        <Layout className={cn('app-root','ant-layout-has-sider')} >
+        <Layout hasSider className={cn('app-root')} >
             <Sider/>
             <Layout>
                 <Header />
-                <Content className={cn('content')}>
+                <Layout.Content className={cn('content')}>
                     <Switch>
                         {routes.map(i => {
                             const params = i.url ? {
@@ -56,7 +55,7 @@ const App = props => {
                             return (<Route {...params} />)
                         })}
                     </Switch>
-                </Content>
+                </Layout.Content>
             </Layout>
             {/*{element(children)}
             {element(footer)}*/}

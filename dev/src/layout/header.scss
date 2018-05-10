@@ -1,5 +1,13 @@
-.menu-icon{
+@import "../style/define";
+.avatar{
   font-size: 1rem;
-  padding: 0 16px;
+  margin-left: $ContentMargin;
   line-height: 64px;
+}
+.name{
+  margin-left: $ContentMargin;
+}
+.menu{
+  display: inline-block;
+  vertical-align: middle;
 }
