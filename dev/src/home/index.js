@@ -1,6 +1,6 @@
 import React from 'react'
 import { DatePicker, message } from 'antd';
-
+import html from './home.html'
 const cn = require('classnames/bind').bind(require('./home.scss'));
 
 class Home extends React.Component {
@@ -16,11 +16,7 @@ class Home extends React.Component {
     }
     render() {
         return (
-            <div>
-                <DatePicker onChange={value => this.handleChange(value)} />
-                <div style={{ marginTop: 20 }}>当前日期：{this.state.date.toString()}</div>
-                <div style={{height:'3000px', width:'100%', backgroundColor: '#000'}}>123</div>
-            </div>
+            <div className={cn('home-box')} dangerouslySetInnerHTML={{__html:html}} />
         );
     }
 }

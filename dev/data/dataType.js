@@ -5,6 +5,7 @@
 /**
  *
  * 数据类型全局定义。
+ * 1)为了增强性能，降低前后端耦合，数据类型使用字符串来表述，例如'string','document','number'
  * 如果由需要可以根据需要扩展，扩展任意类型必须核心开发人员讨论。任何新的类型都会影响表单数据的结构
  * @type {{
  *      string: {name: string, des: string},
@@ -17,7 +18,7 @@
 export const dataType ={
     string:{
         name:'字符串',
-        des:'字符串类型，可以是任意常规非富文本类型字符串',
+        des:'字符串类型，可以是任意常规非富文本类型字符串'
     },
     document:{
         name:'文档',
