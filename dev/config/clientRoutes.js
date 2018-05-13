@@ -18,12 +18,12 @@ export default [{//首页
             call(require("../src/home"))
         }, 'home')
     }
-},{//首页
-    id: "portal",
-    url: "/portal",
+},{
+    id: "form",
+    url: "/form",
     component: (call) => {
         require.ensure([], require => {
-            call(require("../src/portal"))
-        }, 'portal')
+            call(require("../src/page/form"))
+        }, 'form')
     }
 }];
