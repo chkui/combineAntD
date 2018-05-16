@@ -28,3 +28,17 @@ const formDefine = {
         },
     ]
 }
+
+/**
+ * 表单中一个栏目项的配置说明。组件的目标是只控制功能，不控制样式。
+ * @type {{label: string, isRequire: boolean}}
+ */
+const ItemDefine = {
+    column:'', //等效于Item组件的ID
+    label:'', //标题
+    isRequire:false, //对于表单来说是否为必填
+    emptyInfo:'', //当输入内容为空时需要显示的内容
+    errorInfo:'', //当输入内容错误时需要显示的内容
+    type:'', //组件类型['textInput'|]
+    validates:[],//按照验证顺序进行当前字段的表单验证
+}
