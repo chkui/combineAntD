@@ -38,5 +38,6 @@ StringEntry.propTypes = {
 };
 
 StringEntry.attribute = {
+    category:'input',
     type: 'string'
 }

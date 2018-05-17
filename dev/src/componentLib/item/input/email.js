@@ -42,5 +42,6 @@ EmailEntry.propTypes = {
 };
 
 EmailEntry.attribute = {
+    category:'input',
     type:'email'
 }

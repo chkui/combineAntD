@@ -11,20 +11,18 @@ const {Option, OptGroup} = Select;
  * @param props.form 接收 Form的form参数，用于提供验证功能
  * @param props.tip 录入的提示信息
  * @param props.label 标签信息
- * @param props.opts 下拉菜单结构。
- *    1)[{id:'', name: ''}..]
+ * @param props.options 下拉菜单结构。
+ *    1)[{value:'', label: ''}..]
  *    2)[{
- *          id:'' 菜单选择值
- *          type:'option', 下拉菜单类型 option表示是一个下拉菜单选项
+ *          value:'' 菜单选择值
+ *          label:'option', 下拉菜单类型 option表示是一个下拉菜单选项
  *          name:'', 菜单名称
  *      }, {
- *          id:'',
- *          type:'group', group表示是一个下拉菜单分组标记
- *          name:'Group', 分组显示的名称
+ *          value:'',
+ *          label:'Group', 分组显示的名称
  *          children:{ 子菜单
- *              id:'' 菜单选择值
- *              type:'option',
- *              name:''
+ *              value:'' 菜单选择值
+ *              label:'option'
  *      }}]
  * @returns {*}
  * @constructor
@@ -37,7 +35,7 @@ export const StandardEntry = props =>
         tip={props.tip}
         rules={props.rules}
         hasFeedback>
-        <SelectWrapper opts={props.opts}/>
+        <SelectWrapper options={props.options}/>
     </BaseEntryItem>);
 StandardEntry.defaultProps = {
     rules: [{required: false, message: '请选择相关内容',}]
@@ -48,23 +46,24 @@ StandardEntry.propTypes = {
     form: PropTypes.object.isRequired,
     rules: PropTypes.array,
     tip: PropTypes.string,
-    opts: PropTypes.array.isRequired
+    options: PropTypes.array.isRequired
 };
 StandardEntry.attribute = {
-    type:'email'
+    category:'select',
+    type: 'standard'
 }
 
 /**
  * 支持一级或二级菜单，如果是多级联动，请选择Cascader
- * @param {array} props.opts 下拉菜单选项，分组选项。
- *      列表结构：[{
- *          id:'' 菜单选择值
- *          type:'option', 下拉菜单类型 option表示是一个下拉菜单选项
+ * @param props.options 下拉菜单结构。
+ *    1)[{value:'', label: ''}..]
+ *    2)[{
+ *          value:'' 菜单选择值
+ *          label:'option', 下拉菜单类型 option表示是一个下拉菜单选项
  *          name:'', 菜单名称
  *      }, {
- *          id:'',
- *          type:'group', group表示是一个下拉菜单分组标记
- *          name:'Group', 分组显示的名称
+ *          value:'',
+ *          label:'Group', 分组显示的名称
  *          children:{ 子菜单
  *              id:'' 菜单选择值
  *              type:'option',
@@ -73,7 +72,7 @@ StandardEntry.attribute = {
  */
 class SelectWrapper extends React.Component {
     render() {
-        const opts = this.props.opts;
+        const opts = this.props.options;
         if (opts) {
             return (<Select>{buildSelect(opts)}</Select>)
         } else {
@@ -87,7 +86,7 @@ class SelectWrapper extends React.Component {
  * @param opts
  */
 const buildSelect = opts => opts.map(opt => {
-    return ('group' === opt.type) ?
-        (<OptGroup key={opt.id} label={opt.name}>{buildSelect(opt.children)}</OptGroup>) :
-        (<Option key={opt.id} value={opt.id}>{opt.name}</Option>)
+    return opt.children ?
+        (<OptGroup key={opt.value} label={opt.label}>{buildSelect(opt.children)}</OptGroup>) :
+        (<Option key={opt.value} value={opt.value}>{opt.label}</Option>)
 })
