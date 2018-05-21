@@ -1,31 +1,7 @@
- n'h'j'b'n'n'n'n'pimport React from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
 import { Cascader } from 'antd';
 import {BaseEntryItem} from '../baseItem'
-
-const options = [{
-    value: 'zhejiang',
-    label: 'Zhejiang',
-    children: [{
-        value: 'hangzhou',
-        label: 'Hangzhou',
-        children: [{
-            value: 'xihu',
-            label: 'West Lake',
-        }],
-    }],
-}, {
-    value: 'jiangsu',
-    label: 'Jiangsu',
-    children: [{
-        value: 'nanjing',
-        label: 'Nanjing',
-        children: [{
-            value: 'zhonghuamen',
-            label: 'Zhong Hua Men',
-        }],
-    }],
-}];
 
 /**
  * 级联下拉选择器，建议最多到第三层
@@ -55,7 +31,7 @@ export const CascaderEntry = props =>
         tip={props.tip}
         rules={props.rules}
         hasFeedback>
-        <Cascader options={options}/>
+        <Cascader options={props.options}/>
     </BaseEntryItem>);
 CascaderEntry.propTypes = {
     column: PropTypes.string.isRequired,
