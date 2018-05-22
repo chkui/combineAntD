@@ -29,23 +29,24 @@ export const site = {
     itemMetaSet: [
         {
             category: 'Input',
-            type: 'Email',
-            column: 'email',
-            label: '电子邮件',
+            type: 'Text',
+            column: 'siteCode',
+            label: '站点编码(code)',
+            listShow: 1,
             rules: [],
         }, {
             category: 'Input',
             type: 'Text',
-            column: 'firstName',
-            label: '姓',
+            column: 'siteName',
+            label: '站点名称',
             rules: [{
-                type:'string', max: 3, message: '姓名不能超过3个字符'
+                type:'string', max: 64, message: '请用最多使用64个字符'
             }],
         }, {
             category: 'Input',
             type: 'Text',
-            column: 'secondName',
-            label: '名',
+            column: 'parentSiteCode',
+            label: '上级站点',
         }, {
             category: 'Select',
             type: 'Standard',
