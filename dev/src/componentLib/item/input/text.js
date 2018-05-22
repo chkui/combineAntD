@@ -14,30 +14,23 @@ import {BaseEntryItem} from '../baseItem'
  * @constructor
  */
 export const TextEntry = props =>
-    (<BaseEntryItem
-        column={props.column}
-        label={props.label}
-        form={props.form}
-        tip={props.tip}
-        rules={props.rules}
-        hasFeedback>
+    (<BaseEntryItem {...props} hasFeedback>
         <Input type="text"/>
-    </BaseEntryItem>);
+    </BaseEntryItem>)
 
 TextEntry.defaultProps = {
     rules: [{
-        type: 'string', max: 32, message: '最大只能输入32个字符'
+        type: 'string', max: 32, message: '限定输入32个字符'
     }]
 };
 TextEntry.propTypes = {
     column: PropTypes.string.isRequired,
     label: PropTypes.string.isRequired,
-    form: PropTypes.object.isRequired,
     rules: PropTypes.array,
     tip: PropTypes.string
 };
 
 TextEntry.attribute = {
-    category:'Input',
+    category: 'Input',
     type: 'Text'
 }

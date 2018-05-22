@@ -36,7 +36,6 @@ export const CascaderEntry = props =>
 CascaderEntry.propTypes = {
     column: PropTypes.string.isRequired,
     label: PropTypes.string.isRequired,
-    form: PropTypes.object.isRequired,
     rules: PropTypes.array,
     tip: PropTypes.string,
     options: PropTypes.array.isRequired

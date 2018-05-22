@@ -1,19 +1,32 @@
-import {category} from './component'
-
-/**
- * 表单配置信息表，
- * 页面表单布局采用横向转换4-2-1布局（思考是否需要贪心算法步进位置），组件根据需要会占据4到1格的位置
- * @type {{type: string, column: *[]}}
- */
-
 /**
  *
  * @type {{type: string, bussId: string, columnMetaSet: *[]}}
  */
-export const oneForm = {
-    type: 'flow', //表单所属业务类型，['flow'|'asset'] 流程表单|资产表单
-    bussId: '123456',//所属业务关键主键，标识该表单对应的业务或流程
-    itemMetaSet: [ //描述字段-名称-组件-长度限定，{}
+export const site = {
+    //表单所属业务类型，['flow'|'asset'|'static'] 流程表单|资产表单|固定表单。
+    // 1)固定表单由开发人员预设的表单，具备特殊的功能，已经预先开发到前端系统中。
+    type: 'asset',
+    // 当前表单的标识字段
+    column: 'optionsSiteConfig',
+    // list用于标记该项的入口页面是否为一个列表。
+    // 1)如果有列表，对应的列表页面为 /list/${column}
+    // 2)如果没有列表，点击这个表单对应的菜单时，会直接使用/${column}来访问，不携带任何参数。
+    list: {
+        options:[
+            'view', //可查看，点击具体项目之后会提供详情页面访问,跳转路径 /[assert|flow]/${column}/${当前数据的主键值}
+            'new', //可列表新建
+            'delete', //可列表删除
+            'search' //可搜索
+        ],
+    },
+    options: {
+        query:'', //列表查询接口，如果有列表，必须组装这个选项
+        get:'', //单项数据获取接口
+        submit:'' //数据提交接口
+    },
+    // 表单的项目字段名称
+    //
+    itemMetaSet: [
         {
             category: 'Input',
             type: 'Email',

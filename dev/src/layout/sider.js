@@ -13,6 +13,7 @@ const SiderWrapper = props =>
                 defaultOpenKeys={['sub1']}
                 mode="inline"
             >
+                <Menu.Item key="222">Option 1</Menu.Item>
                 <SubMenu key="sub1" title={<span><Icon type="link" /><span>说明</span></span>}>
                     <Menu.Item key="1">Option 1</Menu.Item>
                     <Menu.Item key="2">Option 2</Menu.Item>
