@@ -1,11 +1,13 @@
 import React from 'react'
 import HorizontalForm from '../componentLib/form/horizontalForm'
 
-const Form = props =>
-    <div>Form
+const Form = props => {
+    props.match.params
+    return (
         <div>
-            <HorizontalForm />
-        </div>
-    </div>
-
+            <div>
+                <HorizontalForm/>
+            </div>
+        </div>)
+}
 export default Form

@@ -42,7 +42,7 @@ export default Form.create()(HorizontalForm);
 
 function FormBuilder(formData) {
     const list = [];
-    for (let item of data.itemMetaSet) {
+    for (let item of formData.itemMetaSet) {
         const Component = Items[item.category][item.type].Entry;
         list.push(<Component key={item.column}{...item}/>)
     }

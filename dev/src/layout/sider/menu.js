@@ -37,7 +37,7 @@ const generateMenu = (m) => {
         (<Menu.Item key={m.id}><Link to={generateLink(m)}>{m.label}</Link></Menu.Item>)
 }
 const generateLink = (m) => {
-    return m.url ? m.url : `/form/${m.form}`
+    return m.url ? m.url : (m.list ? `/list/${m.form}` : `/form/${m.form}`);
 }
 
 const MenuWrapper = connect(

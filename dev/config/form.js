@@ -45,10 +45,6 @@ export const defaultForm = [
         id: '2a36fc3d5e3e11e883bb516681d29dd6',
         //表单标题名称
         label:'站点配置',
-        //当前表单的数据绑定ID。
-        // 1)在使用query时候，这个字段没用用处。
-        // 2)在使用get、submit、delete时，这个字段用于标记当前操作的数据项
-        dataBindId: '*',
         //表单所属业务类型，['flow'|'asset'|'static'] 流程表单|资产表单|固定表单。
         // 1)固定表单由开发人员预设的表单，具备特殊的功能，已经预先开发到前端系统中。包括数据字典、站点信息、人员、组织结构、权限、
         type: 'static',

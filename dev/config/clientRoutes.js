@@ -18,20 +18,28 @@ export default [{//首页
             call(require("../src/page/home"))
         }, 'home')
     }
-},{
-    id: "form",
+}, {
+    id: "list",
     url: "/list/:formId",
     component: (call) => {
         require.ensure([], require => {
             call(require("../src/page/list"))
         }, 'form')
     }
-},{
+}, {
     id: "form",
-    url: "/form/:bussId",
+    url: "/form/:formId/:bussId",
     component: (call) => {
         require.ensure([], require => {
             call(require("../src/page/form"))
         }, 'form')
+    }
+}, {
+    id: "singleForm",
+    url: "/form/:singleFormId",
+    component: (call) => {
+        require.ensure([], require => {
+            call(require("../src/page/form"))
+        }, 'singleForm')
     }
 }];
