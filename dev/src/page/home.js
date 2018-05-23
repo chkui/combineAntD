@@ -1,7 +1,7 @@
 import React from 'react'
 import { DatePicker, message } from 'antd';
-import html from './home.html'
-const cn = require('classnames/bind').bind(require('./home.scss'));
+import html from './home/home.html'
+const cn = require('classnames/bind').bind(require('./home/home.scss'));
 
 class Home extends React.Component {
     constructor(props) {

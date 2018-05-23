@@ -13,13 +13,14 @@ const cn = require('classnames/bind').bind(require('./baseItem.scss'));
  *      参看{@link https://ant.design/components/form-cn/#components-form-demo-validate-other}之后的内容
  *
  * @param {object} props
- * @param {object} props.attribute 所有包装属性
- * @param {string} props.attribute.column 组件字段名称
- * @param {string} props.attribute.label 组件的标题
- * @param {string} props.attribute.tip 录入的提示信息
- * @param {array} props.attribute.rules 验证规则
- * @param {array} props.attribute.defRules 默认校验规则，如果rules和defRules同时存在，会将2者进行合并，有限判断rules成立的规则
- * @param {string} props.attribute.tip 录入的提示信息
+ * @param {object} props 所有包装属性
+ * @param {string} props.column 组件字段名称
+ * @param {string} props.label 组件的标题
+ * @param {string} props.tip 录入的提示信息
+ * @param {array} props.rules 验证规则
+ * @param {object} props.valuePropName 附加受控属性，用于标记特殊的子节点属性至
+ * @param {array} props.defRules 默认校验规则，如果rules和defRules同时存在，会将2者进行合并，有限判断rules成立的规则
+ * @param {string} props.tip 录入的提示信息
  * @Param {ReactNode|Element} props.children 包裹的子标签
  *
  * //
@@ -29,21 +30,24 @@ const cn = require('classnames/bind').bind(require('./baseItem.scss'));
 export class BaseEntryItem extends React.Component {
     constructor(...props) {
         super(...props)
-        this.buildRules();
+        this.options = {};
+        this.buildOptions();
     }
 
     /**
      * 构建校验规则链
      */
-    buildRules(){
+    buildOptions(){
         const props = this.props,
             rules = props.rules || [],
-            defRules = props.defRules || [];
+            defRules = props.defRules || [],
+            valuePropName = props.valuePropName;
         if (Array.isArray(rules) && Array.isArray(defRules)) {
-            this.rules = rules.concat(defRules);
+            this.options.rules = rules.concat(defRules);
         } else {
             throw 'Input params: "rules" and "defRules" must be array!'
         }
+        valuePropName && (this.options.valuePropName = valuePropName);
     }
 
     render() {
@@ -55,7 +59,7 @@ export class BaseEntryItem extends React.Component {
                                     <Tooltip title={props.tip}>&nbsp;<Icon
                                         type="question-circle-o"/></Tooltip>)}</span>)}
                                 hasFeedback={props.hasFeedback} {...formItemLayoutCol}>
-                    {form.getFieldDecorator(props.column, {rules: this.rules})(props.children)}
+                    {form.getFieldDecorator(props.column, this.options)(props.children)}
                 </Item>)}
             </FormConsumer>
         );

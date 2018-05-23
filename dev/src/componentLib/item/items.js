@@ -1,9 +1,13 @@
+//input
 import {TextEntry} from './input/text'
 import {EmailEntry} from './input/email'
 
 //select
 import {StandardEntry} from './select/standard'
 import {CascaderEntry} from './select/cascader'
+
+//switch
+import {TFSwitchEntry} from './switch/tfSwitch'
 
 /**
  *
@@ -29,6 +33,12 @@ const Items = {
             Entry: CascaderEntry,
             Read: null
         },
+    },
+    Switch: {
+        TFSwitch: {
+            Entry: TFSwitchEntry,
+            Read: null
+        }
     }
 };
 

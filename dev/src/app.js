@@ -9,6 +9,7 @@ import bundle from 'pwfe-dom/bundle'
 import {isElement} from 'pwfe-dom/util'
 import Header from './layout/header'
 import Sider from './layout/sider'
+import db from './database/db'
 const cn = require('classnames/bind').bind(require('./app.scss'));
 
 const element = (el) => {
@@ -33,34 +34,41 @@ const element = (el) => {
  * @return {XML}
  * @constructor
  */
-const App = props => {
-    const {init, routes, className, header, children, footer} = props;
-    return (
-        <Layout hasSider className={cn('app-root')} >
-            <Sider/>
-            <Layout>
-                <Header />
-                <Layout.Content className={cn('content')}>
-                    <Switch>
-                        {routes.map(i => {
-                            const params = i.url ? {
-                                key: i.id,
-                                component: bundle(init.id === i.id && init.comp, i.component),
-                                exact: true,
-                                path: i.url
-                            } : {
-                                key: i.id,
-                                component: bundle(init.id === i.id && init.comp, i.component)
-                            }
-                            return (<Route {...params} />)
-                        })}
-                    </Switch>
-                </Layout.Content>
-            </Layout>
-            {/*{element(children)}
+class App extends React.Component{
+
+    componentDidMount(){
+
+    }
+
+    render(){
+        const {init, routes, className, header, children, footer} = this.props;
+        return (
+            <Layout hasSider className={cn('app-root')} >
+                <Sider/>
+                <Layout>
+                    <Header />
+                    <Layout.Content className={cn('content')}>
+                        <Switch>
+                            {routes.map(i => {
+                                const params = i.url ? {
+                                    key: i.id,
+                                    component: bundle(init.id === i.id && init.comp, i.component),
+                                    exact: true,
+                                    path: i.url
+                                } : {
+                                    key: i.id,
+                                    component: bundle(init.id === i.id && init.comp, i.component)
+                                }
+                                return (<Route {...params} />)
+                            })}
+                        </Switch>
+                    </Layout.Content>
+                </Layout>
+                {/*{element(children)}
             {element(footer)}*/}
-        </Layout>
-    )
+            </Layout>
+        )
+    }
 }
 
 module.exports = App;

@@ -88,7 +88,13 @@ export const oneForm = {
                 }],
             }],
             rules: [],
-        }
+        },{
+            category: 'Switch',
+            type: 'TFSwitch',
+            column: 'OP',
+            label: '启用&停用',
+            tip:'设定该站点是否停止使用'
+        },
     ]
 }
 

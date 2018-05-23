@@ -7,6 +7,10 @@ import {oneForm} from '../../../../data/form'
 
 const FormItem = Form.Item;
 
+/**
+ * @param props.formID 表单对应的ID
+ * @param props.bussID 业务对应的ID
+ */
 class HorizontalForm extends React.Component {
     handleSubmit = (e) => {
         e.preventDefault();
@@ -36,7 +40,7 @@ class HorizontalForm extends React.Component {
  */
 export default Form.create()(HorizontalForm);
 
-function FormBuilder(data, form) {
+function FormBuilder(formData) {
     const list = [];
     for (let item of data.itemMetaSet) {
         const Component = Items[item.category][item.type].Entry;

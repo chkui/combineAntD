@@ -15,12 +15,20 @@ export default [{//首页
     url: "/",
     component: (call) => {
         require.ensure([], require => {
-            call(require("../src/home"))
+            call(require("../src/page/home"))
         }, 'home')
     }
 },{
     id: "form",
-    url: "/form",
+    url: "/list/:formId",
+    component: (call) => {
+        require.ensure([], require => {
+            call(require("../src/page/list"))
+        }, 'form')
+    }
+},{
+    id: "form",
+    url: "/form/:bussId",
     component: (call) => {
         require.ensure([], require => {
             call(require("../src/page/form"))

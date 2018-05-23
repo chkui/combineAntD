@@ -1,16 +1,17 @@
 import React from 'react'
 import PropTypes from 'prop-types';
-import {Form, Input, Tooltip, Icon} from 'antd';
+import {Input} from 'antd';
 
-import {BaseEntryItem, combineAttr} from '../baseItem'
+import {BaseEntryItem} from '../baseItem'
 
 const _DefRules = [{type: 'email', message: '不是有效的电子邮件地址'}]
 /**
  * 基础录入功能
  * @param props
- * @param props.form 接收 Form的form参数，用于提供验证功能
+ * @param props.column 标签字段
+ * @param props.label 标签显示内容
  * @param props.tip 录入的提示信息
- * @param props.label 标签信息
+ * @param props.rules 扩展规则
  * @returns {*}
  * @constructor
  */
