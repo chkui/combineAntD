@@ -1,6 +1,7 @@
 import menuConfig from '../../config/menu'
 import {List} from 'immutable'
 import {allMenu} from '../database/menu'
+import {oneForm} from '../database/form'
 
 function MenuService() {
 }
@@ -14,11 +15,40 @@ export default MenuService
 MenuService.prototype.build = function (cb) {
     allMenu((err, docs) => {
         if (!err) {
-            const cusMenu = buildDB(docs),
-                menus = List(menuConfig.before.concat(cusMenu, menuConfig.after))
-            cb(menus);
+            combineFormData(docs, (combineResults)=>{
+                const cusMenu = buildDB(combineResults),
+                    menus = List(menuConfig.before.concat(cusMenu, menuConfig.after))
+                cb(menus);
+            })
         }
     })
+};
+const combineFormData = (docs, callback) => {
+    const result = [], optsList = [];
+    let count = 0;
+    for (let doc of docs) {
+        if(doc.form){
+            const opts = {
+                id:doc.form,
+                cb:(err, form)=>{
+                    if(!err){
+                        doc.list = form.list;
+                        doc.label = form.label;
+                        count--;
+                        if(0 === count){
+                            callback(result);
+                        }
+                    }
+                }
+            }
+            optsList.push(opts);
+        }
+        result.push(doc);
+    }
+    for(let opts of optsList){
+        oneForm(opts.id, opts.cb);
+        count++;
+    }
 };
 /**
  * 构建自定义菜单
@@ -47,6 +77,7 @@ const buildDBOne = menu => {
     menu.url && (i.url = menu.url);
     menu.form && (i.form = menu.form);
     menu.code && (i.code = menu.code);
+    menu.list && (i.list = menu.list);
     return i;
 }
 /**

@@ -2,60 +2,60 @@ export const menu = [
     {
         table: 'd_menu',
         id: 'b47671735e3c11e89682cbf47605967c',
+        label: '组件',
         code:'',
         parent:false,
-        label: '组件',
         createTime: 1527040262519,
         createUser: 'admin',
         modifyTIme: 1527040262519,
         modifyUser: 'admin',
-        OP: 'ACT', //ACTIVIE,DELETE,DISABLE
+        OP: 'ENABLE', //ENABLE,DELETE,DISABLE
     },{
         table: 'd_menu',
         id: '111cb47f5e3d11e89bdbeb6e6430dcfc',
+        label: '表单案例',
         code:'',
         parent:'b47671735e3c11e89682cbf47605967c',
-        label: '表单案例',
         form:'1a4d65685e4e11e8bfd8b1edbfd13392',
         createTime: 1527040262519,
         createUser: 'admin',
         modifyTIme: 1527040262519,
         modifyUser: 'admin',
-        OP: 'ACT', //ACTIVIE,DELETE,DISABLE
+        OP: 'ENABLE', //ENABLE,DELETE,DISABLE
     },{
         table: 'd_menu',
         id: '6da8dfc75e3d11e8aeb83f5d1f0d1db3',
-        code:'',
         label: 'form',
+        code:'',
         form:'/form',
         createTime: 1527040262519,
         createUser: 'admin',
         modifyTIme: 1527040262519,
         modifyUser: 'admin',
-        OP: 'DISABLE', //ACTIVIE,DELETE,DISABLE
+        OP: 'DISABLE', //ENABLE,DELETE,DISABLE
     },{
         table: 'd_menu',
         id: '6f8b97c45e6411e89bdda73ce763ab52',
+        label: '表单案例',
         code:'',
         parent:'b47671735e3c11e89682cbf47605967c',
-        label: '表单案例',
         form:'1a4d65685e4e11e8bfd8b1edbfd13392',
         createTime: 1527040262519,
         createUser: 'admin',
         modifyTIme: 1527040262519,
         modifyUser: 'admin',
-        OP: 'ACT',
+        OP: 'ENABLE',
     },{
         table: 'd_menu',
         id: 'ab1376075e6411e882b6937df60a9441',
+        label: '表单案例',
         code:'',
         parent:'b47671735e3c11e89682cbf47605967c',
-        label: '表单案例',
         form:'1a4d65685e4e11e8bfd8b1edbfd13392',
         createTime: 1527040262519,
         createUser: 'admin',
         modifyTIme: 1527040262519,
         modifyUser: 'admin',
-        OP: 'ACT',
+        OP: 'ENABLE',
     }
 ]

@@ -1,13 +1,39 @@
 import React from 'react'
-import HorizontalForm from '../componentLib/form/horizontalForm'
+import {connect} from 'react-redux'
+import FormBoot from '../componentLib/form/formBoot'
+import {loadFormStructureAction} from '../../config/redux/formAction'
 
-const Form = props => {
-    props.match.params
-    return (
-        <div>
+class FormComponent extends React.Component {
+    constructor(...props) {
+        super(...props)
+        console.log('form mount')
+    }
+
+    componentDidMount() {
+        const props = this.props;
+        props.onLoadForm(props.match.params.singleFormId);
+    }
+
+    render() {
+        return (
             <div>
-                <HorizontalForm/>
+                <FormBoot/>
             </div>
-        </div>)
+        )
+    }
 }
-export default Form
+
+const Form = connect(
+    state => {
+        const structure = state.formStructureReducer;
+        return {
+            stateCode: structure.stateCode,
+            form: structure.form
+        }
+    },
+    (dispatch, props) => ({
+        onLoadForm: id => dispatch(loadFormStructureAction(id))
+    })
+)(FormComponent)
+
+module.exports = Form;

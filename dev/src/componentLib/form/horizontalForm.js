@@ -8,8 +8,8 @@ import {oneForm} from '../../../../data/form'
 const FormItem = Form.Item;
 
 /**
- * @param props.formID 表单对应的ID
- * @param props.bussID 业务对应的ID
+ * @param props.form Antd Form.create高阶组件传递的表单值。
+ * @param props.formStructure 表单对象
  */
 class HorizontalForm extends React.Component {
     handleSubmit = (e) => {
@@ -22,10 +22,11 @@ class HorizontalForm extends React.Component {
     }
 
     render() {
+        const props = this.props;
         return (
-            <FormProvider value={this.props.form}>
+            <FormProvider value={props.form}>
                 <Form onSubmit={this.handleSubmit}>
-                    {FormBuilder(oneForm)}
+                    {FormBuilder(props.formStructure)}
                     <FormItem {...formItemLayoutCol}>
                         <Button type="primary" htmlType="submit">Register</Button>
                     </FormItem>

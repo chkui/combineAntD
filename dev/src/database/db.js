@@ -1,3 +1,14 @@
+/**
+ * 数据库中有几个必填字段：
+ * id:主键
+ * label:标题
+ * createTime: 1527040262519, 创建时间
+ * createUser: 'admin', 创建人
+ * modifyTIme: 1527040262519, 修改时间
+ * modifyUser: 'admin', 修改人
+ * OP: 'ENABLE', //ENABLE,DISABLE,DELETE 操作标记[启用,停用,删除]
+ */
+
 import BrowserEmDataBase from 'nedb'
 import {fluent} from 'es-optional'
 import {site} from '../../../data/db/site'
@@ -65,7 +76,8 @@ db.d_form.loadDatabase((err) => {
     }
 });
 
-const find = (tableName, options, cb) => {
+//查询方法
+const query = (tableName, options, cb) => {
     fluent(db[tableName]).then(table => {
         asyncLoad(()=>table.find(options, cb));
         return true;
@@ -74,6 +86,17 @@ const find = (tableName, options, cb) => {
     })
 };
 
+//只获取查询的一条数据
+const one = (tableName, options, cb) => {
+    fluent(db[tableName]).then(table => {
+        asyncLoad(()=>table.findOne(options, cb));
+        return true;
+    }).else(() => {
+        cb(`table ${tableName} no exists`);
+    })
+};
+
+//添加
 const insert = (tableName, rows, cb) => {
     if(!db[tableName]){
         const table = db[tableName] = new BrowserEmDataBase();
@@ -89,7 +112,8 @@ const insert = (tableName, rows, cb) => {
 }
 
 export default {
-    find,
+    query,
+    one,
     insert
 };
 
