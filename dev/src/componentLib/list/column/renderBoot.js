@@ -3,6 +3,7 @@ import {Table} from 'antd';
 import {fluent} from 'es-optional'
 
 const {Column} = Table;
+const cn = require('classnames/bind').bind(require('./renderBoot.scss'));
 
 /**
  * Column中render显示的组装工具
@@ -19,21 +20,25 @@ const {Column} = Table;
 const renderBoot = props => {
     const Comp = fluent(columnComp[props.category]).then(type => type[props.type]).else(false);
     return Comp ? (text, record, index) => {
-        return <Comp/>;
+        return (<Comp text={text} record={record}/>);
     } : null;
 
 }
 
 export default renderBoot
 
+/**
+ * 开关
+ * @param {boolean} props.text boolean
+ * @param {object} props.record 单行数据
+ * @constructor
+ */
+const TFSwitchRender = props =>
+    (<span className={cn(props.text ? 'switch-enable':'switch-disable')}>{props.text ? '是' : '否'}</span>)
+
 const columnComp = {
     Switch: {
         TFSwitch: TFSwitchRender
     }
 }
-
-const TFSwitchRender = props =>
-    <Column key={props.column} {...props} render={(text, record, index) => {
-        return (<span>{text}</span>)
-    }}/>
 

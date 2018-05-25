@@ -2,32 +2,16 @@ import React from 'react'
 import _Config from '../../../config/sysDefConfig'
 import {loadListDataAction} from '../../../config/redux/listAction'
 import {StateCode} from '../../../config/redux/listReducer'
+import {listService} from '../../service/listService'
 import renderBoot from './column/renderBoot'
+import ButtonBar from './searchTable/buttonBar'
 import {connect} from 'react-redux'
 import {Table, Input, Button, Icon} from 'antd';
+import {fluent} from 'es-optional'
 
 const {Column} = Table;
-
+const ButtonGroup = Button.Group;
 const ListConfig = _Config.ListConfig
-const data = [{
-    key: '1',
-    firstName: 'John',
-    lastName: 'Brown',
-    age: 32,
-    address: 'New York No. 1 Lake Park',
-}, {
-    key: '2',
-    firstName: 'Jim',
-    lastName: 'Green',
-    age: 42,
-    address: 'London No. 1 Lake Park',
-}, {
-    key: '3',
-    firstName: 'Joe',
-    lastName: 'Black',
-    age: 32,
-    address: 'Sidney No. 1 Lake Park',
-}];
 
 /**
  * 支持列表表头所斗的table
@@ -36,30 +20,47 @@ const data = [{
 class SearchTable extends React.Component {
     constructor(...props) {
         super(...props)
+        this.handleFresh = this.handleFresh.bind(this);
     }
 
     componentDidMount() {
+        this.load();
+    }
+
+    load(options){
         const props = this.props,
             form = props.form;
         props.onLoadList(form.id, form.type, {length: ListConfig.pageLength, start: 0, column: {}});
     }
 
+    handleFresh(){
+        this.load();
+    }
+
     render() {
         const props = this.props,
+            form = props.form,
             Columns = [];
-        for (let meta of props.form.itemMetaSet) {
+        for (let meta of form.itemMetaSet) {
             if (meta.listShow) {
                 Columns.push(<Column key={meta.label}
                                      title={meta.label}
                                      dataIndex={meta.column}
-                                     render={renderBoot(props)}/>)
+                                     render={renderBoot(meta)}/>)
             }
         }
-        return (<Table {...ListConfig.table}
+        return (
+            <div>
+                <ButtonBar options={fluent(form.list).then(list => list.options).else(false)}
+                           formId={form.id}
+                           onFresh={this.handleFresh}
+                />
+                <Table {...ListConfig.table}
                        loading={StateCode.suc !== props.stateCode}
-                       dataSource={StateCode.suc === props.stateCode && bindingData(props.list)}>
-            {Columns}
-        </Table>);
+                       dataSource={StateCode.suc === props.stateCode && listService.bindData(props.list)}>
+                    {Columns}
+                </Table>
+            </div>);
     }
 }
 

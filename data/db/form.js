@@ -1,3 +1,5 @@
+import {ListOption} from '../../dev/config/sysDefConfig'
+
 export const form = [
     {
         //表单对应的ID
@@ -16,10 +18,10 @@ export const form = [
         // 2)如果没有列表，点击这个表单对应的菜单时，会直接使用/${column}来访问，不携带任何参数。
         list: {
             options: [
-                'view', //可查看，点击具体项目之后会提供详情页面访问,跳转路径 /[assert|flow]/${column}/${当前数据的主键值}
-                'new', //可列表新建
-                'delete', //可列表删除
-                'search' //可搜索
+                ListOption.VIEW, //可查看，点击具体项目之后会提供详情页面访问,跳转路径 /[assert|flow]/${column}/${当前数据的主键值}
+                ListOption.NEW, //可列表新建
+                ListOption.DELETE, //可列表删除
+                ListOption.SEARCH //可搜索
             ],
         },
         // 表单的项目字段名称

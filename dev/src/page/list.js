@@ -1,5 +1,6 @@
 import React from 'react'
-import SearchTable from '../componentLib/list/searchTable'
+import Data from './list/data'
+import BrowserTitle from '../componentLib/title/browserTitle'
 import {StateCode} from '../../config/redux/formReducer'
 import {connect} from 'react-redux'
 import {loadFormStructureAction} from '../../config/redux/formAction'
@@ -12,10 +13,15 @@ class ListComponent extends React.Component {
 
     render() {
         const props = this.props;
-
-        return StateCode.suc === props.stateCode ? (<SearchTable form={props.form} />) : null;
+        return StateCode.suc === props.stateCode ? (
+            <div>
+                <BrowserTitle title={props.form.label}/>
+                <Data form={props.form} />
+            </div>
+        ) : null;
     }
 }
+
 
 const List = connect(
     state => {

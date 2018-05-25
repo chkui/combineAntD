@@ -1,4 +1,5 @@
 import db from '../database/data'
+import _Config from '../../config/sysDefConfig'
 
 function ListService() {}
 
@@ -21,5 +22,27 @@ ListService.prototype.find = function(formId, formType, options, cb){
     db.query(formId, formType, options.column, cb);
 }
 
+/**
+ * 将进入列表的数据进行一次转换以符合列表的要求。
+ * 1)将所有的id字段映射到key。
+ * 2)处理固定字段'OP'，将ENABLE/DISABLE/DELETE映射到true/false/false。当出现非ENABLE/DISABLE/DELETE的字符串时，均映射为false。
+ *
+ * @param docs
+ */
+ListService.prototype.bindData = function (docs) {
+    return docs.map(doc => {
+        doc.key = doc.id
+        if(doc.OP){
+            doc.OP = _Config.OPType[doc.OP] || false;
+        }
+        return doc;
+    })
+}
+
+
+/**
+ *
+ * @type {ListService}
+ */
 export const listService = new ListService();
 export default ListService
