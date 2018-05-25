@@ -44,7 +44,17 @@ export const ListOption = {
     SEARCH:'SEARCH'
 }
 
+/**
+ * 特殊的数据标记，用于标记一些空、非数据
+ * @type {{EMPTY: string}}
+ */
+export const DataFlag = {
+    EMPTY:'EMPTY' //空数据，表示用户未输入内容或下拉菜单选择了空选项
+}
+
 export default {
     ListConfig,
-    OPType
+    OPType,
+    ListOption,
+    DataFlag
 }

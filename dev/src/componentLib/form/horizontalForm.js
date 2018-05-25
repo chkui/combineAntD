@@ -26,7 +26,7 @@ class HorizontalForm extends React.Component {
         return (
             <FormProvider value={props.form}>
                 <Form onSubmit={this.handleSubmit}>
-                    {FormBuilder(props.formStructure)}
+                    {FormBuilder(props.formStructure, props.form)}
                     <FormItem {...formItemLayoutCol}>
                         <Button type="primary" htmlType="submit">Register</Button>
                     </FormItem>
@@ -41,11 +41,11 @@ class HorizontalForm extends React.Component {
  */
 export default Form.create()(HorizontalForm);
 
-function FormBuilder(formData) {
+function FormBuilder(formData, form) {
     const list = [];
     for (let item of formData.itemMetaSet) {
         const Component = Items[item.category][item.type].Entry;
-        list.push(<Component key={item.column}{...item}/>)
+        list.push(<Component key={item.column}{...item} form={form}/>)
     }
     return list;
 }

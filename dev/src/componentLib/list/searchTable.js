@@ -52,7 +52,6 @@ class SearchTable extends React.Component {
         return (
             <div>
                 <ButtonBar options={fluent(form.list).then(list => list.options).else(false)}
-                           formId={form.id}
                            onFresh={this.handleFresh}
                 />
                 <Table {...ListConfig.table}

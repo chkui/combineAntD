@@ -3,6 +3,7 @@ import {fluent} from 'es-optional'
 import {Button, Icon} from 'antd';
 import {reRoute} from 'pwfe-dom/router'
 import {ListConfig, ListOption} from '../../../../config/sysDefConfig'
+import {routes} from '../../../../config/url'
 const cn = require('classnames/bind').bind(require('./buttonBar.scss'));
 
 const ButtonGroup = Button.Group;
@@ -16,7 +17,7 @@ const ButtonGroup = Button.Group;
  * @param props.onFresh //刷新
  * @constructor
  */
-const OptionsBar = props => {
+const ButtonBar = props => {
     const newEnable = fluent(props.options).then(options=>{
         for(let op of props.options){
             if(ListOption.NEW === op){
@@ -37,7 +38,8 @@ const New = reRoute()(class extends React.Component{
     }
 
     handleClick(){
-        this.props.browser.forward(`/from/${this.props.formId}`);
+        const props = this.props;
+        props.browser.forward(routes.formNew.build(props.match.params[routes.formNew.params.form]));
     }
 
     render(){
@@ -48,4 +50,4 @@ const New = reRoute()(class extends React.Component{
 const BarButton = props =>
     <Button type="primary" onClick={props.onClick}><Icon type={props.icon}/>{props.children}</Button>
 
-export default OptionsBar
+export default ButtonBar

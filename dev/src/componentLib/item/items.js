@@ -1,4 +1,5 @@
 //input
+import {PKEntry} from './input/pk'
 import {TextEntry} from './input/text'
 import {EmailEntry} from './input/email'
 
@@ -15,6 +16,10 @@ import {TFSwitchEntry} from './switch/tfSwitch'
  */
 const Items = {
     Input: {
+        PK:{
+            Entry: PKEntry,
+            Read: null
+        },
         Text: {
             Entry: TextEntry,
             Read: null

@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types';
-import {Form, Tooltip, Icon} from 'antd';
+import {Form, Tooltip, Icon, Spin} from 'antd';
 import {FormConsumer} from '../formContext'
 import {formItemLayoutCol} from "../../../config/form";
 
@@ -19,9 +19,11 @@ const cn = require('classnames/bind').bind(require('./baseItem.scss'));
  * @param {string} props.tip 录入的提示信息
  * @param {array} props.rules 验证规则
  * @param {object} props.valuePropName 附加受控属性，用于标记特殊的子节点属性至
+ * @param {string} props.initialValue
  * @param {array} props.defRules 默认校验规则，如果rules和defRules同时存在，会将2者进行合并，有限判断rules成立的规则
  * @param {string} props.tip 录入的提示信息
  * @Param {ReactNode|Element} props.children 包裹的子标签
+ * @param {boolean} props.loading 现实是否正在加载状态
  *
  * //
  * @Param props.hasFeedback 是否包含验证错误的提示信息，input标签需要提供
@@ -37,17 +39,19 @@ export class BaseEntryItem extends React.Component {
     /**
      * 构建校验规则链
      */
-    buildOptions(){
+    buildOptions() {
         const props = this.props,
             rules = props.rules || [],
             defRules = props.defRules || [],
-            valuePropName = props.valuePropName;
+            valuePropName = props.valuePropName,
+            initialValue = props.initialValue;
         if (Array.isArray(rules) && Array.isArray(defRules)) {
             this.options.rules = rules.concat(defRules);
         } else {
             throw 'Input params: "rules" and "defRules" must be array!'
         }
         valuePropName && (this.options.valuePropName = valuePropName);
+        initialValue && (this.options.initialValue = initialValue);
     }
 
     render() {
@@ -60,11 +64,16 @@ export class BaseEntryItem extends React.Component {
                                         type="question-circle-o"/></Tooltip>)}</span>)}
                                 hasFeedback={props.hasFeedback} {...formItemLayoutCol}>
                     {form.getFieldDecorator(props.column, this.options)(props.children)}
+                    {props.loading && (
+                        <Loading/>
+                    )}
                 </Item>)}
-            </FormConsumer>
-        );
+            </FormConsumer>);
     }
 }
+
+const Loading = props => (<div className={cn('spin')}><Spin/></div>)
+
 
 BaseEntryItem.propTypes = {
     column: PropTypes.string.isRequired,
@@ -74,6 +83,7 @@ BaseEntryItem.propTypes = {
     rules: PropTypes.array,
     defRules: PropTypes.array,
     hasFeedback: PropTypes.bool,
+    loading: PropTypes.bool,
 };
 
 export const BaseReadItem = props => (<div>Read</div>);

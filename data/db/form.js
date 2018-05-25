@@ -4,6 +4,8 @@ export const form = [
     {
         //表单对应的ID
         id: 'static_d_site',
+        //资产项id，当菜单对应的是一个单页面时，这一项的数据为单一的资产项数据，
+        data: '',
         //版本信息
         //用表单创建时候的时间戳表示版本号
         ver: 1527147766581,
@@ -28,11 +30,9 @@ export const form = [
         itemMetaSet: [
             {
                 category: 'Input', //组件分类
-                type: 'Text', //组件类型
+                type: 'PK', //组件类型
                 column: 'id', //字段标记，标记对应的字段
-                label: '字段ID', //字段现实的名字
-                pk: 1, //主键标记
-                readOnly: 0, //只读标记，无论是读状态还是写状态都不能编辑
+                label: 'ID', //字段现实的名字
                 listShow: 0, //列表现实标记，标记在列表上是否可以显示
                 search: 0, //可搜索标记
             }, {
@@ -67,11 +67,20 @@ export const form = [
                 listShow: 1,
                 search: 1
             }, {
-                category: 'Input',
-                type: 'Text',
-                column: 'parent',
+                category: 'Select',
+                type: 'Standard',
+                column: 'relParent',
                 label: '上级站点',
                 tip: '站点的从属关系，该站点从属与上级站点',
+                // 各种选择框的特有属性，标记外关联的数据项。
+                // 可以是标准的站点数据、数据字典、人员、权限、资产项、流程项。
+                // 根据id和Label的对应关系来关联。
+                select: {
+                    empty: 1, //是否支持空选项
+                    form:'static_d_site', //关联表单
+                    type:'static', //关联表单类型
+                    ids:false //[]，可以进行多项数据关联，如果关联字段不存在或为空，则全表关联
+                },
                 listShow: 1,
                 search: 1
             }, {
@@ -101,6 +110,7 @@ export const form = [
         OP: 'ENABLE', //ENABLE,DISABLE,DELETE
     }, {
         id: '1a4d65685e4e11e8bfd8b1edbfd13392',
+        data: '',
         type: 'asset',
         label: '表单案例',
         itemMetaSet: [ //描述字段-名称-组件-长度限定，{}

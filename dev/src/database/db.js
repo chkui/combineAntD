@@ -76,7 +76,12 @@ db.d_form.loadDatabase((err) => {
     }
 });
 
-//查询方法
+/**
+ *
+ * @param tableName 查询表名称
+ * @param options {@link https://github.com/louischatriot/nedb}
+ * @param cb 回调 (err, docs)
+ */
 const query = (tableName, options, cb) => {
     fluent(db[tableName]).then(table => {
         asyncLoad(()=>table.find(options, cb));

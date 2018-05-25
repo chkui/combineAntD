@@ -29,8 +29,3 @@ TextEntry.propTypes = {
     rules: PropTypes.array,
     tip: PropTypes.string
 };
-
-TextEntry.attribute = {
-    category: 'Input',
-    type: 'Text'
-}

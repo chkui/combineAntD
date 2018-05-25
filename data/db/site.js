@@ -16,7 +16,7 @@ export const site = [
         label: '棕榈设计股份有限公司',
         code: 'palmDesign',
         shortLabel: '棕榈设计',
-        parent: 'palmEco',
+        relParent: {id: '5b71f6095e2b11e89c57bdb3fe53720a', label: '棕榈生态城镇股份有限公司'},
         createTime: 1527040262519,
         createUser: 'admin',
         modifyTIme: 1527040262519,
@@ -28,11 +28,12 @@ export const site = [
         label: '棕榈体育股份有限公司',
         code: 'palmSport',
         shortLabel: '棕榈体育',
+        relParent: {id: '5b71f6095e2b11e89c57bdb3fe53720a', label: '棕榈生态城镇股份有限公司'},
         parent: 'palmEco',
         createTime: 1527040262519,
         createUser: 'admin',
         modifyTIme: 1527040262519,
         modifyUser: 'admin',
-        OP: 'ENABLE', //ENABLE,DELETE,DISABLE
+        OP: 'ENABLE', //ENABLE,DELETE,DISABLE编码
     }
 ]

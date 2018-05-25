@@ -2,6 +2,8 @@
  * Created by chkui on 2017/6/9.
  * 路由配置表
  */
+const routes = require('./url').routes
+
 //解决服务器端没有ensure方法的问题，直接用源生的require替换
 if (typeof require.ensure !== 'function') {
     require.ensure = function (dependencies, callback) {
@@ -9,7 +11,16 @@ if (typeof require.ensure !== 'function') {
     }
 }
 
-//路由配置
+//陆游
+//纯静态开发页面
+//表单页面
+//表单页面分为3个状态,通过URL来标记
+//  view
+//  new
+//  edit
+//
+
+//列表页面
 export default [{//首页
     id: "home",
     url: "/",
@@ -20,26 +31,34 @@ export default [{//首页
     }
 }, {
     id: "list",
-    url: "/list/:formId",
+    url: routes.list.match,
     component: (call) => {
         require.ensure([], require => {
             call(require("../src/page/list"))
         }, 'form')
     }
 }, {
-    id: "form",
-    url: "/form/:formId/:bussId",
+    id: "formView",
+    url: routes.formView.match,
     component: (call) => {
         require.ensure([], require => {
             call(require("../src/page/form"))
-        }, 'form')
+        }, 'formView')
     }
 }, {
-    id: "singleForm",
-    url: "/form/:singleFormId",
+    id: "formNew",
+    url: routes.formNew.match,
     component: (call) => {
         require.ensure([], require => {
             call(require("../src/page/form"))
-        }, 'singleForm')
+        }, 'formNew')
+    }
+}, {
+    id: "formEdit",
+    url: routes.formEdit.match,
+    component: (call) => {
+        require.ensure([], require => {
+            call(require("../src/page/form"))
+        }, 'formEdit')
     }
 }];

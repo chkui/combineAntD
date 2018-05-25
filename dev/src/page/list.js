@@ -4,11 +4,12 @@ import BrowserTitle from '../componentLib/title/browserTitle'
 import {StateCode} from '../../config/redux/formReducer'
 import {connect} from 'react-redux'
 import {loadFormStructureAction} from '../../config/redux/formAction'
+import {routes} from '../../config/url'
 
 class ListComponent extends React.Component {
     componentDidMount(){
         const props = this.props;
-        props.onLoadForm(props.match.params.formId);
+        props.onLoadForm(props.match.params[routes.list.params.form]);
     }
 
     render() {

@@ -11,7 +11,7 @@ class FormComponent extends React.Component {
 
     componentDidMount() {
         const props = this.props;
-        props.onLoadForm(props.match.params.singleFormId);
+        props.onLoadForm(props.match.params.form);
     }
 
     render() {

@@ -7,8 +7,8 @@ import db from './db'
  * 多数据查询方法
  * @param formId 表单ID
  * @param formType 表单类型 [flow,asset,static]
- * @param options
- * @param cb
+ * @param options {@link https://github.com/louischatriot/nedb}
+ * @param cb (err, docs)
  */
 export const query = (formId, formType, options, cb) => {
     if ('static' === formType) {
