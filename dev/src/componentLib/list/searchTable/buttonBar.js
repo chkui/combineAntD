@@ -39,7 +39,7 @@ const New = reRoute()(class extends React.Component{
 
     handleClick(){
         const props = this.props;
-        props.browser.forward(routes.formNew.build(props.match.params[routes.formNew.params.form]));
+        props.browser.forward(routes.form.buildNew(props.match.params[routes.form.params.form]));
     }
 
     render(){

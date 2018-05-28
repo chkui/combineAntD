@@ -1,9 +1,11 @@
 import React from 'react'
 import PropTypes from 'prop-types';
+import {connect} from 'react-redux'
 import {Select, Tooltip, Icon} from 'antd';
 import {BaseEntryItem} from '../baseItem'
 import {itemService} from '../../../service/itemService'
 import {DataFlag} from '../../../../config/sysDefConfig'
+import {combineFormMetaSetAction} from '../../../../config/redux/formAction'
 
 const {Option, OptGroup} = Select;
 
@@ -33,19 +35,18 @@ const {Option, OptGroup} = Select;
  * @returns {*}
  * @constructor
  */
-export const StandardEntry = class extends React.Component {
-    constructor(...props) {
-        super(...props);
-        this.state = {options: this.props.options}
-    }
 
+class StandardComp extends React.Component{
     componentDidMount() {
-        const select = this.props.select;
-        itemService.selectedOptions(select.form, select.type, select.ids, (err, docs)=>{
-            const options = select.empty ? [{value:DataFlag.EMPTY, label: '未选择'}] : []
-            this.setState({
-                options:options.concat(docs.map(i=>({value:i.id, label:i.label})))
-            })
+        const _this = this,
+            props = this.props,
+            select = props.select,
+            pk = props.pk;
+        itemService.selectedOptions(pk.form, pk.type, pk.ids, (err, docs) => {
+            if (!err) {
+                const options = select.empty ? [{value: DataFlag.EMPTY, label: '未选择'}] : []
+                _this.props.onLoadOptions(props.column, 'options', options.concat(docs));
+            }
         })
     }
 
@@ -58,21 +59,24 @@ export const StandardEntry = class extends React.Component {
             form={props.form}
             tip={props.tip}
             rules={props.rules}
-            loading={!state.options}>
-            <Select>{buildSelect(state.options)}</Select>
+            loading={!props.options}>
+            <Select>{buildSelect(props.options)}</Select>
         </BaseEntryItem>)
     }
-};
-StandardEntry.defaultProps = {
-    rules: [{required: false, message: '请选择相关内容',}]
-};
-StandardEntry.propTypes = {
+}
+StandardComp.propTypes = {
     column: PropTypes.string.isRequired,
     label: PropTypes.string.isRequired,
     rules: PropTypes.array,
     tip: PropTypes.string,
     options: PropTypes.array
 };
+
+export const StandardEntry = connect(
+    () => ({}),
+    (dispatch, props) => ({
+        onLoadOptions: (column, key, value) => dispatch(combineFormMetaSetAction(column, key, value))
+    }))(StandardComp);
 
 /**
  * 构建组件
@@ -83,5 +87,5 @@ const buildSelect = opts => {
         return opt.children ?
             (<OptGroup key={opt.value} label={opt.label}>{buildSelect(opt.children)}</OptGroup>) :
             (<Option key={opt.value} value={opt.value}>{opt.label}</Option>)
-    }):false;
+    }) : null;
 }

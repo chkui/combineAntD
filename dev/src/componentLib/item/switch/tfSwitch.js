@@ -7,6 +7,7 @@ import {BaseEntryItem} from '../baseItem'
 /**
  * 标准开关
  * @param props
+ * @param props.value 是否选择的标记[true|false]
  * @param props.column 标签字段
  * @param props.label 标签显示内容
  * @param props.tip 录入的提示信息
@@ -15,7 +16,7 @@ import {BaseEntryItem} from '../baseItem'
  * @constructor
  */
 export const TFSwitchEntry = props =>
-    (<BaseEntryItem {...props} valuePropName="checked">
+    (<BaseEntryItem {...props} valuePropName="checked" initialValue={true}>
         <Switch/>
     </BaseEntryItem>)
 TFSwitchEntry.propTypes = {
@@ -24,8 +25,3 @@ TFSwitchEntry.propTypes = {
     rules: PropTypes.array,
     tip: PropTypes.string
 };
-
-TFSwitchEntry.attribute = {
-    category: 'switch',
-    type: 'tfswitch'
-}

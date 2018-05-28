@@ -2,6 +2,7 @@ import React from 'react'
 import HorizontalForm from './horizontalForm'
 import {connect} from 'react-redux'
 import {StateCode} from '../../../config/redux/formReducer'
+import {reRoute} from 'pwfe-dom/router'
 
 /**
  * From的装载器，用于过滤store中的数据状态判断是否进行重复渲染。同时用于控制当前显示的表单
@@ -26,7 +27,7 @@ const FormBoot = connect(
     (dispatch, props) => ({
         onLoadForm: id => dispatch(loadFormStructureAction(id))
     })
-)(FormBootComp)
+)(reRoute()(FormBootComp))
 
 export default FormBoot
 

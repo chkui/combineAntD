@@ -6,6 +6,7 @@ import MenuService from '../../service/menuService'
 import {connect} from 'react-redux'
 import {menuAction} from '../../../config/redux/menuAction'
 import {routes} from '../../../config/url'
+import {FromState} from '../../../config/sysDefConfig'
 
 const SubMenu = Menu.SubMenu
 
@@ -37,7 +38,7 @@ const generateMenu = (m) => {
         (<Menu.Item key={m.id}><Link to={generateLink(m)}>{m.label}</Link></Menu.Item>)
 }
 const generateLink = (m) => {
-    return m.url ? m.url : (m.list ? routes.list.build(m.form) : routes.formView.build(m.form, m.data));
+    return m.url ? m.url : (m.list ? routes.list.build(m.form) : routes.form.buildView(m.form, m.data));
 }
 
 const MenuWrapper = connect(

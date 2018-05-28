@@ -24,14 +24,16 @@ class HorizontalForm extends React.Component {
     render() {
         const props = this.props;
         return (
-            <FormProvider value={props.form}>
-                <Form onSubmit={this.handleSubmit}>
-                    {FormBuilder(props.formStructure, props.form)}
-                    <FormItem {...formItemLayoutCol}>
-                        <Button type="primary" htmlType="submit">Register</Button>
-                    </FormItem>
-                </Form>
-            </FormProvider>
+            <div>
+                <FormProvider value={props.form}>
+                    <Form onSubmit={this.handleSubmit}>
+                        {FormBuilder(props.formStructure, props.form)}
+                        <FormItem {...formItemLayoutCol}>
+                            <Button type="primary" htmlType="submit">提交</Button>
+                        </FormItem>
+                    </Form>
+                </FormProvider>
+            </div>
         );
     }
 }

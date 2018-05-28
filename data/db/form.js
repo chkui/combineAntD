@@ -41,7 +41,13 @@ export const form = [
                 column: 'code',
                 label: '站点编码(code)',
                 listShow: 1,
-                rules: [], //提交过滤规则
+                rules: [{category: 'single', type: 'require', options: {msg: '请输入站点编码'}},
+                    {
+                        category: 'single',
+                        type: 'unIdentical',
+                        options: {formId: 'static_d_site', formType: 'static', column: 'code'}
+                    }
+                ], //提交过滤规则
                 tip: '可以使用一个常用的业务编码来标记站点信息，用于和其他系统进行呢数据合并', //tip表示提示信息
                 search: 1
             }, {
@@ -49,9 +55,9 @@ export const form = [
                 type: 'Text',
                 column: 'label',
                 label: '站点名称',
-                rules: [{
-                    type: 'string', max: 64, message: '请用最多使用64个字符'
-                }],
+                rules: [{category: 'single', type: 'require', options: {msg: '请输入站点名称'}},
+                    {category: 'single', type: 'max', options: {len: 32}}
+                ],
                 tip: '输入公司、企业、组织的名称',
                 listShow: 1,
                 search: 1
@@ -60,9 +66,10 @@ export const form = [
                 type: 'Text',
                 column: 'shortLabel',
                 label: '站点简称',
-                rules: [{
-                    type: 'string', max: 6, message: '简称最多使用6个字符'
-                }],
+                rules: [
+                    {category: 'single', type: 'require', options: {msg: '请输入站点简称'}},
+                    {category: 'single', type: 'max', options: {len: 6, msg: '简称最多使用6个字符'}}
+                ],
                 tip: '输入公司、企业、组织的简称',
                 listShow: 1,
                 search: 1
@@ -72,15 +79,20 @@ export const form = [
                 column: 'relParent',
                 label: '上级站点',
                 tip: '站点的从属关系，该站点从属与上级站点',
-                // 各种选择框的特有属性，标记外关联的数据项。
-                // 可以是标准的站点数据、数据字典、人员、权限、资产项、流程项。
-                // 根据id和Label的对应关系来关联。
+                // pk表示外关联表单、字段以及数据项数据
+                // 关联数据可以是标准的站点数据、数据字典、人员、权限、资产项、流程项。
+                pk: {
+                    form: 'static_d_site', //关联表单
+                    type: 'static', //关联表单类型
+                    ids: false //[]，可以进行多项数据关联，如果关联字段不存在或为空，则全表关联
+                },
+                // 各种选择框的特有属性。数据来源源自pk，也可以直接设置Options
                 select: {
                     empty: 1, //是否支持空选项
-                    form:'static_d_site', //关联表单
-                    type:'static', //关联表单类型
-                    ids:false //[]，可以进行多项数据关联，如果关联字段不存在或为空，则全表关联
+                    options: 0
                 },
+                //下拉操作项目，通常由大前端组装（node，browser）数据库中不用存储这一项数据。
+                options: 0,
                 listShow: 1,
                 search: 1
             }, {

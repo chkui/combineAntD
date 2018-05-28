@@ -3,6 +3,9 @@ import PropTypes from 'prop-types';
 import {Form, Tooltip, Icon, Spin} from 'antd';
 import {FormConsumer} from '../formContext'
 import {formItemLayoutCol} from "../../../config/form";
+import rulerCollect from '../../rules/submitCollect'
+import {fluent} from 'es-optional'
+import {category} from "../../../../data/component";
 
 const Item = Form.Item;
 const cn = require('classnames/bind').bind(require('./baseItem.scss'));
@@ -41,10 +44,29 @@ export class BaseEntryItem extends React.Component {
      */
     buildOptions() {
         const props = this.props,
-            rules = props.rules || [],
             defRules = props.defRules || [],
             valuePropName = props.valuePropName,
-            initialValue = props.initialValue;
+            initialValue = props.initialValue,
+            rules = [];
+        if(props.rules){
+            for(let rule of props.rules){
+                let one = false;
+                if(rule.category && rule.type && rule.options){
+                    one = fluent(rulerCollect[rule.category]).then(category=>{
+                        return category[rule.type];
+                    }).then(foo=>{
+                        return foo(rule.options)
+                    }).else(false);
+                }else{
+                    one = false;
+                }
+                if(one){
+                    rules.push(one);
+                }else{
+                    console.warn('rule', rule, 'not the specification way of using! please check it!')
+                }
+            }
+        }
         if (Array.isArray(rules) && Array.isArray(defRules)) {
             this.options.rules = rules.concat(defRules);
         } else {

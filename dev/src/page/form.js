@@ -1,5 +1,6 @@
 import React from 'react'
 import {connect} from 'react-redux'
+import {fluent} from 'es-optional'
 import FormBoot from '../componentLib/form/formBoot'
 import {loadFormStructureAction} from '../../config/redux/formAction'
 
@@ -10,8 +11,9 @@ class FormComponent extends React.Component {
     }
 
     componentDidMount() {
-        const props = this.props;
-        props.onLoadForm(props.match.params.form);
+        const props = this.props,
+            id = fluent(props.form).then(form=>form.id).else(false);
+        (id !== props.match.params.form) && props.onLoadForm(props.match.params.form);
     }
 
     render() {

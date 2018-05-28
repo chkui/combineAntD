@@ -20,7 +20,6 @@ const cn = require('classnames/bind').bind(require('./pk.scss'));
 export class PKEntry extends React.Component {
     constructor(...props) {
         super(...props)
-        this.state = {loading: true}
     }
 
     componentDidMount() {
@@ -30,13 +29,12 @@ export class PKEntry extends React.Component {
             const field = {};
             field[props.column] = uuid;
             props.form.setFieldsValue(field);
-            _this.setState({loading: false});
         });
     }
 
     render() {
         const state = this.state;
-        return (<BaseEntryItem loading={state.loading} {...this.props}>
+        return (<BaseEntryItem {...this.props}>
             <Input className={cn('read-only-input')} type="text" disabled/>
         </BaseEntryItem>)
     }

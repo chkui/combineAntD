@@ -27,7 +27,7 @@ export const ListConfig = {
  *      DELETE: boolean 逻辑删除
  * }}
  */
-export const OPType = {
+export const OPData = {
     ENABLE: true,
     DISABLE: false,
     DELETE: false
@@ -45,6 +45,16 @@ export const ListOption = {
 }
 
 /**
+ * 表单状态，用于在URL中显示表单对应的状态
+ * @type {{new: string, edit: string, view: string}}
+ */
+export const FromState = {
+    new:'new', //新建
+    edit:'edit',//编辑
+    view:'view'//查看（只读）
+}
+
+/**
  * 特殊的数据标记，用于标记一些空、非数据
  * @type {{EMPTY: string}}
  */
@@ -54,7 +64,8 @@ export const DataFlag = {
 
 export default {
     ListConfig,
-    OPType,
+    OPData,
     ListOption,
-    DataFlag
+    DataFlag,
+    FromState
 }

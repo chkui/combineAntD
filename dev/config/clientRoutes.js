@@ -38,27 +38,11 @@ export default [{//首页
         }, 'form')
     }
 }, {
-    id: "formView",
-    url: routes.formView.match,
+    id: "form",
+    url: routes.form.match,
     component: (call) => {
         require.ensure([], require => {
             call(require("../src/page/form"))
         }, 'formView')
-    }
-}, {
-    id: "formNew",
-    url: routes.formNew.match,
-    component: (call) => {
-        require.ensure([], require => {
-            call(require("../src/page/form"))
-        }, 'formNew')
-    }
-}, {
-    id: "formEdit",
-    url: routes.formEdit.match,
-    component: (call) => {
-        require.ensure([], require => {
-            call(require("../src/page/form"))
-        }, 'formEdit')
     }
 }];

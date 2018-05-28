@@ -27,13 +27,13 @@ class SearchTable extends React.Component {
         this.load();
     }
 
-    load(options){
+    load(options) {
         const props = this.props,
             form = props.form;
         props.onLoadList(form.id, form.type, {length: ListConfig.pageLength, start: 0, column: {}});
     }
 
-    handleFresh(){
+    handleFresh() {
         this.load();
     }
 
@@ -56,7 +56,7 @@ class SearchTable extends React.Component {
                 />
                 <Table {...ListConfig.table}
                        loading={StateCode.suc !== props.stateCode}
-                       dataSource={StateCode.suc === props.stateCode && listService.bindData(props.list)}>
+                       dataSource={StateCode.suc === props.stateCode && listService.bindData(form, props.list)}>
                     {Columns}
                 </Table>
             </div>);

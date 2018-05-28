@@ -1,5 +1,7 @@
 import db from '../database/data'
 import _Config from '../../config/sysDefConfig'
+import {dataBindService} from './dataBindService'
+import {fluent} from 'es-optional'
 
 function ListService() {}
 
@@ -27,17 +29,12 @@ ListService.prototype.find = function(formId, formType, options, cb){
  * 1)将所有的id字段映射到key。
  * 2)处理固定字段'OP'，将ENABLE/DISABLE/DELETE映射到true/false/false。当出现非ENABLE/DISABLE/DELETE的字符串时，均映射为false。
  *
- * @param docs
+ * @param form 每一个表单项的属性
+ * @param docs 数据列表
  */
-ListService.prototype.bindData = function (docs) {
-    return docs.map(doc => {
-        doc.key = doc.id
-        if(doc.OP){
-            doc.OP = _Config.OPType[doc.OP] || false;
-        }
-        return doc;
-    })
-}
+ListService.prototype.bindData = function (form, docs) {
+    return dataBindService.listData2Comp(form, docs);
+};
 
 
 /**
