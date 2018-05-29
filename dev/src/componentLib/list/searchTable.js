@@ -1,5 +1,5 @@
 import React from 'react'
-import _Config from '../../../config/sysDefConfig'
+import {ListConfig} from '../../../config/sysDefConfig'
 import {loadListDataAction} from '../../../config/redux/listAction'
 import {StateCode} from '../../../config/redux/listReducer'
 import {listService} from '../../service/listService'
@@ -11,63 +11,100 @@ import {fluent} from 'es-optional'
 
 const {Column} = Table;
 const ButtonGroup = Button.Group;
-const ListConfig = _Config.ListConfig
 
 /**
  * 支持列表表头所斗的table
- * @param {Object} form 表单结构
+ * @param {Object} formStructure 表单结构
  */
 class SearchTable extends React.Component {
     constructor(...props) {
         super(...props)
         this.handleFresh = this.handleFresh.bind(this);
+        this.handleTableChange = this.handleTableChange.bind(this);
     }
 
     componentDidMount() {
-        this.load();
+        this.load({}, {curPage: 0, size: ListConfig.pageLength});
     }
 
-    load(options) {
+    load(where, options) {
         const props = this.props,
-            form = props.form;
-        props.onLoadList(form.id, form.type, {length: ListConfig.pageLength, start: 0, column: {}});
+            formStructure = props.formStructure;
+        props.onLoadList(formStructure.id, formStructure.type, where || {}, options || {});
     }
 
     handleFresh() {
-        this.load();
+        const list = this.props.list;
+        this.load(list.where, list.options);
+    }
+
+
+    handleTableChange(page, filters, sorter) {
+        const list = this.props.list,
+            where = list.where,
+            options = list.options,
+            opt = {};
+        opt.curPage = page.current - 1;
+        if(sorter){
+            const sort = {}
+            sort[sorter.field] = 'descend' === sorter.order ? -1 : 1;
+            opt.sort = sort;
+        }
+        /**
+         * {column: {…}, order: "descend", field: "code", columnKey: "站点编码(code)"}
+         column
+         :
+         {title: {…}, dataIndex: "code", sorter: true, render: null, key: "站点编码(code)", …}
+         columnKey
+         :
+         "站点编码(code)"
+         field
+         :
+         "code"
+         order
+         :"descend" ascend
+         */
+        if(options.curPage !== opt.curPage || options.sort !== opt.sort){
+            this.load(where, opt);
+        }
+
+        console.log(page);
+        console.log(filters);
+        console.log(sorter);
     }
 
     render() {
         const props = this.props,
-            form = props.form,
-            Columns = [];
-        for (let meta of form.itemMetaSet) {
+            list = props.list,
+            formStructure = props.formStructure,
+            Columns = [],
+            pagination = {pageSize: ListConfig.pageLength};
+        if (list) {
+            pagination.total = list.total;
+        }
+        for (let meta of formStructure.itemMeta) {
             if (meta.listShow) {
                 Columns.push(<Column key={meta.label}
                                      title={meta.label}
                                      dataIndex={meta.column}
+                                     sorter
                                      render={renderBoot(meta)}/>)
             }
         }
         return (
             <div>
-                <ButtonBar options={fluent(form.list).then(list => list.options).else(false)}
+                <ButtonBar options={fluent(formStructure.list).then(list => list.options).else(false)}
                            onFresh={this.handleFresh}
                 />
                 <Table {...ListConfig.table}
                        loading={StateCode.suc !== props.stateCode}
-                       dataSource={StateCode.suc === props.stateCode && listService.bindData(form, props.list)}>
+                       pagination={pagination}
+                       onChange={this.handleTableChange}
+                       dataSource={StateCode.suc === props.stateCode && listService.bindData(formStructure, list.docs)}>
                     {Columns}
                 </Table>
             </div>);
     }
-}
-
-const bindingData = (docs) => {
-    return docs.map(doc => {
-        doc.key = doc.id
-        return doc;
-    })
 }
 
 const SearchTableWrapper = connect(
@@ -79,7 +116,7 @@ const SearchTableWrapper = connect(
         }
     },
     (dispatch, props) => ({
-        onLoadList: (id, type, options) => dispatch(loadListDataAction(id, type, options))
+        onLoadList: (id, type, where, options) => dispatch(loadListDataAction(id, type, where, options))
     })
 )(SearchTable)
 

@@ -1,5 +1,20 @@
 $ContentMargin: 16px; //内容区域的初穴位
 $ContentPadding: 20px; //内容区域的留白位
 
+/**
+ * Antd相应式布局移动点
+ *   xs: 小于575px,
+ *   sm: 576px-768px,
+ *   md: 768px-992px,
+ *   lg: 992px-1200px,
+ *   xl: 1200px-1600px,
+ *   xxl: 大于1600px,
+ */
+$MediaXs: 575px;
+$MediaSm: 768px;
+$MediaMd: 992px;
+$MediaLg: 1200px;
+$MediaXl: 1600px;
+
 $Enable: #0b8235; //用于全局标记启用的颜色
 $Disable: #f81d22; //用于全局标记停用的颜色

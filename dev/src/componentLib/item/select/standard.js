@@ -36,16 +36,17 @@ const {Option, OptGroup} = Select;
  * @constructor
  */
 
-class StandardComp extends React.Component{
+class StandardComp extends React.Component {
     componentDidMount() {
         const _this = this,
             props = this.props,
             select = props.select,
-            pk = props.pk;
-        itemService.selectedOptions(pk.form, pk.type, pk.ids, (err, docs) => {
+            options = props.selectOptions,
+            fk = props.fk;
+        !options && fk && itemService.selectedOptions(fk.fsId, fk.fsType, fk.ids, (err, docs) => {
             if (!err) {
                 const options = select.empty ? [{value: DataFlag.EMPTY, label: '未选择'}] : []
-                _this.props.onLoadOptions(props.column, 'options', options.concat(docs));
+                _this.props.onLoadOptions(props.column, 'selectOptions', options.concat(docs));
             }
         })
     }
@@ -59,11 +60,12 @@ class StandardComp extends React.Component{
             form={props.form}
             tip={props.tip}
             rules={props.rules}
-            loading={!props.options}>
-            <Select>{buildSelect(props.options)}</Select>
+            loading={!props.selectOptions}>
+            <Select>{buildSelect(props.selectOptions)}</Select>
         </BaseEntryItem>)
     }
 }
+
 StandardComp.propTypes = {
     column: PropTypes.string.isRequired,
     label: PropTypes.string.isRequired,

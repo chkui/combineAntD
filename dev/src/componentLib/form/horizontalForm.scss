@@ -1,0 +1,9 @@
+@import "../../style/define";
+.contain{
+  position: relative;
+}
+.btn{
+  @media (max-width: $MediaXs){
+    width: 100%;
+  }
+}

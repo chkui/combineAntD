@@ -21,16 +21,54 @@ export const ListConfig = {
 
 /**
  * 系统全局Op的定义
- * @type {{
- *      ENABLE: boolean, 启用
- *      DISABLE: boolean, 停用
- *      DELETE: boolean 逻辑删除
- * }}
+ * @type {{Data2Comp: {ENABLE: boolean, DISABLE: boolean, DELETE: boolean}, Comp2Data: {true: string, false: string}}}
  */
 export const OPData = {
-    ENABLE: true,
-    DISABLE: false,
-    DELETE: false
+    Data2Comp: {
+        ENABLE: true,
+        DISABLE: false,
+        DELETE: false
+    },
+    Comp2Data:{
+        true:'ENABLE',
+        false:'DISABLE'
+    }
+};
+
+/**
+ * 数据集固定字段，所有的数据集都必须包含子些字段
+ * @type {{id: string, label: string, OP: string, createUser: string, createTime: string, modifyUser: string, modifyTime: string}}
+ */
+export const RegularItemMeta = {
+    /**
+     * 主键，使用19位Object-id
+     */
+    id: 'id',
+    /**
+     * 标题名称，用于标记业务内容
+     */
+    label: 'label',
+    /**
+     * 操作标志
+     * {@link OPData}
+     */
+    OP: 'OP',
+    /**
+     * 该项数据的创建者
+     */
+    createUser: 'createUser',
+    /**
+     * 数据创建时间，时间戳
+     */
+    createTime: 'createTime',
+    /**
+     * 该项数据的最后修改者
+     */
+    modifyUser: 'modifyUser',
+    /**
+     * 该项数据的最后修改时间，时间戳
+     */
+    modifyTime: 'modifyTime'
 }
 
 /**
@@ -38,20 +76,30 @@ export const OPData = {
  * @type {{NEW: string, DELETE: string, VIEW: string, SEARCH: string}}
  */
 export const ListOption = {
-    NEW:'NEW',
-    DELETE:'DELETE',
-    VIEW:'VIEW',
-    SEARCH:'SEARCH'
+    NEW: 'NEW',
+    DELETE: 'DELETE',
+    VIEW: 'VIEW',
+    SEARCH: 'SEARCH'
 }
 
 /**
  * 表单状态，用于在URL中显示表单对应的状态
  * @type {{new: string, edit: string, view: string}}
  */
-export const FromState = {
-    new:'new', //新建
-    edit:'edit',//编辑
-    view:'view'//查看（只读）
+export const FormStructureState = {
+    new: 'new', //新建
+    edit: 'edit',//编辑
+    view: 'view'//查看（只读）
+}
+
+/**
+ * 表单类型
+ * @type {{static: string, asset: string, flow: string}}
+ */
+export const FormStructureType = {
+    static: 'static',//预定义表单
+    asset: 'asset',//资产表单
+    flow: 'flow'//流程表单
 }
 
 /**
@@ -59,7 +107,7 @@ export const FromState = {
  * @type {{EMPTY: string}}
  */
 export const DataFlag = {
-    EMPTY:'EMPTY' //空数据，表示用户未输入内容或下拉菜单选择了空选项
+    EMPTY: 'EMPTY' //空数据，表示用户未输入内容或下拉菜单选择了空选项
 }
 
 export default {
@@ -67,5 +115,7 @@ export default {
     OPData,
     ListOption,
     DataFlag,
-    FromState
+    FormStructureState,
+    FormStructureType,
+    RegularItemMeta
 }

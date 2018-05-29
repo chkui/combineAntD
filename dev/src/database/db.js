@@ -10,6 +10,7 @@
  */
 
 import BrowserEmDataBase from 'nedb'
+import {RegularItemMeta} from '../../config/sysDefConfig'
 import {fluent} from 'es-optional'
 import {site} from '../../../data/db/site'
 import {menu} from '../../../data/db/menu'
@@ -47,7 +48,8 @@ const db = {
 };
 db.d_site.loadDatabase((err) => {
     if (!err) {
-        db.d_site.insert(site, (err, newDoc) => {
+        const insertData = fluent(localStorage).then(store=>store.d_site).then(site=>JSON.parse(site)).else(site);
+        db.d_site.insert(insertData, (err, newDoc) => {
             _siteInit = true;
             asyncExecute();
             log('init site data: ');
@@ -77,14 +79,45 @@ db.d_form.loadDatabase((err) => {
 });
 
 /**
+ * 默认排序字段
+ * @type {{}}
+ * @private
+ */
+const _defaultSort = {};
+_defaultSort[RegularItemMeta.modifyTime] = -1;
+
+/**
  *
  * @param tableName 查询表名称
- * @param options {@link https://github.com/louischatriot/nedb}
+ * @param where 查询条件 详见{@link https://github.com/louischatriot/nedb}find部分说明
+ * @param options 排序分页扩增操作
+ * @param options.sort 指定排序字段，格式为{column: -1或1}
+ * @param options.curPage 当前在第几页
+ * @param options.size 单页的数据个数
  * @param cb 回调 (err, docs)
  */
-const query = (tableName, options, cb) => {
+const query = (tableName, where, options, cb) => {
+    const sort = options.sort || _defaultSort,
+        skip = fluent(options.curPage).then(()=>options.size).then(()=>options.curPage * options.size).else(0),
+        limit = options.size || 100; //如果不限制，最多返回100条数据
+
     fluent(db[tableName]).then(table => {
-        asyncLoad(()=>table.find(options, cb));
+        asyncLoad(()=>table.find(where).sort(sort).skip(skip).limit(limit).exec(cb));
+        return true;
+    }).else(() => {
+        cb(`table ${tableName} no exists`);
+    })
+};
+
+/**
+ * 计算总数 符合条件的查询总数
+ * @param tableName 表名称
+ * @param where 条件
+ * @param cb 回调 (err, count)
+ */
+const count = (tableName, where, cb) => {
+    fluent(db[tableName]).then(table => {
+        asyncLoad(()=>table.count(where, cb));
         return true;
     }).else(() => {
         cb(`table ${tableName} no exists`);
@@ -113,11 +146,17 @@ const insert = (tableName, rows, cb) => {
             }
         })
     }
-    asyncLoad(()=>db[tableName].insert(rows, cb));
+    asyncLoad(()=>db[tableName].insert(rows, (err, doc)=>{
+        db[tableName].find({}, (err, docs)=>{
+            localStorage[tableName] = JSON.stringify(docs);
+        })
+        cb(err, doc);
+    }));
 }
 
 export default {
     query,
+    count,
     one,
     insert
 };

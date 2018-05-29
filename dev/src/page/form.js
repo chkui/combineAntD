@@ -12,7 +12,7 @@ class FormComponent extends React.Component {
 
     componentDidMount() {
         const props = this.props,
-            id = fluent(props.form).then(form=>form.id).else(false);
+            id = fluent(props.formStructure).then(fs=>fs.id).else(false);
         (id !== props.match.params.form) && props.onLoadForm(props.match.params.form);
     }
 
@@ -30,11 +30,11 @@ const Form = connect(
         const structure = state.formStructureReducer;
         return {
             stateCode: structure.stateCode,
-            form: structure.form
+            formStructure: structure.formStructure
         }
     },
     (dispatch, props) => ({
-        onLoadForm: id => dispatch(loadFormStructureAction(id))
+        onLoadForm: fsId => dispatch(loadFormStructureAction(fsId))
     })
 )(FormComponent)
 

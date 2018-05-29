@@ -27,7 +27,7 @@ export const form = [
             ],
         },
         // 表单的项目字段名称
-        itemMetaSet: [
+        itemMeta: [
             {
                 category: 'Input', //组件分类
                 type: 'PK', //组件类型
@@ -76,23 +76,25 @@ export const form = [
             }, {
                 category: 'Select',
                 type: 'Standard',
-                column: 'relParent',
+                column: 'fkParent',
                 label: '上级站点',
                 tip: '站点的从属关系，该站点从属与上级站点',
-                // pk表示外关联表单、字段以及数据项数据
+                // fk表示外关联表单、字段以及数据项数据
                 // 关联数据可以是标准的站点数据、数据字典、人员、权限、资产项、流程项。
-                pk: {
-                    form: 'static_d_site', //关联表单
-                    type: 'static', //关联表单类型
+                // 通常情况下数据项关联只关联主键，所以column不必填写
+                fk: {
+                    fsId: 'static_d_site', //关联表单
+                    fsType: 'static', //关联表单类型
+                    column: false, //TODO 保留字段：通常情况下外键数据项只关联主键，所以column暂时不启用
                     ids: false //[]，可以进行多项数据关联，如果关联字段不存在或为空，则全表关联
                 },
-                // 各种选择框的特有属性。数据来源源自pk，也可以直接设置Options
+                // 各种选择框的的操作属性。
                 select: {
                     empty: 1, //是否支持空选项
-                    options: 0
                 },
-                //下拉操作项目，通常由大前端组装（node，browser）数据库中不用存储这一项数据。
-                options: 0,
+                //下拉操作项目，通常由大前端根据fk字段进行组装（node，browser）
+                //也可以直接预设为固定结构，如果有预设，不会装载数据
+                selectOptions: 0,
                 listShow: 1,
                 search: 1
             }, {
@@ -108,7 +110,7 @@ export const form = [
         /**
          * 固定字符配置
          */
-        regularMetaSet: {
+        regularItemMeta: {
             createUser: 'READ', //READ\EDIT
             createTime: 'READ',
             modifyUser: 'READ',
@@ -125,7 +127,7 @@ export const form = [
         data: '',
         type: 'asset',
         label: '表单案例',
-        itemMetaSet: [ //描述字段-名称-组件-长度限定，{}
+        itemMeta: [ //描述字段-名称-组件-长度限定，{}
             {
                 category: 'Input',
                 type: 'Email',
@@ -227,7 +229,7 @@ export const form = [
         list: {
             options: ['view', 'new', 'delete', 'search'],
         },
-        itemMetaSet: [
+        itemMeta: [
             {
                 category: 'Input',
                 type: 'Email',

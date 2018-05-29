@@ -13,16 +13,16 @@ export const StateCode = {
     }
 }
 
-export const formStructureReducer = (state = {stateCode: StateCode.init, form: false}, action) => {
+export const formStructureReducer = (state = {stateCode: StateCode.init, formStructure: false}, action) => {
     switch (action.type) {
         case 'formStructure':
             return {
                 stateCode: action.stateCode,
-                form: action.form
+                formStructure: action.formStructure
             }
         case 'combineFormItemSet':
-            const form = Object.assign({}, state.form),
-                metas = form.itemMetaSet;
+            const formStructure = Object.assign({}, state.formStructure),
+                metas = formStructure.itemMeta;
             for(let pos = 1; pos < metas.length; pos++){
                 if(metas[pos].column === action.column){
                     metas[pos][action.key] = action.value;
@@ -30,7 +30,7 @@ export const formStructureReducer = (state = {stateCode: StateCode.init, form: f
             }
             return {
                 stateCode: state.stateCode,
-                form: form
+                formStructure: formStructure
             };
         default:
             return state;

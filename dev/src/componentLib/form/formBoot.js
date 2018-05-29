@@ -12,7 +12,7 @@ import {reRoute} from 'pwfe-dom/router'
  * @constructor
  */
 const FormBootComp = props => {
-    return props.stateCode === StateCode.suc ? (<HorizontalForm formStructure={props.form}/>) : null
+    return props.stateCode === StateCode.suc ? (<HorizontalForm formStructure={props.formStructure}/>) : null
 }
 
 
@@ -21,12 +21,9 @@ const FormBoot = connect(
         const structure = state.formStructureReducer;
         return {
             stateCode: structure.stateCode,
-            form: structure.form
+            formStructure: structure.formStructure
         }
-    },
-    (dispatch, props) => ({
-        onLoadForm: id => dispatch(loadFormStructureAction(id))
-    })
+    }
 )(reRoute()(FormBootComp))
 
 export default FormBoot

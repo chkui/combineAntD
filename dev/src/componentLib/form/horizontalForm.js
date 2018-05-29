@@ -1,9 +1,12 @@
 import React from 'react'
-import {Form, Input, Tooltip, Icon, Cascader, Select, Row, Col, Checkbox, Button} from 'antd';
+import {reRoute} from 'pwfe-dom/router'
+import {Form, Button, message} from 'antd';
 import Items from '../item/items'
 import {FormProvider} from '../formContext'
-import {formItemLayoutCol} from '../../../config/form'
-import {oneForm} from '../../../../data/form'
+import {formButtonLayoutCol} from '../../../config/form'
+import {formDataService} from '../../service/formDataService'
+
+const cn = require('classnames/bind').bind(require('./horizontalForm.scss'));
 
 const FormItem = Form.Item;
 
@@ -12,11 +15,31 @@ const FormItem = Form.Item;
  * @param props.formStructure 表单对象
  */
 class HorizontalForm extends React.Component {
+    constructor(...props) {
+        super(...props)
+        this.state = {onSubmit: false}
+    }
+
     handleSubmit = (e) => {
+        const _this = this,
+            props = _this.props;
+        _this.setState({onSubmit: true})
         e.preventDefault();
-        this.props.form.validateFieldsAndScroll((err, values) => {
-            if (!err) {
-                console.log('Received values of form: ', values);
+        props.form.validateFieldsAndScroll((err, values) => {
+            if (err) {
+                message.error('提交的数据项存在错误，请按提示检查！');
+                _this.setState({onSubmit: false})
+            } else {
+                formDataService.submit(props.formStructure, values, (err, docs) => {
+                    if(err){
+                        message.error(`提交数据错误：${err}`);
+                        _this.setState({onSubmit: false})
+                    }else{
+                        message.success('提交数据成功');
+                        props.browser.back();
+                        _this.setState({onSubmit: false})
+                    }
+                });
             }
         });
     }
@@ -24,16 +47,15 @@ class HorizontalForm extends React.Component {
     render() {
         const props = this.props;
         return (
-            <div>
-                <FormProvider value={props.form}>
-                    <Form onSubmit={this.handleSubmit}>
-                        {FormBuilder(props.formStructure, props.form)}
-                        <FormItem {...formItemLayoutCol}>
-                            <Button type="primary" htmlType="submit">提交</Button>
-                        </FormItem>
-                    </Form>
-                </FormProvider>
-            </div>
+            <FormProvider value={props.form}>
+                <Form onSubmit={this.handleSubmit}>
+                    {FormBuilder(props.formStructure, props.form)}
+                    <FormItem {...formButtonLayoutCol}>
+                        <Button className={cn('btn')} type="primary" htmlType="submit"
+                                loading={this.state.onSubmit}>提交</Button>
+                    </FormItem>
+                </Form>
+            </FormProvider>
         );
     }
 }
@@ -41,13 +63,13 @@ class HorizontalForm extends React.Component {
 /**
  * Form.create的作用是向子组件注入已经定义好验证和操作高阶组件
  */
-export default Form.create()(HorizontalForm);
+export default reRoute()(Form.create()(HorizontalForm));
 
-function FormBuilder(formData, form) {
+function FormBuilder(formStructure, form) {
     const list = [];
-    for (let item of formData.itemMetaSet) {
+    for (let item of formStructure.itemMeta) {
         const Component = Items[item.category][item.type].Entry;
-        list.push(<Component key={item.column}{...item} form={form}/>)
+        list.push(<Component key={item.column}{...item} formStructure={formStructure} form={form}/>)
     }
     return list;
 }

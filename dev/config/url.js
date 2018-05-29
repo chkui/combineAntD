@@ -1,4 +1,4 @@
-import {FromState} from './sysDefConfig'
+import {FormStructureState} from './sysDefConfig'
 
 /**
  * 全局url配置
@@ -20,8 +20,8 @@ export const routes = {
             data: 'data'
         },
         build: (state, form, data) => `/form/${state}/${form}/${data}`,
-        buildNew: (form) => `/form/${FromState.new}/${form}/get`,
-        buildView: (form, data) => `/form/${FromState.view}/${form}/${data}`,
-        buildEdit: (form, data) => `/form/${FromState.edit}/${form}/${data}`
+        buildNew: (form) => `/form/${FormStructureState.new}/${form}/get`,
+        buildView: (form, data) => `/form/${FormStructureState.view}/${form}/${data}`,
+        buildEdit: (form, data) => `/form/${FormStructureState.edit}/${form}/${data}`
     }
 }

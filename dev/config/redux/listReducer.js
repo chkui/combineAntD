@@ -21,8 +21,9 @@ export const StateCode = {
  * @param {object} action.list 列表信息
  * @param {number} action.list.total 数据量总数
  * @param {number} action.list.start 数据在全体结果集的开始位置
- * @param {number} action.list.count 单页数据个数
- * @param {number} action.list.docs 单页数据
+ * @param {number} action.list.end 数据在全体结果集的结束位置
+ * @param {array} action.list.docs 单页数据
+ * @param {object} action.list.sort 排序字段
  * @returns {*}
  */
 export const listDataReducer = (state = {stateCode: StateCode.init, list: false}, action) => {

@@ -1,16 +1,15 @@
-import {oneForm} from '../../src/database/form'
-import {fromJS} from 'immutable'
+import {oneFormStructure} from '../../src/database/form'
 import {StateCode} from './formReducer'
 
 /**
  * 更新当前表单的结构（样式）数据
  * @param stateCode 标记状态编码{@link stateCode}
- * @param form 切记修改form的任何数据都要新建一个对象。
+ * @param formStructure 切记修改form的任何数据都要新建一个对象。
  */
-export const formStructureAction = (stateCode, form) => ({
+export const formStructureAction = (stateCode, formStructure) => ({
     type: 'formStructure',
     stateCode: stateCode,
-    form: form
+    formStructure: formStructure
 });
 
 /**
@@ -21,11 +20,11 @@ export const formStructureAction = (stateCode, form) => ({
 export const loadFormStructureAction = (formId) => {
     return dispatch => {
         dispatch(formStructureAction(StateCode.init));
-        oneForm(formId, (err, form) => {
+        oneFormStructure(formId, (err, formStructure) => {
             if (err) {
                 dispatch(formStructureAction(StateCode.err));
             } else {
-                dispatch(formStructureAction(StateCode.suc, form));
+                dispatch(formStructureAction(StateCode.suc, formStructure));
             }
         })
     }

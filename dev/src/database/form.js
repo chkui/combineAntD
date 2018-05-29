@@ -5,18 +5,18 @@ import db from './db'
 
 /**
  * 根据ID获取单个表单
- * @param formId
- * @param cb
+ * @param fsId 要查询的表单ID
+ * @param cb 查询回调
  */
-export const oneForm = (formId, cb) => {
-    db.one('d_form', {OP: 'ENABLE', id: formId}, cb);
+export const oneFormStructure = (fsId, cb) => {
+    db.one('d_form', {OP: 'ENABLE', id: fsId}, cb);
 }
 
-export const queryForm = (formId, cb) => {
+export const queryForm = (fsId, cb) => {
 
 }
 
-export const addForm = (menu) => {
+export const addOneForm = (fsId, fsType, formDoc) => {
 
 }
 

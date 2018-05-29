@@ -16,10 +16,10 @@ const ListBootComp = props => {
 
 const ListBoot = connect(
     state => {
-        const structure = state.formStructureReducer;
+        const reducer = state.formStructureReducer;
         return {
-            stateCode: structure.stateCode,
-            form: structure.form
+            stateCode: reducer.stateCode,
+            form: reducer.form
         }
     }
 )(ListBootComp)

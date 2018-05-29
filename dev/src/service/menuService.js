@@ -1,7 +1,7 @@
 import menuConfig from '../../config/menu'
 import {List} from 'immutable'
 import {allMenu} from '../database/menu'
-import {oneForm} from '../database/form'
+import {oneFormStructure} from '../database/form'
 
 function MenuService() {
 }
@@ -46,7 +46,7 @@ const combineFormData = (docs, callback) => {
         result.push(doc);
     }
     for(let opts of optsList){
-        oneForm(opts.id, opts.cb);
+        oneFormStructure(opts.id, opts.cb);
         count++;
     }
 };

@@ -18,7 +18,7 @@
  */
 export const formItemLayoutCol = {
     labelCol: {
-        xs: {span: 24},
+        xs: {span: 0},
         sm: {span: 6},
         md: {span: 6},
         lg: {span: 6},
@@ -32,5 +32,16 @@ export const formItemLayoutCol = {
         lg: {span: 16},
         xl: {span: 16},
         xxl: {span: 16}
+    }
+}
+
+export const formButtonLayoutCol = {
+    wrapperCol: {
+        xs: {offset: 0,span: 14},
+        sm: {offset: 6,span: 18},
+        md: {offset: 6,span: 18},
+        lg: {offset: 6,span: 16},
+        xl: {offset: 6,span: 16},
+        xxl: {offset: 6,span: 16}
     }
 }

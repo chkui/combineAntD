@@ -13,11 +13,11 @@ class ListComponent extends React.Component {
     }
 
     render() {
-        const props = this.props;
+        const props = this.props, formStructure = props.formStructure;
         return StateCode.suc === props.stateCode ? (
             <div>
-                <BrowserTitle title={props.form.label}/>
-                <Data form={props.form} />
+                <BrowserTitle title={formStructure.label}/>
+                <Data formStructure={formStructure} />
             </div>
         ) : null;
     }
@@ -29,7 +29,7 @@ const List = connect(
         const structure = state.formStructureReducer;
         return {
             stateCode: structure.stateCode,
-            form: structure.form
+            formStructure: structure.formStructure
         }
     },
     (dispatch, props) => ({
