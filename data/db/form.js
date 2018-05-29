@@ -35,6 +35,7 @@ export const form = [
                 label: 'ID', //字段现实的名字
                 listShow: 0, //列表现实标记，标记在列表上是否可以显示
                 search: 0, //可搜索标记
+                sort: 0 //可排序标记
             }, {
                 category: 'Input',
                 type: 'Text',
@@ -49,7 +50,8 @@ export const form = [
                     }
                 ], //提交过滤规则
                 tip: '可以使用一个常用的业务编码来标记站点信息，用于和其他系统进行呢数据合并', //tip表示提示信息
-                search: 1
+                search: 1,
+                sort: 1
             }, {
                 category: 'Input',
                 type: 'Text',
@@ -60,7 +62,8 @@ export const form = [
                 ],
                 tip: '输入公司、企业、组织的名称',
                 listShow: 1,
-                search: 1
+                search: 1,
+                sort: 1
             }, {
                 category: 'Input',
                 type: 'Text',
@@ -72,7 +75,8 @@ export const form = [
                 ],
                 tip: '输入公司、企业、组织的简称',
                 listShow: 1,
-                search: 1
+                search: 1,
+                sort: 1
             }, {
                 category: 'Select',
                 type: 'Standard',
@@ -96,7 +100,8 @@ export const form = [
                 //也可以直接预设为固定结构，如果有预设，不会装载数据
                 selectOptions: 0,
                 listShow: 1,
-                search: 1
+                search: 1,
+                sort: 0
             }, {
                 category: 'Switch',
                 type: 'TFSwitch',
@@ -104,7 +109,8 @@ export const form = [
                 label: '启用&停用',
                 tip: '设定该站点是否停止使用',
                 listShow: 1,
-                search: 1
+                search: 1,
+                sort: 1
             }
         ],
         /**

@@ -7,9 +7,10 @@ import renderBoot from './column/renderBoot'
 import ButtonBar from './searchTable/buttonBar'
 import {connect} from 'react-redux'
 import {Table, Input, Button, Icon} from 'antd';
+import SearchInput from './searchTable/searchInput'
 import {fluent} from 'es-optional'
 
-const {Column} = Table;
+const {Column, ColumnGroup} = Table;
 const ButtonGroup = Button.Group;
 
 /**
@@ -45,7 +46,7 @@ class SearchTable extends React.Component {
             options = list.options,
             opt = {};
         opt.curPage = page.current - 1;
-        if(sorter){
+        if (sorter) {
             const sort = {}
             sort[sorter.field] = 'descend' === sorter.order ? -1 : 1;
             opt.sort = sort;
@@ -64,7 +65,7 @@ class SearchTable extends React.Component {
          order
          :"descend" ascend
          */
-        if(options.curPage !== opt.curPage || options.sort !== opt.sort){
+        if (options.curPage !== opt.curPage || options.sort !== opt.sort) {
             this.load(where, opt);
         }
 
@@ -84,11 +85,12 @@ class SearchTable extends React.Component {
         }
         for (let meta of formStructure.itemMeta) {
             if (meta.listShow) {
-                Columns.push(<Column key={meta.label}
-                                     title={meta.label}
-                                     dataIndex={meta.column}
-                                     sorter
-                                     render={renderBoot(meta)}/>)
+                Columns.push(<ColumnGroup key={meta.column} title={<SearchInput />}>
+                    <Column key={meta.column}
+                            title={<span>{meta.label}</span>}
+                            dataIndex={meta.column}
+                            sorter={meta.sort} render={renderBoot(meta)}/>
+                </ColumnGroup>)
             }
         }
         return (
