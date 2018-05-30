@@ -2,7 +2,15 @@ import React from 'react'
 import PropTypes from 'prop-types';
 import {Switch} from 'antd';
 
-import {BaseEntryItem} from '../baseItem'
+import FormWrapper from '../formWrapper'
+
+/**
+ * 标准双向开关
+ * 封装自{@link https://ant.design/components/switch-cn/}
+ * @param props
+ * @constructor
+ */
+export const TFSwitchEntry = props =>(<Switch {...props}/>)
 
 /**
  * 标准开关
@@ -15,11 +23,11 @@ import {BaseEntryItem} from '../baseItem'
  * @returns {*}
  * @constructor
  */
-export const TFSwitchEntry = props =>
-    (<BaseEntryItem {...props} valuePropName="checked" initialValue={true}>
-        <Switch/>
-    </BaseEntryItem>)
-TFSwitchEntry.propTypes = {
+export const TFSwitchItem = props =>
+    (<FormWrapper {...props} valuePropName="checked" initialValue={true}>
+        <TFSwitchEntry/>
+    </FormWrapper>)
+TFSwitchItem.propTypes = {
     column: PropTypes.string.isRequired,
     label: PropTypes.string.isRequired,
     rules: PropTypes.array,

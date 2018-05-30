@@ -5,13 +5,12 @@ import {FormConsumer} from '../formContext'
 import {formItemLayoutCol} from "../../../config/form";
 import rulerCollect from '../../rules/submitCollect'
 import {fluent} from 'es-optional'
-import {category} from "../../../../data/component";
 
 const Item = Form.Item;
-const cn = require('classnames/bind').bind(require('./baseItem.scss'));
+const cn = require('classnames/bind').bind(require('./formWrapper.scss'));
 
 /**
- * 基本录入组件。
+ * 表单基本录入组件。通过这个组件的包装，让一些基本组件提供表单联通、校验、数据收集功能
  * 1) Form的form参数通过Context传递，用于提供验证功能。
  *      参看{@link https://ant.design/components/form-cn/#components-form-demo-validate-other}之后的内容
  *
@@ -32,7 +31,7 @@ const cn = require('classnames/bind').bind(require('./baseItem.scss'));
  * @Param props.hasFeedback 是否包含验证错误的提示信息，input标签需要提供
  * @constructor
  */
-export class BaseEntryItem extends React.Component {
+export default class FormWrapper extends React.Component {
     constructor(...props) {
         super(...props)
         this.options = {};
@@ -97,7 +96,7 @@ export class BaseEntryItem extends React.Component {
 const Loading = props => (<div className={cn('spin')}><Spin/></div>)
 
 
-BaseEntryItem.propTypes = {
+FormWrapper.propTypes = {
     column: PropTypes.string.isRequired,
     label: PropTypes.string.isRequired,
     children: PropTypes.node.isRequired,
@@ -107,8 +106,6 @@ BaseEntryItem.propTypes = {
     hasFeedback: PropTypes.bool,
     loading: PropTypes.bool,
 };
-
-export const BaseReadItem = props => (<div>Read</div>);
 
 /**
  * 通用传递属性

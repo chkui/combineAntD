@@ -68,7 +68,7 @@ export default reRoute()(Form.create()(HorizontalForm));
 function FormBuilder(formStructure, form) {
     const list = [];
     for (let item of formStructure.itemMeta) {
-        const Component = Items[item.category][item.type].Entry;
+        const Component = Items[item.category][item.type].Form;
         list.push(<Component key={item.column}{...item} formStructure={formStructure} form={form}/>)
     }
     return list;

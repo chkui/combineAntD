@@ -1,17 +1,18 @@
 import React from 'react'
-import {ListConfig} from '../../../config/sysDefConfig'
+import {connect} from 'react-redux'
+import {ListConfig, ListOption} from '../../../config/sysDefConfig'
 import {loadListDataAction} from '../../../config/redux/listAction'
 import {StateCode} from '../../../config/redux/listReducer'
 import {listService} from '../../service/listService'
 import renderBoot from './column/renderBoot'
 import ButtonBar from './searchTable/buttonBar'
-import {connect} from 'react-redux'
-import {Table, Input, Button, Icon} from 'antd';
-import SearchInput from './searchTable/searchInput'
+import {Table} from 'antd';
+import SearchInputObserver from './searchTable/searchInputObserver'
 import {fluent} from 'es-optional'
 
+const cn = require('classnames/bind').bind(require('./searchTable.scss'));
+
 const {Column, ColumnGroup} = Table;
-const ButtonGroup = Button.Group;
 
 /**
  * 支持列表表头所斗的table
@@ -20,8 +21,12 @@ const ButtonGroup = Button.Group;
 class SearchTable extends React.Component {
     constructor(...props) {
         super(...props)
+        this.state = {searchBar: false};
         this.handleFresh = this.handleFresh.bind(this);
+        this.handleSearchEnable = this.handleSearchEnable.bind(this);
+        this.handleSearch = this.handleSearch.bind(this);
         this.handleTableChange = this.handleTableChange.bind(this);
+        this.proxy = new SearchInputObserver(this.handleSearch);
     }
 
     componentDidMount() {
@@ -36,74 +41,74 @@ class SearchTable extends React.Component {
 
     handleFresh() {
         const list = this.props.list;
-        this.load(list.where, list.options);
+        this.proxy.cleanSearchValue();
+        this.load({}, {});
     }
 
+    handleSearchEnable() {
+        this.setState((prevState, props) => ({
+            searchBar: !prevState.searchBar
+        }));
+    }
+
+    handleSearch(search) {
+        const {where, options} = this.props.list,
+            result = listService.antdQueryToDBSupport(where, options, search);
+        result && this.load(result.where, result.options)
+    }
 
     handleTableChange(page, filters, sorter) {
-        const list = this.props.list,
-            where = list.where,
-            options = list.options,
-            opt = {};
-        opt.curPage = page.current - 1;
-        if (sorter) {
-            const sort = {}
-            sort[sorter.field] = 'descend' === sorter.order ? -1 : 1;
-            opt.sort = sort;
-        }
-        /**
-         * {column: {…}, order: "descend", field: "code", columnKey: "站点编码(code)"}
-         column
-         :
-         {title: {…}, dataIndex: "code", sorter: true, render: null, key: "站点编码(code)", …}
-         columnKey
-         :
-         "站点编码(code)"
-         field
-         :
-         "code"
-         order
-         :"descend" ascend
-         */
-        if (options.curPage !== opt.curPage || options.sort !== opt.sort) {
-            this.load(where, opt);
-        }
-
-        console.log(page);
-        console.log(filters);
-        console.log(sorter);
+        const {where, options} = this.props.list,
+            result = listService.antdQueryToDBSupport(where, options, {}, page, filters, sorter);
+        result && this.load(result.where, result.options);
     }
 
     render() {
         const props = this.props,
             list = props.list,
             formStructure = props.formStructure,
-            Columns = [],
+            //标记是否可以查看表详情
+            viewDetail = fluent(formStructure.list).then(list=>list.options).then(options=>{
+                for(let opt of options){
+                    if(ListOption.VIEW === opt){
+                        return true;
+                    }
+                }
+                return false
+            }).else(false),
             pagination = {pageSize: ListConfig.pageLength};
         if (list) {
             pagination.total = list.total;
-        }
-        for (let meta of formStructure.itemMeta) {
-            if (meta.listShow) {
-                Columns.push(<ColumnGroup key={meta.column} title={<SearchInput />}>
-                    <Column key={meta.column}
-                            title={<span>{meta.label}</span>}
-                            dataIndex={meta.column}
-                            sorter={meta.sort} render={renderBoot(meta)}/>
-                </ColumnGroup>)
-            }
+            pagination.current = list.options.curPage + 1;
         }
         return (
             <div>
                 <ButtonBar options={fluent(formStructure.list).then(list => list.options).else(false)}
+                           onSearchEnable={this.handleSearchEnable}
                            onFresh={this.handleFresh}
                 />
                 <Table {...ListConfig.table}
                        loading={StateCode.suc !== props.stateCode}
                        pagination={pagination}
                        onChange={this.handleTableChange}
-                       dataSource={StateCode.suc === props.stateCode && listService.bindData(formStructure, list.docs)}>
-                    {Columns}
+                       dataSource={StateCode.suc === props.stateCode ? listService.bindData(formStructure, list.docs) : []}
+                       onRow={(record, index) =>({
+                               onClick: () => {console.log(record)}
+                       })}>
+                    {formStructure.itemMeta.map(meta => {
+                        if (meta.listShow) {
+                            return (<ColumnGroup key={meta.column}
+                                                 title={this.proxy.createSearchInput(formStructure, meta, this.state.searchBar)}>
+                                <Column key={meta.column}
+                                        className={cn(viewDetail && 'column')}
+                                        title={<span>{meta.label}</span>}
+                                        dataIndex={meta.column}
+                                        sorter={meta.sort} render={renderBoot(meta)}/>
+                            </ColumnGroup>)
+                        } else {
+                            return null;
+                        }
+                    })}
                 </Table>
             </div>);
     }

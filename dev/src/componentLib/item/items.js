@@ -1,47 +1,64 @@
 //input
-import {PKEntry} from './input/pk'
-import {TextEntry} from './input/text'
-import {EmailEntry} from './input/email'
+import {PKEntry, PKItem} from './input/pk'
+import {TextEntry, TextItem, TextRead} from './input/text'
+import {EmailEntry, EmailItem} from './input/email'
 
 //select
-import {StandardEntry} from './select/standard'
-import {CascaderEntry} from './select/cascader'
+import {StandardSelectEntry, StandardSelectItem} from './select/standard'
+import {CascaderEntry, CascaderItem} from './select/cascader'
 
 //switch
-import {TFSwitchEntry} from './switch/tfSwitch'
+import {TFSwitchEntry, TFSwitchItem} from './switch/tfSwitch'
+
+//listSearchItem
+import Search from '../list/searchItem/searchs'
+
+/**
+ * 所有的数据Input都接受同样的接口数据
+ * 所有的searchItem也是都接收同样的接口数据。
+ */
 
 /**
  *
- * @type {{Input: {Text: {Entry: TextEntry, Read: null}, Email: {Entry: EmailEntry, Read: null}}, Select: {Standard: {Entry: StandardEntry, Read: null}, Cascader: {Entry: CascaderEntry, Read: null}}}}
+ * @type {{Input: {PK: {Def: PKEntry, Form: PKItem, Read: null}, Text: {Def: TextEntry, Form: TextItem, Read: TextRead}, Email: {Def: EmailEntry, Form: EmailItem, Read: null}}, Select: {Standard: {Def: StandardSelectEntry, Form, Read: null}, Cascader: {Def: CascaderEntry, Form: CascaderItem, Read: null}}, Switch: {TFSwitch: {Def: TFSwitchEntry, Form: TFSwitchItem, Read: null}}}}
  */
 const Items = {
     Input: {
-        PK:{
-            Entry: PKEntry,
+        PK: {
+            Def: PKEntry,
+            Form: PKItem,
+            ListSearch: Search.Input.TextSearch,
             Read: null
         },
         Text: {
-            Entry: TextEntry,
-            Read: null
+            Def: TextEntry, //基本组件，不提供联合表单提交的功能
+            Form: TextItem, //表单组件，提供配合表单验证，规则校验，数据联动的功能
+            ListSearch: Search.Input.TextSearch, //默认的列表搜索组件，也可以在表单结构上设置，如果设置为true或其他有效数据，启用默认组件
+            Read: TextRead //只读组件，用于展示
         },
         Email: {
-            Entry: EmailEntry,
+            Def: EmailEntry,
+            Form: EmailItem,
+            ListSearch: Search.Input.TextSearch, //对应的列表搜索组件
             Read: null
         }
     },
     Select: {
         Standard: {
-            Entry: StandardEntry,
+            Def: StandardSelectEntry,
+            Form: StandardSelectItem,
             Read: null
         },
         Cascader: {
-            Entry: CascaderEntry,
+            Def: CascaderEntry,
+            Form: CascaderItem,
             Read: null
         },
     },
     Switch: {
         TFSwitch: {
-            Entry: TFSwitchEntry,
+            Def: TFSwitchEntry,
+            Form: TFSwitchItem,
             Read: null
         }
     }

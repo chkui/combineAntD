@@ -14,11 +14,17 @@ const ButtonGroup = Button.Group;
  * @param props
  * @param props.formId  //表单结构的ID
  * @param props.options //列表可用操作
+ * @param props.onSearchEnable //启用搜索回调
  * @param props.onFresh //刷新
  * @constructor
  */
 const ButtonBar = props => {
-    const newEnable = fluent(props.options).then(options=>{
+    const {options} = props;
+
+    /**
+     * 列表功能的启用标记
+     */
+    const Enable = fluent(props.options).then(options=>{
         for(let op of props.options){
             if(ListOption.NEW === op){
                 return true;
@@ -26,10 +32,19 @@ const ButtonBar = props => {
         }
     }).else(false);
     return (<ButtonGroup size={ListConfig.button.size}>
-        {newEnable && (<New />)}
-        <BarButton icon="retweet" onClick={props.onFresh}>刷新</BarButton>
+        {options && options.map(op=>{
+            if(ListOption.NEW === op){
+                return (<New key={op} />)
+            }else if(ListOption.SEARCH === op){
+                return (<BarButton key={op} icon="search" onClick={props.onSearchEnable}>查询</BarButton>)
+            }else{
+                return null;
+            }
+        })}
+        <BarButton key="retweet" icon="retweet" onClick={props.onFresh}>刷新</BarButton>
     </ButtonGroup>)
 }
+
 
 const New = reRoute()(class extends React.Component{
     constructor(...props){

@@ -24,7 +24,8 @@ function DataBindService() {
 DataBindService.prototype.listData2Comp = function (formStructure, formDocs) {
     const metas = formStructure.itemMeta,
         fks = metas.filter(meta => !!meta.fk) || [];
-    return formDocs.map(doc => {
+    return formDocs.map(d => {
+        const doc = Object.assign({}, d);//防止数据突变
         doc.key = doc.id;
         if (doc.OP) {
             doc.OP = OPData.Data2Comp[doc.OP] || false;//如果包含OP，必须将OP的字符串表述转换为true|false

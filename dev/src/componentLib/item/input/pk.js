@@ -4,12 +4,20 @@ import {idGenerator} from '../../../database/idgenerator'
 import {Form, Input} from 'antd';
 import {FormConsumer} from '../../formContext'
 
-import {BaseEntryItem} from '../baseItem'
+import FormWrapper from '../formWrapper'
 
 const cn = require('classnames/bind').bind(require('./pk.scss'));
 
 /**
- * 基本文字输入框
+ * 主键包装组件，用于显示或生成主键
+ *
+ * @param props
+ * @constructor
+ */
+export const PKEntry = props => <Input className={cn('read-only-input')} type="text" disabled {...props}/>
+
+/**
+ * 用于表单域的主键包装组件，用于显示或生成主键
  * @param props
  * @param props.form 接收 Form的form参数，用于提供验证功能
  * @param props.tip 录入的提示信息
@@ -17,7 +25,7 @@ const cn = require('classnames/bind').bind(require('./pk.scss'));
  * @returns {*}
  * @constructor
  */
-export class PKEntry extends React.Component {
+export class PKItem extends React.Component {
     constructor(...props) {
         super(...props)
     }
@@ -34,13 +42,13 @@ export class PKEntry extends React.Component {
 
     render() {
         const state = this.state;
-        return (<BaseEntryItem {...this.props}>
-            <Input className={cn('read-only-input')} type="text" disabled/>
-        </BaseEntryItem>)
+        return (<FormWrapper {...this.props}>
+            <PKEntry {...this.props}/>
+        </FormWrapper>)
     }
 }
 
-PKEntry.propTypes = {
+PKItem.propTypes = {
     column: PropTypes.string.isRequired,
     label: PropTypes.string.isRequired,
     rules: PropTypes.array,

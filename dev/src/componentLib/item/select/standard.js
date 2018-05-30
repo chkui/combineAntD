@@ -2,12 +2,20 @@ import React from 'react'
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux'
 import {Select, Tooltip, Icon} from 'antd';
-import {BaseEntryItem} from '../baseItem'
+import FormWrapper from '../formWrapper'
 import {itemService} from '../../../service/itemService'
 import {DataFlag} from '../../../../config/sysDefConfig'
 import {combineFormMetaSetAction} from '../../../../config/redux/formAction'
 
 const {Option, OptGroup} = Select;
+
+/**
+ * 基础下来菜单
+ * {@link https://ant.design/components/select-cn/}
+ * @param props
+ * @constructor
+ */
+export const StandardSelectEntry = props =>(<Select {...props}/>)
 
 /**
  * 基础单项下拉菜单，提供分组功能。
@@ -36,7 +44,7 @@ const {Option, OptGroup} = Select;
  * @constructor
  */
 
-class StandardComp extends React.Component {
+class StandardSelectItemComp extends React.Component {
     componentDidMount() {
         const _this = this,
             props = this.props,
@@ -54,7 +62,7 @@ class StandardComp extends React.Component {
     render() {
         const props = this.props,
             state = this.state;
-        return (<BaseEntryItem
+        return (<FormWrapper
             column={props.column}
             label={props.label}
             form={props.form}
@@ -62,11 +70,11 @@ class StandardComp extends React.Component {
             rules={props.rules}
             loading={!props.selectOptions}>
             <Select>{buildSelect(props.selectOptions)}</Select>
-        </BaseEntryItem>)
+        </FormWrapper>)
     }
 }
 
-StandardComp.propTypes = {
+StandardSelectItemComp.propTypes = {
     column: PropTypes.string.isRequired,
     label: PropTypes.string.isRequired,
     rules: PropTypes.array,
@@ -74,11 +82,11 @@ StandardComp.propTypes = {
     options: PropTypes.array
 };
 
-export const StandardEntry = connect(
+export const StandardSelectItem = connect(
     () => ({}),
     (dispatch, props) => ({
         onLoadOptions: (column, key, value) => dispatch(combineFormMetaSetAction(column, key, value))
-    }))(StandardComp);
+    }))(StandardSelectItemComp);
 
 /**
  * 构建组件

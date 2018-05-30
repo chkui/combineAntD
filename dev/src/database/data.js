@@ -39,14 +39,23 @@ export const listQuery = (fsId, fsType, where, options, cb) => {
     if (FormStructureType.static === fsType) {
         table = staticCrud[fsId]
     }
-    table.count(fsId, fsType, where, (err, count)=>{
-        if(err){
+    const whe = where ? (() => {
+        const keys = Object.keys(where), ret = {};
+        if (keys && 0 < keys.length) {
+            keys.map(key => {
+                ret[key] = new RegExp(where[key])
+            })
+        }
+        return ret;
+    })() : {};
+    table.count(fsId, fsType, whe, (err, count) => {
+        if (err) {
             cb(err);
-        }else{
-            table.query(fsId, fsType, where, options, (err, docs)=>{
-                if(err){
+        } else {
+            table.query(fsId, fsType, whe, options, (err, docs) => {
+                if (err) {
                     cb(err);
-                }else{
+                } else {
                     cb(null, {
                         total: count,
                         docs: docs,
@@ -81,7 +90,7 @@ const staticCrud = {
         query: (formId, formType, where, options, cb) => {
             db.query('d_site', where, options, cb);
         },
-        count:(formId, formType, where, cb) => {
+        count: (formId, formType, where, cb) => {
             db.count('d_site', where, cb);
         },
         insert: (fsId, fsType, rows, cb) => {

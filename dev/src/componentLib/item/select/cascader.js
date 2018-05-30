@@ -1,7 +1,15 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { Cascader } from 'antd';
-import {BaseEntryItem} from '../baseItem'
+import FormWrapper from '../formWrapper'
+
+/**
+ * 级联下拉选择器，建议最多到第三层
+ * 封装自{@link https://ant.design/components/cascader-cn/}
+ * @param props
+ * @constructor
+ */
+export const CascaderEntry = props => (<Cascader {...props}/>)
 
 /**
  * 级联下拉选择器，建议最多到第三层
@@ -23,16 +31,16 @@ import {BaseEntryItem} from '../baseItem'
  *     }]
  * @constructor
  */
-export const CascaderEntry = props =>
-    (<BaseEntryItem
+export const CascaderItem = props =>
+    (<FormWrapper
         column={props.column}
         label={props.label}
         form={props.form}
         tip={props.tip}
         rules={props.rules}
         hasFeedback>
-        <Cascader options={props.options}/>
-    </BaseEntryItem>);
+        <CascaderEntry options={props.options}/>
+    </FormWrapper>);
 CascaderEntry.propTypes = {
     column: PropTypes.string.isRequired,
     label: PropTypes.string.isRequired,
@@ -40,7 +48,3 @@ CascaderEntry.propTypes = {
     tip: PropTypes.string,
     options: PropTypes.array.isRequired
 };
-CascaderEntry.attribute = {
-    category:'select',
-    type: 'cascader'
-}

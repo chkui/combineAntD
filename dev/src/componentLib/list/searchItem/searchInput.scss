@@ -1,0 +1,12 @@
+.searchInput{
+  text-align: left;
+  overflow: hidden;
+}
+.show{
+  height: 32px;
+  transition: height .25s ease;
+}
+.hide{
+  height: 0;
+  transition: height .25s ease;
+}
