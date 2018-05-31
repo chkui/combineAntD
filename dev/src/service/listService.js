@@ -1,5 +1,5 @@
 import db from '../database/data'
-import {ListOption} from '../../config/sysDefConfig'
+import {iocService} from './iocService'
 import {dataBindService} from './dataBindService'
 import {fluent} from 'es-optional'
 
@@ -15,7 +15,7 @@ function ListService() {
  * @param {object} options.sort 指定排序字段，格式为{column: -1或1}
  * @param {number} options.curPage 当前在第几页
  * @param {number} options.size 单页的数据个数
- * @param {function} cb (err, docs, total, start, end) 查询成功的回调
+ * @param {function} cb (err, total, docs, where, options) 查询成功的回调
  *     err 错误信息
  *     docs返回的文档
  *     total 数据总量
@@ -23,7 +23,9 @@ function ListService() {
  *     end 查询结果的结束位置
  */
 ListService.prototype.find = function (fsId, fsType, where, options, cb) {
-    db.listQuery(fsId, fsType, where, options, cb);
+    db.listQuery(fsId, fsType, where, options, (err, total, docs)=>{
+        cb(err, total, docs, where, options)
+    });
 }
 
 /**
@@ -93,19 +95,18 @@ ListService.prototype.antdQueryToDBSupport = function (where = {}, options = {},
 
     //构建where
     let whe = where, isWhe = false;
-    if(where !== search){
+    if (where !== search) {
         whe = search;
         isWhe = true;
+        opts.curPage = 0;
     }
     return (isOpts || isWhe) ? {
         where: whe,
         options: opts
     } : false
-}
+};
 
 /**
- *
- * @type {ListService}
+ * {@link ListService}
  */
-export const listService = new ListService();
-export default ListService
+export const listService = iocService.addBean(ListService);

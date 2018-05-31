@@ -15,24 +15,26 @@ export const StateCode = {
 
 /**
  *
- * @param state 状态
- * @param action
- * @param {string} action.type 'listData'
- * @param {object} action.list 列表信息
- * @param {number} action.list.total 数据量总数
- * @param {number} action.list.start 数据在全体结果集的开始位置
- * @param {number} action.list.end 数据在全体结果集的结束位置
- * @param {array} action.list.docs 单页数据
- * @param {object} action.list.sort 排序字段
+ * @param {object} state 详见{@link StateCode} 说明
+ * @param {object} action 详见{@link listDataAction}、{@link combineListSearchDataAction} 参数说明
  * @returns {*}
  */
-export const listDataReducer = (state = {stateCode: StateCode.init, list: false}, action) => {
+export const listDataReducer = (state = {stateCode: StateCode.init, search: false, list: false}, action) => {
     switch (action.type) {
-        case 'listData':
+        case 'combineListData':
             return {
                 stateCode: action.stateCode,
+                search: state.search,
                 list: action.list
             }
+        case 'combineListSearchData':
+            const search = state.search || {};
+            search[action.column] = action.data;
+            return {
+                stateCode: state.stateCode,
+                search: search,
+                list: state.list
+            };
         default:
             return state;
     }

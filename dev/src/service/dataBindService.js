@@ -1,5 +1,6 @@
 import {userService} from './userService'
 import {DataFlag, RegularItemMeta, OPData} from '../../config/sysDefConfig'
+import {iocService} from './iocService'
 import {fluent} from 'es-optional'
 
 /**
@@ -84,5 +85,7 @@ DataBindService.prototype.buildRegularMetaEdit = function (formDoc) {
 }
 
 
-export const dataBindService = new DataBindService();
-export default DataBindService
+/**
+ * {@link DataBindService}
+ */
+export const dataBindService = iocService.addBean(DataBindService);

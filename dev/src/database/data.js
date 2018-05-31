@@ -2,7 +2,7 @@
  用于数据CRUD的接口，所有的数据都必须通过这个接口来进行CRUD操作，针对表单的类型['flow'|'asset'|'static']对应的表也有错差异
  */
 import db from './db'
-import {FormStructureType} from '../../config/sysDefConfig'
+import {FormStructureType, QueryOpt} from '../../config/sysDefConfig'
 
 /**
  * 多数据查询方法
@@ -25,7 +25,9 @@ export const query = (fsId, fsType, where, options, cb) => {
  * 支持数据集总数递归的查询。也支持分页
  * @param fsId
  * @param fsType
- * @param where 查询条件 详见{@link https://github.com/louischatriot/nedb}find部分说明
+ * @param where 查询条件
+ *      结构见{@link listData}的where说明
+ *      查询方式见{@link https://github.com/louischatriot/nedb}find部分说明
  * @param options 排序分页扩增操作
  * @param options.sort 指定排序字段，格式为{column: -1或1}
  * @param options.curPage 当前在第几页
@@ -42,9 +44,13 @@ export const listQuery = (fsId, fsType, where, options, cb) => {
     const whe = where ? (() => {
         const keys = Object.keys(where), ret = {};
         if (keys && 0 < keys.length) {
-            keys.map(key => {
-                ret[key] = new RegExp(where[key])
-            })
+            let key, title, cond;
+            for (key of keys) {
+                const {column, value, opt} = where[key];
+                title = Array.isArray(column) ? column.join('.') : column;
+                cond = QueryOpt.LIK === opt ? new RegExp(`${value}`) : value;
+                ret[title] = cond;
+            }
         }
         return ret;
     })() : {};
@@ -56,12 +62,7 @@ export const listQuery = (fsId, fsType, where, options, cb) => {
                 if (err) {
                     cb(err);
                 } else {
-                    cb(null, {
-                        total: count,
-                        docs: docs,
-                        where: where,
-                        options: options
-                    });
+                    cb(null, count, docs);
                 }
             })
         }
@@ -69,7 +70,7 @@ export const listQuery = (fsId, fsType, where, options, cb) => {
 }
 
 /**
- * 想数据表添加数据
+ * 向数据表添加数据
  * @param fsId
  * @param fsType
  * @param rows

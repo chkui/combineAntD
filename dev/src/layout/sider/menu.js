@@ -2,18 +2,17 @@ import React from 'react'
 import {Menu, Icon} from 'antd';
 import {Link} from 'pwfe-dom/router'
 import menuConfig from '../../../config/menu'
-import MenuService from '../../service/menuService'
+import {menuService} from '../../service/menuService'
 import {connect} from 'react-redux'
 import {menuAction} from '../../../config/redux/menuAction'
 import {routes} from '../../../config/url'
-import {FromState} from '../../../config/sysDefConfig'
 
 const SubMenu = Menu.SubMenu
 
 class MenuComponent extends React.Component {
     componentDidMount() {
         const _this = this;
-        new MenuService().build((menus) => {
+        new menuService.build((menus) => {
             _this.props.onLoadMenu(menus)
         })
     }

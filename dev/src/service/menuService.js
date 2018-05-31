@@ -1,12 +1,11 @@
 import menuConfig from '../../config/menu'
+import {iocService} from './iocService'
 import {List} from 'immutable'
 import {allMenu} from '../database/menu'
 import {oneFormStructure} from '../database/form'
 
 function MenuService() {
 }
-
-export default MenuService
 
 /**
  * 构建菜单
@@ -106,3 +105,7 @@ const buildDBIter = (menus, surplus) => {
 MenuService.prototype.add = function (menu, cb) {
 
 }
+/**
+ * {@link ListService}
+ */
+export const menuService = iocService.addBean(MenuService);

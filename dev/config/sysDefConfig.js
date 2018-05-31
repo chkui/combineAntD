@@ -110,6 +110,17 @@ export const DataFlag = {
     EMPTY: 'EMPTY' //空数据，表示用户未输入内容或下拉菜单选择了空选项
 }
 
+/**
+ * 查询相关的规则
+ * @type {{EQU: string, LIK: string, DESC: string, ASC: string}}
+ */
+export const QueryOpt = {
+    EQU:'que', //完全相等匹配
+    LIK:'lik', //模糊匹配
+    DESC:'decs', //上升排序
+    ASC:'asc' //下降排序
+}
+
 export default {
     ListConfig,
     OPData,
@@ -117,5 +128,6 @@ export default {
     DataFlag,
     FormStructureState,
     FormStructureType,
-    RegularItemMeta
+    RegularItemMeta,
+    QueryOpt
 }

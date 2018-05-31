@@ -32,7 +32,7 @@ export default renderBoot
 /**
  * 默认数据表格处理。会根据当当前的查询条件进行高亮结果渲染。
  * 1)会持续观察列表数据，通过列表数据来判断是否对当前数据进行高亮
- * 2)会获取搜索的where条件
+ * 2)会获取搜索的where条件 {@link listData}
  * @param props
  * @constructor
  */
@@ -47,7 +47,7 @@ const DefColumn = connect(
 )(props => {
     const {where, text} = props,
         {column} = props.itemMeta,
-        reg = where[column];
+        reg = fluent(where[column]).then(q=>q.value).else(false);
     let Comp = reg ? (<span>{
         text.split(new RegExp(`(?<=${reg})|(?=${reg})`, 'i')).map((t, i) =>
             t.toLowerCase() === reg.toLowerCase() ?

@@ -1,4 +1,5 @@
 import db from '../database/data'
+import {iocService} from './iocService'
 import {fluent} from 'es-optional'
 
 /**
@@ -28,5 +29,7 @@ ItemService.prototype.selectedOptions = function (fsId, fsType, fsFkIds, cb) {
     });
 }
 
-export const itemService = new ItemService();
-export default ItemService
+/**
+ * {@link ItemService}
+ */
+export const itemService = iocService.addBean(ItemService);

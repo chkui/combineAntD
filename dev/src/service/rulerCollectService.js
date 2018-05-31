@@ -1,4 +1,5 @@
 import {query} from '../database/data'
+import {iocService} from './iocService'
 
 /**
  *
@@ -27,8 +28,6 @@ RulerCollectService.prototype.checkTableSameValueExists = function (fsId, fsType
 }
 
 /**
- *
- * @type {RulerCollectService}
+ * {@link RulerCollectService}
  */
-export const rulerCollectService = new RulerCollectService();
-export default RulerCollectService
+export const rulerCollectService = iocService.addBean(RulerCollectService);

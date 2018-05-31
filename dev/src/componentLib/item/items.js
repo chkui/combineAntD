@@ -27,19 +27,19 @@ const Items = {
         PK: {
             Def: PKEntry,
             Form: PKItem,
-            ListSearch: Search.Input.TextSearch,
+            ListSearch: Search.Input.Text,
             Read: null
         },
         Text: {
             Def: TextEntry, //基本组件，不提供联合表单提交的功能
             Form: TextItem, //表单组件，提供配合表单验证，规则校验，数据联动的功能
-            ListSearch: Search.Input.TextSearch, //默认的列表搜索组件，也可以在表单结构上设置，如果设置为true或其他有效数据，启用默认组件
+            ListSearch: Search.Input.Text, //默认的列表搜索组件，也可以在表单结构上设置，如果设置为true或其他有效数据，启用默认组件
             Read: TextRead //只读组件，用于展示
         },
         Email: {
             Def: EmailEntry,
             Form: EmailItem,
-            ListSearch: Search.Input.TextSearch, //对应的列表搜索组件
+            ListSearch: Search.Input.Text,
             Read: null
         }
     },
@@ -47,11 +47,13 @@ const Items = {
         Standard: {
             Def: StandardSelectEntry,
             Form: StandardSelectItem,
+            ListSearch: Search.Select.Standard, //对应的列表搜索组件
             Read: null
         },
         Cascader: {
             Def: CascaderEntry,
             Form: CascaderItem,
+            ListSearch: Search.Select.Standard, //对应的列表搜索组件
             Read: null
         },
     },
@@ -59,6 +61,7 @@ const Items = {
         TFSwitch: {
             Def: TFSwitchEntry,
             Form: TFSwitchItem,
+            ListSearch: Search.Select.Standard, //对应的列表搜索组件
             Read: null
         }
     }

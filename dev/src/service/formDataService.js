@@ -1,5 +1,5 @@
 import {add} from '../database/data'
-import {DataFlag} from '../../config/sysDefConfig'
+import {iocService} from './iocService'
 import {dataBindService} from './dataBindService'
 
 function FormDataService() {
@@ -20,5 +20,7 @@ FormDataService.prototype.submit = function (fs, fd, cb) {
     }
 }
 
-export const formDataService = new FormDataService();
-export default FormDataService
+/**
+ * {@link FormDataService}
+ */
+export const formDataService = iocService.addBean(FormDataService);

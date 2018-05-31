@@ -34,7 +34,12 @@ export const form = [
                 column: 'id', //字段标记，标记对应的字段
                 label: 'ID', //字段现实的名字
                 listShow: 0, //列表现实标记，标记在列表上是否可以显示
-                search: 0, //可搜索标记
+                /**
+                 * 可搜索标记。
+                 * 搜索标记如果是有一个有效标记（非[0,false,null,undefined]则会启用搜索功能。
+                 * 搜索标记如果是一个对象，则会按照{@link searchs}的结构进行加载，对象目标不存在则使用默认组件
+                 */
+                search: 0,
                 sort: 0 //可排序标记
             }, {
                 category: 'Input',
@@ -50,7 +55,7 @@ export const form = [
                     }
                 ], //提交过滤规则
                 tip: '可以使用一个常用的业务编码来标记站点信息，用于和其他系统进行呢数据合并', //tip表示提示信息
-                search: 1,
+                search: {category:'Input',type:'Text'},
                 sort: 1
             }, {
                 category: 'Input',
@@ -101,7 +106,7 @@ export const form = [
                 selectOptions: 0,
                 listShow: 1,
                 search: 1,
-                sort: 0
+                sort: 1
             }, {
                 category: 'Switch',
                 type: 'TFSwitch',
@@ -109,8 +114,8 @@ export const form = [
                 label: '启用&停用',
                 tip: '设定该站点是否停止使用',
                 listShow: 1,
-                search: 1,
-                sort: 1
+                search: 0,
+                sort: 0
             }
         ],
         /**

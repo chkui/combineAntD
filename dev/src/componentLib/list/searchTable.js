@@ -1,13 +1,12 @@
 import React from 'react'
-import {connect} from 'react-redux'
+import listData from '../../componentLib/highOrder/listData'
 import {ListConfig, ListOption} from '../../../config/sysDefConfig'
-import {loadListDataAction} from '../../../config/redux/listAction'
 import {StateCode} from '../../../config/redux/listReducer'
 import {listService} from '../../service/listService'
 import renderBoot from './column/renderBoot'
 import ButtonBar from './searchTable/buttonBar'
 import {Table} from 'antd';
-import SearchInputObserver from './searchTable/searchInputObserver'
+import SearchObserver from './searchTable/searchObserver'
 import {fluent} from 'es-optional'
 
 const cn = require('classnames/bind').bind(require('./searchTable.scss'));
@@ -26,7 +25,8 @@ class SearchTable extends React.Component {
         this.handleSearchEnable = this.handleSearchEnable.bind(this);
         this.handleSearch = this.handleSearch.bind(this);
         this.handleTableChange = this.handleTableChange.bind(this);
-        this.proxy = new SearchInputObserver(this.handleSearch);
+        this.handleRow = this.handleRow.bind(this);
+        this.searchObserver = new SearchObserver(this.handleSearch);
     }
 
     componentDidMount() {
@@ -36,7 +36,7 @@ class SearchTable extends React.Component {
     load(where, options) {
         const props = this.props,
             formStructure = props.formStructure;
-        props.onLoadList(formStructure.id, formStructure.type, where || {}, options || {});
+        props.loadList(formStructure.id, formStructure.type, where || {}, options || {});
     }
 
     handleFresh() {
@@ -59,8 +59,15 @@ class SearchTable extends React.Component {
 
     handleTableChange(page, filters, sorter) {
         const {where, options} = this.props.list,
-            result = listService.antdQueryToDBSupport(where, options, {}, page, filters, sorter);
+            result = listService.antdQueryToDBSupport(where, options, where, page, filters, sorter);
         result && this.load(result.where, result.options);
+    }
+
+    handleRow(record, index){
+        const _this = this;
+        return{
+            onClick:()=>{console.log(record)}
+        }
     }
 
     render() {
@@ -85,20 +92,17 @@ class SearchTable extends React.Component {
             <div>
                 <ButtonBar options={fluent(formStructure.list).then(list => list.options).else(false)}
                            onSearchEnable={this.handleSearchEnable}
-                           onFresh={this.handleFresh}
-                />
+                           onFresh={this.handleFresh}/>
                 <Table {...ListConfig.table}
                        loading={StateCode.suc !== props.stateCode}
                        pagination={pagination}
                        onChange={this.handleTableChange}
                        dataSource={StateCode.suc === props.stateCode ? listService.bindData(formStructure, list.docs) : []}
-                       onRow={(record, index) =>({
-                               onClick: () => {console.log(record)}
-                       })}>
+                       onRow={this.handleRow}>
                     {formStructure.itemMeta.map(meta => {
                         if (meta.listShow) {
                             return (<ColumnGroup key={meta.column}
-                                                 title={this.proxy.createSearchInput(formStructure, meta, this.state.searchBar)}>
+                                                 title={this.searchObserver.createSearchInput(formStructure, meta, this.state.searchBar)}>
                                 <Column key={meta.column}
                                         className={cn(viewDetail && 'column')}
                                         title={<span>{meta.label}</span>}
@@ -114,17 +118,6 @@ class SearchTable extends React.Component {
     }
 }
 
-const SearchTableWrapper = connect(
-    state => {
-        const listData = state.listDataReducer;
-        return {
-            stateCode: listData.stateCode,
-            list: listData.list
-        }
-    },
-    (dispatch, props) => ({
-        onLoadList: (id, type, where, options) => dispatch(loadListDataAction(id, type, where, options))
-    })
-)(SearchTable)
+const SearchTableWrapper = listData()(SearchTable);
 
 export default SearchTableWrapper
