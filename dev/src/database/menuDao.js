@@ -50,7 +50,7 @@ export const insertBatchMenu = (list) => {
     })
 };
 
-const CountSql = 'SELECT COUNT(1) AS count FROM B_MENU WHERE 1 = 1'
+const CountSql = 'SELECT COUNT(*) AS count FROM B_MENU WHERE 1 = 1'
 
 /**
  * 根据查询条件获取总数
@@ -64,7 +64,8 @@ export const getCount = (query, cb) => {
     let where = '', cond = [];
     for (let i of query || []) {
         if (QueryOpt.LIK === i.opts) {
-            where += ` AND ${i.column} LIKE %${i.value}%`
+            where += ` AND ${i.column} LIKE ?`
+            cond.push(`%${i.value}%`);
         } else {
             where += ` AND ${i.column} = ?`
             cond.push(i.value);
@@ -80,9 +81,9 @@ export const getCount = (query, cb) => {
 }
 
 (() => {
-    getCount([{column: 'count', value: '桌', opts: QueryOpt.LIK}], (err, count) => {
+    getCount([{column: 'label', value: '桌', opts: QueryOpt.LIK}], (err, count) => {
         if (!err) {
-            0 === count && insertBatchMenu(insertMenu);
+            0 > count && insertBatchMenu(insertMenu);
         }
     })
 })();
