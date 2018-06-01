@@ -45,4 +45,12 @@ export default [{//首页
             call(require("../src/page/form"))
         }, 'formView')
     }
+}, {
+    id: "menuConfig",
+    url: 'config/menu',
+    component: (call) => {
+        require.ensure([], require => {
+            call(require("../src/page/list"))
+        }, 'form')
+    }
 }];

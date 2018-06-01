@@ -21,6 +21,7 @@ export const ListConfig = {
 
 /**
  * 系统全局Op的定义
+ * //todo delete
  * @type {{Data2Comp: {ENABLE: boolean, DISABLE: boolean, DELETE: boolean}, Comp2Data: {true: string, false: string}}}
  */
 export const OPData = {
@@ -34,6 +35,42 @@ export const OPData = {
         false:'DISABLE'
     }
 };
+
+/**
+ * 菜单类型配置
+ * @type {{LINK: string, FORM: string, GROUP: string}}
+ */
+export const MenuLinkType = {
+    LINK:'L',
+    FORM:'F',
+    GROUP:'G'
+}
+
+/**
+ * 系统数据操作标记
+ * @type {{ENABLE: string, DISABLE: string, DELETE: string}}
+ */
+export const SysFlag = {
+    ENABLE:'E', //启用
+    DISABLE:'N', //停用
+    DELETE:'D' //删除
+}
+
+/**
+ * OP字段的定义参数。
+ * @type {{Data2Comp: {E: boolean, N: boolean, D: boolean}, Comp2Data: {true: string, false: string}}}
+ */
+export const OPTrans = {
+    Data2Comp: {
+        E: true, //启用
+        N: false, //停用
+        D: false //删除
+    },
+    Comp2Data:{
+        true:'E',
+        false:'N'
+    }
+}
 
 /**
  * 数据集固定字段，所有的数据集都必须包含子些字段
@@ -115,10 +152,10 @@ export const DataFlag = {
  * @type {{EQU: string, LIK: string, DESC: string, ASC: string}}
  */
 export const QueryOpt = {
-    EQU:'que', //完全相等匹配
-    LIK:'lik', //模糊匹配
-    DESC:'decs', //上升排序
-    ASC:'asc' //下降排序
+    EQU:'QUE', //完全相等匹配
+    LIK:'LIK', //模糊匹配
+    DESC:'DESC', //上升排序
+    ASC:'ASC' //下降排序
 }
 
 export default {
