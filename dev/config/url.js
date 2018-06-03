@@ -25,3 +25,24 @@ export const routes = {
         buildEdit: (form, data) => `/form/${FormStructureState.edit}/${form}/${data}`
     }
 }
+
+export const urlBase = {
+    menu:{
+        module:'/api/menu',
+        options:{
+            getAll:'/getAllMenu'
+        }
+    }
+}
+
+const none = encodeURI(JSON.stringify('none'));
+/**
+ * url命名暂定 '/api/模块[menu|site|formStrut]/操作[allMenu|list]等/传递参数[encodeURI(JSON.stringify(json))]'
+ *      或 '/api/模块/子模块/传递参数[encodeURI(JSON.stringify(json))]'
+ * @type {{menu: {getAll: function(): string}}}
+ */
+export const urlBuilder = {
+    menu:{
+        getAll:(params)=>`${urlBase.menu.module}${urlBase.menu.options.getAll}/${params || none}`
+    }
+}

@@ -3,6 +3,8 @@ import {iocService} from './iocService'
 import {List} from 'immutable'
 import {allMenu} from '../database/menu'
 import {oneFormStructure} from '../database/form'
+import {get} from '../request/net'
+import {urlBuilder} from '../../config/url'
 
 function MenuService() {
 }
@@ -12,7 +14,17 @@ function MenuService() {
  * @param {function} cb (List(menus)) //返回的是一个 immutable/List对象。
  */
 MenuService.prototype.build = function (cb) {
-    allMenu((err, docs) => {
+    get(urlBuilder.menu.getAll(), (err, resultSet)=>{
+        if (!err) {
+            combineFormData(resultSet, (combineResults)=>{
+                const cusMenu = buildDB(combineResults),
+                    menus = List(menuConfig.before.concat(cusMenu, menuConfig.after))
+                cb(menus);
+            })
+        }
+    })
+
+    /*allMenu((err, docs) => {
         if (!err) {
             combineFormData(docs, (combineResults)=>{
                 const cusMenu = buildDB(combineResults),
@@ -20,7 +32,7 @@ MenuService.prototype.build = function (cb) {
                 cb(menus);
             })
         }
-    })
+    })*/
 };
 const combineFormData = (docs, callback) => {
     const result = [], optsList = [];
