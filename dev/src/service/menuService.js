@@ -1,8 +1,5 @@
-import menuConfig from '../../config/menu'
 import {iocService} from './iocService'
 import {List} from 'immutable'
-import {allMenu} from '../database/menu'
-import {oneFormStructure} from '../database/form'
 import {get} from '../request/net'
 import {urlBuilder} from '../../config/url'
 
@@ -11,107 +8,68 @@ function MenuService() {
 
 /**
  * 构建菜单
- * @param {function} cb (List(menus)) //返回的是一个 immutable/List对象。
+ * @param {function} cb (List(menus)=>{
+ *   menus.id
+ *   menus.label
+ *   menus.parent
+ *   menus.type
+ *   menus.url
+ *   menus.column
+ * })
+ *
+ * //返回的是一个 immutable/List对象。
  */
 MenuService.prototype.build = function (cb) {
-    get(urlBuilder.menu.getAll(), (err, resultSet)=>{
+    get(urlBuilder.menu.getAll(), (err, resultSet) => {
         if (!err) {
-            combineFormData(resultSet, (combineResults)=>{
-                const cusMenu = buildDB(combineResults),
-                    menus = List(menuConfig.before.concat(cusMenu, menuConfig.after))
-                cb(menus);
-            })
+            const menus = [], residue = [];
+            for (let doc of resultSet) {
+                if(doc.parent){
+                    residue.push(transDb2Comp(doc));
+                }else{
+                    menus.push(transDb2Comp(doc));
+                }
+            }
+            for(let node of menus){
+                iterMenu(node, residue)
+            }
+            cb(List(menus));
         }
     })
+};
 
-    /*allMenu((err, docs) => {
-        if (!err) {
-            combineFormData(docs, (combineResults)=>{
-                const cusMenu = buildDB(combineResults),
-                    menus = List(menuConfig.before.concat(cusMenu, menuConfig.after))
-                cb(menus);
-            })
-        }
-    })*/
-};
-const combineFormData = (docs, callback) => {
-    const result = [], optsList = [];
-    let count = 0;
-    for (let doc of docs) {
-        if(doc.form){
-            const opts = {
-                id:doc.form,
-                cb:(err, form)=>{
-                    if(!err){
-                        doc.list = form.list;
-                        doc.label = form.label;
-                        count--;
-                        if(0 === count){
-                            callback(result);
-                        }
-                    }
-                }
-            }
-            optsList.push(opts);
-        }
-        result.push(doc);
-    }
-    for(let opts of optsList){
-        oneFormStructure(opts.id, opts.cb);
-        count++;
-    }
-};
+//---------------------------------------------------------
+//用于build的私有方法
 /**
- * 构建自定义菜单
- * 1) 输入是一个一维列表
- * 2) 输出为一个层级关系
- *      [{code, label, children:[]}]
+ * 多层构建菜单的迭代器
+ * @param node
+ * @param residue
  */
-const buildDB = function (docs) {
-    const menus = [], surplus = [];
-    for (let menu of docs) {
-        if (menu.parent) {
-            surplus.push(menu);
-        } else {
-            menus.push(buildDBOne(menu));
-        }
-    }
-    buildDBIter(menus, surplus);
-    return menus;
-};
-/**
- * 构建单个菜单
- * @param menu
- */
-const buildDBOne = menu => {
-    const i = {id: menu.id, label: menu.label};
-    menu.url && (i.url = menu.url);
-    menu.form && (i.form = menu.form);
-    menu.code && (i.code = menu.code);
-    menu.list && (i.list = menu.list);
-    return i;
-}
-/**
- * 构建菜单的迭代器
- * @param menus
- * @param surplus
- */
-const buildDBIter = (menus, surplus) => {
-    for (let menu of menus) {
-        if (!menu.form && !menu.url) {
-            const id = menu.id;
-            menu.children = [];
-            for (let pos = 0; pos < surplus.length; pos++) {
-                const item = surplus[pos];
-                if (id === item.parent) {
-                    menu.children.push(buildDBOne(item))
-                    surplus.splice(pos, 1);
-                    buildDB(menu.children, surplus);
-                }
-            }
+const iterMenu = (node, residue) => {
+    const id = node.id;
+    node.children = [];
+    for(let index = 0; index < residue.length; index++){
+        const item = residue[index];
+        if(id === item.parent){
+            node.children.push(item);
+            iterMenu(item, residue.splice(index, 1))
         }
     }
 };
+
+/**
+ * 将单行数据从数据库的结构转换为组件应用的结构
+ * @param item
+ */
+const transDb2Comp = (item)=>({
+    id:item.id,
+    label:item.label,
+    parent:item.parent,
+    type:item.link_type,
+    url:item.link_url,
+    column:item.column
+})
+//---------------------------------------------------------
 
 //---------------------------------------------------------
 MenuService.prototype.add = function (menu, cb) {

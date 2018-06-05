@@ -35,6 +35,7 @@ export const insertMenu = [{
     id:'631bbc395e6511e8bec9c3e1038a5664',
     label: '导航菜单配置',
     column: 'navConfig',
+    link: '/sysConfig/navigation',
     parent: '488789365e6511e88ce87fae8ccec962',
     type: MenuLinkType.LINK,
 }]

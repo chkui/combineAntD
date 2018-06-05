@@ -6,6 +6,7 @@ import {menuService} from '../../service/menuService'
 import {connect} from 'react-redux'
 import {menuAction} from '../../../config/redux/menuAction'
 import {routes} from '../../../config/url'
+import {MenuLinkType} from '../../../config/sysDefConfig'
 
 const SubMenu = Menu.SubMenu
 
@@ -29,12 +30,12 @@ class MenuComponent extends React.Component {
 
 const generateMenu = (m) => {
     const Comp = null;
-    return (!m.url && !m.form) ?
+    return (m.type === MenuLinkType.GROUP) ?
         (<SubMenu key={m.id}
                   title={<span><Icon type="appstore"/><span>{m.label}</span></span>}>
             {m.children.map(i => generateMenu(i))}
         </SubMenu>) :
-        (<Menu.Item key={m.id}><Link to={generateLink(m)}>{m.label}</Link></Menu.Item>)
+        (<Menu.Item key={m.id}><Link to={m.url}>{m.label}</Link></Menu.Item>)
 }
 const generateLink = (m) => {
     return m.url ? m.url : (m.list ? routes.list.build(m.form) : routes.form.buildView(m.form, m.data));

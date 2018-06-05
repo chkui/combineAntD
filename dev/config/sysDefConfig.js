@@ -41,9 +41,9 @@ export const OPData = {
  * @type {{LINK: string, FORM: string, GROUP: string}}
  */
 export const MenuLinkType = {
-    LINK:'L',
-    FORM:'F',
-    GROUP:'G'
+    LINK:'L', //直接的URL链接
+    FORM:'F', //指向一个配置表单
+    GROUP:'G' //是一个组菜单，还包含一些子菜单
 }
 
 /**
