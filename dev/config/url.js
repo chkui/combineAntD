@@ -10,7 +10,7 @@ export const routes = {
         params: {
             form: 'form'
         },
-        build: (form) => `/list/${form}`,
+        build: formId => `/list/${formId}`,
     },
     form: {
         match: '/form/:state/:form/:data',

@@ -9,8 +9,7 @@ import bundle from 'pwfe-dom/bundle'
 import {isElement} from 'pwfe-dom/util'
 import Header from './layout/header'
 import Sider from './layout/sider'
-import {mySqlSupport} from './database/mySqlSupport'
-import {insertOneMenu} from './database/menuDao'
+import * as UUID from 'uuidjs'
 const cn = require('classnames/bind').bind(require('./app.scss'));
 
 const element = (el) => {
@@ -71,6 +70,8 @@ class App extends React.Component{
         )
     }
 }
+
+console.log('Random:', UUID.genV1().hexNoDelim);
 
 module.exports = App;
 module.exports.default = module.exports;

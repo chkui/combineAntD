@@ -1,5 +1,4 @@
 import React from 'react'
-import {reRoute} from 'pwfe-dom/router'
 import {Form, Button, message} from 'antd';
 import Items from '../item/items'
 import {FormProvider} from '../formContext'
@@ -63,7 +62,7 @@ class HorizontalForm extends React.Component {
 /**
  * Form.create的作用是向子组件注入已经定义好验证和操作高阶组件
  */
-export default reRoute()(Form.create()(HorizontalForm));
+export default Form.create()(HorizontalForm);
 
 function FormBuilder(formStructure, form) {
     const list = [];

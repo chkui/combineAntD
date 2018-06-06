@@ -47,10 +47,10 @@ export default [{//首页
     }
 }, {
     id: "menuConfig",
-    url: 'config/menu',
+    url: '/sysConfig/navigation',
     component: (call) => {
         require.ensure([], require => {
-            call(require("../src/page/list"))
-        }, 'form')
+            call(require("../src/page/sysConfig/navigation"))
+        }, 'navigation')
     }
 }];

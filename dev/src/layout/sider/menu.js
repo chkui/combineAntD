@@ -3,8 +3,7 @@ import {Menu, Icon} from 'antd';
 import {Link} from 'pwfe-dom/router'
 import menuConfig from '../../../config/menu'
 import {menuService} from '../../service/menuService'
-import {connect} from 'react-redux'
-import {menuAction} from '../../../config/redux/menuAction'
+import menuData from '../../componentLib/highOrder/menuData'
 import {routes} from '../../../config/url'
 import {MenuLinkType} from '../../../config/sysDefConfig'
 
@@ -14,7 +13,7 @@ class MenuComponent extends React.Component {
     componentDidMount() {
         const _this = this;
         new menuService.build((menus) => {
-            _this.props.onLoadMenu(menus)
+            _this.props.setMenu(menus)
         })
     }
 
@@ -41,13 +40,6 @@ const generateLink = (m) => {
     return m.url ? m.url : (m.list ? routes.list.build(m.form) : routes.form.buildView(m.form, m.data));
 }
 
-const MenuWrapper = connect(
-    (state) => ({
-        menus: state.menuReducer.menus
-    }),
-    (dispatch, props) => ({
-        onLoadMenu: menus => dispatch(menuAction(menus))
-    })
-)(MenuComponent);
+const MenuWrapper = menuData()(MenuComponent);
 
 export default MenuWrapper

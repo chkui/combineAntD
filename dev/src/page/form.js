@@ -1,5 +1,6 @@
 import React from 'react'
-import {connect} from 'react-redux'
+import {StateCode} from '../../config/redux/formReducer'
+import formStructure from '../componentLib/highOrder/formStructure'
 import {fluent} from 'es-optional'
 import FormBoot from '../componentLib/form/formBoot'
 import {loadFormStructureAction} from '../../config/redux/formAction'
@@ -7,35 +8,19 @@ import {loadFormStructureAction} from '../../config/redux/formAction'
 class FormComponent extends React.Component {
     constructor(...props) {
         super(...props)
-        console.log('form mount')
     }
 
     componentDidMount() {
         const props = this.props,
             id = fluent(props.formStructure).then(fs=>fs.id).else(false);
-        (id !== props.match.params.form) && props.onLoadForm(props.match.params.form);
+        (id !== props.match.params.form) && props.loadForm(props.match.params.form);
     }
 
     render() {
-        return (
-            <div>
-                <FormBoot/>
-            </div>
-        )
+        return StateCode.suc === this.props.stateCode ? (<FormBoot/>) : null;
     }
 }
 
-const Form = connect(
-    state => {
-        const structure = state.formStructureReducer;
-        return {
-            stateCode: structure.stateCode,
-            formStructure: structure.formStructure
-        }
-    },
-    (dispatch, props) => ({
-        onLoadForm: fsId => dispatch(loadFormStructureAction(fsId))
-    })
-)(FormComponent)
+const Form = formStructure()(FormComponent)
 
 module.exports = Form;

@@ -84,7 +84,7 @@ const listData = (options = {}) =>{
                 [combineName]: (column, data) =>dispatch(combineListSearchDataAction(column, data))
             })
         )(Comp)
-        ListData.displayName = `formStructure(${getComponentName(Comp)})`;
+        ListData.displayName = `listData(${getComponentName(Comp)})`;
         return ListData;
     }
 }

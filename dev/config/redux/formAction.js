@@ -1,4 +1,4 @@
-import {oneFormStructure} from '../../src/database/form'
+import {formStructureService} from '../../src/service/formStructureService'
 import {StateCode} from './formReducer'
 
 /**
@@ -20,7 +20,7 @@ export const formStructureAction = (stateCode, formStructure) => ({
 export const loadFormStructureAction = (formId) => {
     return dispatch => {
         dispatch(formStructureAction(StateCode.init));
-        oneFormStructure(formId, (err, formStructure) => {
+        formStructureService.getStructureById(formId, (err, formStructure) => {
             if (err) {
                 dispatch(formStructureAction(StateCode.err));
             } else {

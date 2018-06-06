@@ -1,7 +1,8 @@
 import {iocService} from './iocService'
-import {List} from 'immutable'
 import {get} from '../request/net'
 import {urlBuilder} from '../../config/url'
+import {MenuLinkType} from '../../config/sysDefConfig'
+import {routes} from '../../config/url'
 
 function MenuService() {
 }
@@ -15,7 +16,9 @@ function MenuService() {
  *   menus.type
  *   menus.url
  *   menus.column
+ *   menus.sort
  * })
+ * {@link menuData}
  *
  * //返回的是一个 immutable/List对象。
  */
@@ -24,16 +27,16 @@ MenuService.prototype.build = function (cb) {
         if (!err) {
             const menus = [], residue = [];
             for (let doc of resultSet) {
-                if(doc.parent){
+                if (doc.parent) {
                     residue.push(transDb2Comp(doc));
-                }else{
+                } else {
                     menus.push(transDb2Comp(doc));
                 }
             }
-            for(let node of menus){
+            for (let node of menus) {
                 iterMenu(node, residue)
             }
-            cb(List(menus));
+            cb(menus);
         }
     })
 };
@@ -48,11 +51,15 @@ MenuService.prototype.build = function (cb) {
 const iterMenu = (node, residue) => {
     const id = node.id;
     node.children = [];
-    for(let index = 0; index < residue.length; index++){
+    let index = 0;
+    while (index < residue.length) {
         const item = residue[index];
-        if(id === item.parent){
+        if (id === item.parent) {
             node.children.push(item);
-            iterMenu(item, residue.splice(index, 1))
+            residue.splice(index, 1);
+            iterMenu(item, residue);
+        } else {
+            ++index;
         }
     }
 };
@@ -61,14 +68,19 @@ const iterMenu = (node, residue) => {
  * 将单行数据从数据库的结构转换为组件应用的结构
  * @param item
  */
-const transDb2Comp = (item)=>({
-    id:item.id,
-    label:item.label,
-    parent:item.parent,
-    type:item.link_type,
-    url:item.link_url,
-    column:item.column
-})
+const transDb2Comp = (item) => {
+    const url = MenuLinkType.FORM === item.link_type ?
+        routes.list.build(item.link_url) : item.link_url;
+    return {
+        id: item.id,
+        label: item.label,
+        parent: item.parent,
+        type: item.link_type,
+        url: url,
+        column: item.column,
+        sort: item.sort
+    }
+}
 //---------------------------------------------------------
 
 //---------------------------------------------------------
