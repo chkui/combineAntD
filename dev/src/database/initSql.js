@@ -103,7 +103,7 @@ const createDataItem = 'CREATE TABLE IF NOT EXISTS B_DATA_COLUMN(' +
 const createDataItemValue = 'Create Table IF NOT EXISTS B_DATA_VALUE(' +
     'id VARCHAR(32) NOT NULL PRIMARY KEY, ' +
     'rowid VARCHAR(32) NOT NULL,' +
-    'columnid VARCHAR(32) NOT NULL,' + 
+    'columnid VARCHAR(32) NOT NULL,' +
     'columntype CHAR(5) NOT NULL,' +
     'value VARCHAR(255) NOT NULL,' +
     'op CHAR(1) NOT NULL,' + //是否在列表中显示 E启用、N停用、D删除
