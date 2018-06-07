@@ -1,26 +1,35 @@
 import {crudSupport} from './crudSupport'
 import {insertFormStructure} from './initSql'
 
+const Column = 'id,ver,label,type,l_new,l_view,l_search,l_delete,op,createuser,createtime,modifyuser,modifytime,site'
 const CountSql = 'SELECT COUNT(*) AS count FROM B_FORM_STRUCTURE WHERE 1 = 1';
-const QuerySql = 'SELECT id,ver,label,type,l_new,l_view,l_search,l_delete,op,createuser,createtime,modifyuser,modifytime,site FROM B_MENU WHERE 1 = 1'
+const QuerySql = `SELECT ${Column} FROM B_FORM_STRUCTURE WHERE 1 = 1`
+const GetLastSql = `SELECT ${Column} FROM B_FORM_STRUCTURE fs WHERE fs.id = ? AND fs.ver = (SELECT MAX(B.ver) FROM B_FORM_STRUCTURE B WHERE B.id = ?)`
 
-export const insert = (id, ver, label, type, l_new, l_view, l_search, l_delete, callback) =>{
-    crudSupport.insertOne('B_MENU', {
-        id,
-        label,
-        column,
-        parent,
-        type,
-        url,
-        op
-    },callback)
+export const insert = (id, ver, label, type, l_new, l_view, l_search, l_delete, callback) => {
 }
 
-export const query = (condition, sort, cb, tx) => {
+/**
+ * 通用单表条件查询
+ * @param condition
+ * @param sort
+ * @param cb
+ * @param tx
+ */
+export const queryFormStructure = (condition, sort, cb, tx) => {
     crudSupport.query(QuerySql, condition, false, (tx, result) => {
         cb(null, result.rows);
     }, (tx, err) => {
         console.error('Sql:', QuerySql, err);
+        cb(err.message);
+    })
+}
+
+export const getLastFormStructure = (fsid, cb, tx) => {
+    crudSupport.exeQuery(GetLastSql, [fsid, fsid], (tx, result) => {
+        cb(null, result.rows);
+    }, (tx, err) => {
+        console.error('Sql:', GetLastSql, err);
         cb(err.message);
     })
 }
@@ -46,7 +55,7 @@ export const getCount = (condition, cb, tx) => {
 (() => {
     getCount([], (err, count) => {
         if (!err) {
-            0 === count && crudSupport.insertBatch('B_FORM_STRUCTURE', insertFormStructure, (err, result)=>{
+            0 === count && crudSupport.insertBatch('B_FORM_STRUCTURE', insertFormStructure, (err, result) => {
                 !err && (console.log('init menu success!'))
             });
         }

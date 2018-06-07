@@ -32,17 +32,30 @@ export const urlBase = {
         options:{
             getAll:'/getAllMenu'
         }
+    },
+    formStructure:{
+        module:'/api/formStructure',
+        options:{
+            getOneById:'/getOne'
+        }
     }
 }
+export const encode = text => encodeURI(JSON.stringify(text));
+
+export const decode = code => JSON.parse(decodeURI(code));
 
 const none = encodeURI(JSON.stringify('none'));
+
 /**
  * url命名暂定 '/api/模块[menu|site|formStrut]/操作[allMenu|list]等/传递参数[encodeURI(JSON.stringify(json))]'
  *      或 '/api/模块/子模块/传递参数[encodeURI(JSON.stringify(json))]'
- * @type {{menu: {getAll: function(): string}}}
+ * @type {{menu: {getAll: (function(*=): string)}, formStructure: {getOneById: (function(*): string)}}}
  */
 export const urlBuilder = {
     menu:{
         getAll:(params)=>`${urlBase.menu.module}${urlBase.menu.options.getAll}/${params || none}`
+    },
+    formStructure:{
+        getOneById:(id)=>`${urlBase.formStructure.module}${urlBase.formStructure.options.getOneById}/${encode(id)}`
     }
 }

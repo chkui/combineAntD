@@ -1,6 +1,6 @@
 import {iocService} from './iocService'
 import {get} from '../request/net'
-import {urlBuilder} from '../../config/url'
+import {urlBuilder, decode} from '../../config/url'
 import {MenuLinkType} from '../../config/sysDefConfig'
 import {routes} from '../../config/url'
 
@@ -23,10 +23,10 @@ function MenuService() {
  * //返回的是一个 immutable/List对象。
  */
 MenuService.prototype.build = function (cb) {
-    get(urlBuilder.menu.getAll(), (err, resultSet) => {
+    get(urlBuilder.menu.getAll(), (err, result) => {
         if (!err) {
-            const menus = [], residue = [];
-            for (let doc of resultSet) {
+            const ret = decode(result), menus = [], residue = [], keys = Object.keys(ret);
+            for (let doc of ret) {
                 if (doc.parent) {
                     residue.push(transDb2Comp(doc));
                 } else {

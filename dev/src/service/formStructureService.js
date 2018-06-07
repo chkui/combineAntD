@@ -1,9 +1,8 @@
 import {iocService} from './iocService'
-import {QueryOpt} from '../../config/sysDefConfig'
-import {query} from '../database/formStructureDao'
+import {get} from '../request/net'
+import {urlBuilder} from '../../config/url'
 
 function FormStructureService() {
-
 }
 
 /**
@@ -12,7 +11,9 @@ function FormStructureService() {
  * @param cb
  */
 FormStructureService.prototype.getStructureById = function (fsid, cb) {
-    query([{column:'id', value:fsid, opts:QueryOpt.EQU}], false, cb);
+    get(urlBuilder.formStructure.getOneById({id: fsid}), (err, result)=>{
+
+    })
 }
 
 

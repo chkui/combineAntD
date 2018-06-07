@@ -1,5 +1,5 @@
 import {getResultSet} from '../../database/menuDao'
 
-export const getAll = (params, cb) => {
+export const menuGetAll = (params, cb) => {
     getResultSet(null, [{column: 'sort', flag: 'ASC'}], cb);
 }

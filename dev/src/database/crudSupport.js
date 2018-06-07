@@ -85,6 +85,18 @@ function preInsertParams(params) {
 }
 
 //----------------------------------------------------------------------------------
+/**
+ * 不对条件进行任何处理，直接执行传入的sql和参数
+ * @param sql
+ * @param condition
+ * @param sucCb
+ * @param errCb
+ * @param transaction
+ */
+CrudSupport.prototype.exeQuery = function (sql, condition, sucCb, errCb, transaction) {
+    const support = transaction ? transaction : mySqlSupport;
+    support.executeSql(sql, condition, sucCb, errCb);
+}
 
 
 CrudSupport.prototype.update = function () {
@@ -111,7 +123,7 @@ CrudSupport.prototype.delete = function () {
  */
 CrudSupport.prototype.query = function (sql, condition, sort, sucCb, errCb, transaction) {
     let where = '', cond = [];
-    if(condition && 0 < condition.length){
+    if (condition && 0 < condition.length) {
         for (let i of condition) {
             if (QueryOpt.LIK === i.opts) {
                 where += ` AND ${i.column} LIKE ?`;
@@ -136,9 +148,30 @@ CrudSupport.prototype.query = function (sql, condition, sort, sucCb, errCb, tran
     support.executeSql(exeSql, cond, sucCb, errCb);
 };
 
+/**
+ * 多值搜索，根据传入的一组数据使用In语句对数据集进行查询
+ * @param sql 数据集SQL
+ * @param column 数据对应的字段名
+ * @param conds 数据索引
+ * @param {function} sucCb:[in] 成功回掉，(tx, resultSet){@link mySqlSupport}
+ * @param {function} errCb:[in] 错误回掉，(tx, errObject){@link mySqlSupport}
+ * @param {object} transaction 事物对象
+ */
+CrudSupport.prototype.multiInQuery = function (sql, column, conds, sucCb, errCb, transaction) {
+    let where = ` AND ${column} IN (`;
+    for (let cond of conds) {
+        where += `'${cond}',`
+    }
+    const support = transaction ? transaction : mySqlSupport,
+        extSql = sql + where.substring(0, where.length - 1) + ')';
+    support.executeSql(extSql, [], sucCb, errCb);
+}
+
 CrudSupport.prototype.pageQuery = function () {
 
 };
+
+
 /**
  * {@link MySqlSupport}
  */

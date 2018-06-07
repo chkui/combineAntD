@@ -273,7 +273,7 @@ export const insertFormItemStructure = [
         l_sort: SysFlag.DISABLE,
         tip:'',
     }, {
-        id: '861f89a7696411e8a492935266224f65',
+        id: '12fc5e7f6a0511e89aff79eafa1ffa12',
         fsid: 'static_form_dd_2018_6_6_14_52',
         fsver: 1528274292559,
         type: FormItemType.VCHAR,
@@ -287,7 +287,7 @@ export const insertFormItemStructure = [
         l_sort: SysFlag.ENABLE,
         tip:'编码，可以根据需要对菜单项进行编码，便于系统间数据统一'
     }, {
-        id: '861f89a7696411e8a492935266224f65',
+        id: '21aa9bd76a0511e8a81f078e4028a66a',
         fsid: 'static_form_dd_2018_6_6_14_52',
         fsver: 1528274292559,
         type: FormItemType.VCHAR,
@@ -301,7 +301,7 @@ export const insertFormItemStructure = [
         l_sort: SysFlag.ENABLE,
         tip:'数据字典数据项的名称，用于标记该项数据的内容，例如性别。'
     }, {
-        id: '861f89a7696411e8a492935266224f65',
+        id: '2b5dabe16a0511e8838a57a01308399f',
         fsid: 'static_form_dd_2018_6_6_14_52',
         fsver: 1528274292559,
         type: FormItemType.DYNAM,
@@ -315,7 +315,7 @@ export const insertFormItemStructure = [
         l_sort: SysFlag.DISABLE,
         tip:'数据字典一个数据项的数据，可以是单条数据、多条数据或树。'
     }, {
-        id: '861f89a7696411e8a492935266224f65',
+        id: '3e319e2f6a0511e8a81449dd5c0583b8',
         fsid: 'static_form_dd_2018_6_6_14_52',
         fsver: 1528274292559,
         type: FormItemType.VCHAR,
@@ -348,25 +348,25 @@ const createFormItemRules = 'CREATE TABLE IF NOT EXISTS B_FORM_ITEM_RULES(' +
 export const insertFormItemRules = [
     {
         id:'332da458696611e8b786e7ebbc04ad3c',
-        itemid:'861f89a7696411e8a492935266224f65',
+        itemid:'12fc5e7f6a0511e89aff79eafa1ffa12',
         rule_category:'single',
         rule_type:'require',
-        expression:encodeURI(JSON.stringify({msg: '请输入站点编码'}))
+        expression:encodeURI(JSON.stringify({msg: '请输入数据编码'}))
     }, {
         id:'3d5d9014696711e8ae623de7ffa85bfa',
-        itemid:'861f89a7696411e8a492935266224f65',
+        itemid:'12fc5e7f6a0511e89aff79eafa1ffa12',
         rule_category:'single',
         rule_type:'unIdentical',
         expression:encodeURI(JSON.stringify({formId: 'static_form_dd_2018_6_6_14_52', column: 'code'}))
     }, {
         id:'4dd12429696711e88355e9ce8cd50ffb',
-        itemid:'861f89a7696411e8a492935266224f65',
+        itemid:'21aa9bd76a0511e8a81f078e4028a66a',
         rule_category:'single',
         rule_type:'require',
-        expression:encodeURI(JSON.stringify({msg: '请输入站点名称'}))
+        expression:encodeURI(JSON.stringify({msg: '请输入数据名称'}))
     }, {
         id:'522bf2cc696711e8823d0b0f1d5a5463',
-        itemid:'861f89a7696411e8a492935266224f65',
+        itemid:'21aa9bd76a0511e8a81f078e4028a66a',
         rule_category:'single',
         rule_type:'max',
         expression:encodeURI(JSON.stringify({len: 32}))

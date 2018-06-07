@@ -1,5 +1,6 @@
-import {urlBase} from '../../config/url'
-import {getAll} from './serverProxy/menuServer'
+import {urlBase, decode, encode} from '../../config/url'
+import {menuGetAll} from './serverProxy/menuServer'
+import {getStructureById} from './serverProxy/formStructureServer'
 
 /**
  * 代理模式，浏览器模式或网络服务器模式
@@ -34,9 +35,11 @@ NetProxy.prototype.post = function(url, cb){
 
 function LocalServerProxy(mode){
     this.mode = mode;
-    const map = this.LocalServerMapping = {};
-    const menu = urlBase.menu;
-    map[menu.module + menu.options.getAll] = getAll;
+    const map = this.LocalServerMapping = {},
+        menu = urlBase.menu,
+        formStructure = urlBase.formStructure;
+    map[menu.module + menu.options.getAll] = menuGetAll;
+    map[formStructure.module + formStructure.options.getOneById] = getStructureById;
 }
 /**
  * 服务器GET接口
@@ -45,13 +48,23 @@ function LocalServerProxy(mode){
  *      get请求尽量不要使用query格式：/api/path?column=label&value=标题&opts=LIK。复杂参数用URL路径的包装一个JSON字符串。
  *      例如：`/api/path/${encodeURI(JSON.stringify([{column:'label',value:'标题',opts:'LIK'}]))}
  *      后台如果是Java切记JsonObject的冒号转换问题和中文编码解码。
- * @param cb (err, result)
+ * @param cb ({
+ *    code:
+ *    msg:
+ *    data:
+ * })
  */
 LocalServerProxy.prototype.get = function(url, cb){
     const pos = url.lastIndexOf('/'),
         path = url.substring(0 ,pos),
         params = url.substring(pos + 1);
-    this.LocalServerMapping[path](JSON.parse(decodeURI(params)), cb)
+    this.LocalServerMapping[path](decode(params), (err, result)=>{
+        if(err){
+            cb(encode(err))
+        }else{
+            cb(null, encode(result))
+        }
+    })
 };
 LocalServerProxy.prototype.post = function(url, cb){
 
