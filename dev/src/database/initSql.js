@@ -57,7 +57,8 @@ export const insertMenu = [{
     sort: 0
 }]
 
-const createDataTable = 'CREATE TABLE IF NOT EXISTS B_DATA_TABLE(' +
+//行数据表
+const createDataTable = 'CREATE TABLE IF NOT EXISTS B_DATA_ROW(' +
     'id VARCHAR(32) NOT NULL PRIMARY KEY, ' +
     'fsid VARCHAR(32) NOT NULL,' + //关联表单结构表ID
     'fsver INT(15) NOT NULL,' +  //关联表单版本号
@@ -71,26 +72,26 @@ const createDataTable = 'CREATE TABLE IF NOT EXISTS B_DATA_TABLE(' +
     'site VARCHAR(32) NOT NULL' +
     ')';
 
-const createDataItem = 'CREATE TABLE IF NOT EXISTS B_DATA_ITEM(' +
+//列数据表
+const createDataItem = 'CREATE TABLE IF NOT EXISTS B_DATA_COLUMN(' +
     'id VARCHAR(32) NOT NULL PRIMARY KEY, ' +
-    'tableid VARCHAR(32) NOT NULL,' + //关联B_DATA_TABLE的主键
+    'rowid VARCHAR(32) NOT NULL,' + //关联B_DATA_TABLE的主键
     'itemid VARCHAR(32) NOT NULL,' + //关联B_FORM_ITEM_STRUCTURE或B_DATA_ITEM的主键
-    'label VARCHAR(32) NOT NULL,' +
     'column VARCHAR(32) NOT NULL,' +
+    'label VARCHAR(32) NOT NULL,' +
     /**
      * TYPE表示当前数据域的数据类型，由选择组件的时候确定。类型通过枚举确定。
-     * 1)'VARCHA':VALUE储存独立字符串
+     * 1)'VCHAR':VALUE储存独立字符串
      * 2)'INTER':VALUE存储正负整型数字，16位置
-     * 3)'DOUBLE':VALUE存储正负小数点数字，保留小数点后6位到前16位置。
+     * 3)'DOUBL':VALUE存储正负小数点数字，保留小数点后6位到前16位置。
      * 4)'MONEY':VALUE存储价钱，存储方式与DOUBLE一致。组件表现形式存在差异
      * 5)'ARRAY':VALUE无数据，需要到 B_DATA_ITEM 中查询 B_DATA_ITEM.TABLEID = B_DATA_ITEM.TABLEID, B_DATA_ITEM.ITEMID = B_DATA_ITEM.ID的对应的一组列表数据
      * 6)'TREES':VALUE无数据，需要到 B_DATA_ITEM 中查询 B_DATA_ITEM.TABLEID = B_DATA_ITEM.TABLEID, B_DATA_ITEM.ITEMID = B_DATA_ITEM.ID的对应的一组树形结构数据
-     * 7)'SIGFORM':该项数据关联另外一张指定的表单数据。此时VALUE = B_DATA_TABLE.ID
-     * 8)'MULFORM':数据关联到一组表单数据。在B_DATA_ITEM_FORM表建立关联
+     * 7)'SFORM':该项数据关联另外一张指定的表单数据。此时VALUE = B_DATA_TABLE.ID
+     * 8)'MFORM':数据关联到一组表单数据。在B_DATA_ITEM_FORM表建立关联
+     * 9)'DYNAM':数据关联到一组表单数据。在B_DATA_ITEM_FORM表建立关联
      */
-    'type VARCHAR(10) NOT NULL,' +
-    'value VARCHAR(255) NOT NULL,' +
-    'parent VARCHAR(32),' +
+    'type CHAR(5) NOT NULL,' +
     'op CHAR(1) NOT NULL,' + //是否在列表中显示 E启用、N停用、D删除
     'createuser VARCHAR(32) NOT NULL,' +
     'createtime INT(15) NOT NULL,' +
@@ -98,6 +99,21 @@ const createDataItem = 'CREATE TABLE IF NOT EXISTS B_DATA_ITEM(' +
     'modifytime INT(15) NOT NULL,' +
     'site VARCHAR(32) NOT NULL' +
     ')';
+
+const createDataItemValue = 'Create Table IF NOT EXISTS B_DATA_VALUE(' +
+    'id VARCHAR(32) NOT NULL PRIMARY KEY, ' +
+    'rowid VARCHAR(32) NOT NULL,' +
+    'columnid VARCHAR(32) NOT NULL,' + 
+    'columntype CHAR(5) NOT NULL,' +
+    'value VARCHAR(255) NOT NULL,' +
+    'op CHAR(1) NOT NULL,' + //是否在列表中显示 E启用、N停用、D删除
+    'createuser VARCHAR(32) NOT NULL,' +
+    'createtime INT(15) NOT NULL,' +
+    'modifyuser VARCHAR(32) NOT NULL,' +
+    'modifytime INT(15) NOT NULL,' +
+    'site VARCHAR(32) NOT NULL' +
+    ')';
+
 
 /**
  * 数据项关联多个表单的查询表。
@@ -169,7 +185,9 @@ const createFormItemStructure = 'CREATE TABLE IF NOT EXISTS B_FORM_ITEM_STRUCTUR
     'fsid VARCHAR(32) NOT NULL,' + //关联B_FORM_STRUCTURE的ID
     'fsver INT(15) NOT NULL,' + //关联B_FORM_STRUCTURE的VER
     'type VARCHAR(10) NOT NULL,' +
-    'fk_itemid VARCHAR(32),' + //数据来源的ITEM数据项，数据是从该ITEM处选择而来
+    'f_table VARCHAR(32),' + //关联的table数据
+    'f_row VARCHAR(32),' +
+    'f_column VARCHAR(32),' +
     'comp_category VARCHAR(32) NOT NULL,' + //关联B_FORM_ITEM_STRUCTURE的主键
     'comp_type VARCHAR(32) NOT NULL,' +
     'label VARCHAR(32) NOT NULL,' +
@@ -373,10 +391,23 @@ export const insertFormItemRules = [
     }
 ]
 
+export const initDropTableSql = [
+    'DROP TABLE B_MENU',
+    'DROP TABLE B_DATA_TABLE',
+    'DROP TABLE B_DATA_ITEM',
+    'DROP TABLE B_DATA_ITEM_VALUE',
+    'DROP TABLE B_DATA_ITEM_FORM',
+    'DROP TABLE B_FORM_STRUCTURE',
+    'DROP TABLE B_FORM_ITEM_STRUCTURE',
+    'DROP TABLE B_FORM_ITEM_RULES',
+    'DROP TABLE B_FORM_ITEM_RULES'
+]
+
 export const initCreateTableSql = [
     createMenuTable,
     createDataTable,
     createDataItem,
+    createDataItemValue,
     createDataItemMultForm,
     createFormStructure,
     createFormItemStructure,

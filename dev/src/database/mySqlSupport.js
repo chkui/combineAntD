@@ -1,5 +1,5 @@
 import {iocService} from '../service/iocService'
-import {initCreateTableSql} from './initSql'
+import {initCreateTableSql, initDropTableSql} from './initSql'
 
 /**
  * 模拟实现MySql数据库的操作功能。
@@ -16,10 +16,16 @@ function MySqlSupport() {
 
 MySqlSupport.prototype.init = function () {
     this.db.transaction((tx) => {
+        for (let sql of initDropTableSql){
+            tx.executeSql(sql, [], () => {
+            }, (t, e) => {
+                console.error('SQL ERROR:', sql, '!Error info:', e.message)
+            })
+        }
         for (let sql of initCreateTableSql) {
             tx.executeSql(sql, [], () => {
             }, (t, e) => {
-                console.error('SQL ERROR:', sql, '!Error info:', e)
+                console.error('SQL ERROR:', sql, '!Error info:', e.message)
             })
         }
     })

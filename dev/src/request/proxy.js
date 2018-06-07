@@ -7,8 +7,8 @@ import {getStructureById} from './serverProxy/formStructureServer'
  * @type {{Browser: number, Net: number}}
  */
 export const ProxyMode = {
-    Browser:1,
-    Net:2
+    Browser: 1,
+    Net: 2
 }
 
 /**
@@ -25,15 +25,17 @@ export const proxyFactory = (mode) => {
  * @param mode 运行模式
  * @constructor
  */
-function NetProxy(mode){}
-NetProxy.prototype.get = function(url, cb){
-
-}
-NetProxy.prototype.post = function(url, cb){
-
+function NetProxy(mode) {
 }
 
-function LocalServerProxy(mode){
+NetProxy.prototype.get = function (url, cb) {
+
+}
+NetProxy.prototype.post = function (url, cb) {
+
+}
+
+function LocalServerProxy(mode) {
     this.mode = mode;
     const map = this.LocalServerMapping = {},
         menu = urlBase.menu,
@@ -41,6 +43,7 @@ function LocalServerProxy(mode){
     map[menu.module + menu.options.getAll] = menuGetAll;
     map[formStructure.module + formStructure.options.getOneById] = getStructureById;
 }
+
 /**
  * 服务器GET接口
  *
@@ -54,19 +57,22 @@ function LocalServerProxy(mode){
  *    data:
  * })
  */
-LocalServerProxy.prototype.get = function(url, cb){
+LocalServerProxy.prototype.get = function (url, cb) {
     const pos = url.lastIndexOf('/'),
-        path = url.substring(0 ,pos),
+        path = url.substring(0, pos),
         params = url.substring(pos + 1);
-    this.LocalServerMapping[path](decode(params), (err, result)=>{
-        if(err){
-            cb(encode(err))
-        }else{
-            cb(null, encode(result))
+    this.LocalServerMapping[path](decode(params), (err, result) => {
+        if (err) {
+            cb({code: -1, msg: err})
+        } else {
+            cb({
+                code: 0,
+                data: encode(result)
+            })
         }
     })
 };
-LocalServerProxy.prototype.post = function(url, cb){
+LocalServerProxy.prototype.post = function (url, cb) {
 
 };
 

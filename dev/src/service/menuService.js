@@ -23,9 +23,9 @@ function MenuService() {
  * //返回的是一个 immutable/List对象。
  */
 MenuService.prototype.build = function (cb) {
-    get(urlBuilder.menu.getAll(), (err, result) => {
-        if (!err) {
-            const ret = decode(result), menus = [], residue = [], keys = Object.keys(ret);
+    get(urlBuilder.menu.getAll(), (result) => {
+        if (0 === result.code) {
+            const ret = decode(result.data), menus = [], residue = [], keys = Object.keys(ret);
             for (let doc of ret) {
                 if (doc.parent) {
                     residue.push(transDb2Comp(doc));
