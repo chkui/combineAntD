@@ -4,7 +4,6 @@ import BrowserTitle from '../componentLib/title/browserTitle'
 import {StateCode} from '../../config/redux/formReducer'
 import formStructure from '../componentLib/highOrder/formStructure'
 import {connect} from 'react-redux'
-import {loadFormStructureAction} from '../../config/redux/formAction'
 import {routes} from '../../config/url'
 
 class ListComponent extends React.Component {

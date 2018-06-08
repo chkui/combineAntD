@@ -1,21 +1,23 @@
 import {crudSupport} from './crudSupport'
-import {insertFormItemRules} from './initSql'
+import {insertRowValue} from './initSqlData'
 
+const Column = 'id,parent,rowid,itemid,itemtype,type,f_fsid,f_rowid,f_itemid,f_valueid,value,op,createuser,createtime,modifyuser,modifytime,site';
+const CountSql = 'SELECT COUNT(*) AS count FROM B_ROW_VALUE WHERE 1 = 1';
+const QuerySql = `SELECT ${Column} FROM B_ROW_VALUE WHERE 1 = 1`;
 
-const Column = 'id,itemid,rule_category,rule_type,expression,op,modifyuser,modifytime,site';
-const CountSql = 'SELECT COUNT(*) AS count FROM B_FORM_ITEM_RULES WHERE 1 = 1';
-const QuerySql = `SELECT ${Column} FROM B_FORM_ITEM_RULES WHERE 1 = 1`;
-
-export const getFormStructureItemRulesByItemIds = (ids, cb, tx) =>{
-    crudSupport.multiInQuery(QuerySql, 'itemid', ids, (tx, result) => {
-        cb(null, result.rows);
-    }, (tx, err) => {
-        console.error('Sql:', QuerySql, err);
-        cb(err.message);
-    })
-}
-
-export const queryFormStructureItemRules = (condition, sort, cb, tx) => {
+/**
+ * 通用查询接口
+ * @param {array|boolean} condition 查询条件
+ * @param {string} condition.column 要查询的字段
+ * @param {string} condition.value 要查询的值
+ * @param {string} condition.opts 查询操作:LIK|EQU，模糊匹配，精准匹配 {@link QueryOpt}
+ * @param {array|boolean} sort 排序参数。
+ * @param {string} [sort.column] 排序字段
+ * @param {string} [sort.flag] 排序字段，取值['ASC'|'DESC']：升序或降序。默认'ASC'
+ * @param {function} cb:[in] ，(err, resultSet){@link mySqlSupport}
+ * @param {object} tx 事物对象
+ */
+export const queryFormItemValue = (condition, sort, cb, tx) => {
     crudSupport.query(QuerySql, condition, false, (tx, result) => {
         cb(null, result.rows);
     }, (tx, err) => {
@@ -45,7 +47,7 @@ export const getCount = (condition, cb, tx) => {
 (() => {
     getCount([], (err, count) => {
         if (!err) {
-            0 === count && crudSupport.insertBatch('B_FORM_ITEM_RULES', insertFormItemRules, (err, result)=>{
+            0 === count && crudSupport.insertBatch('B_ROW_VALUE', insertRowValue, (err, result)=>{
                 !err && (console.log('init menu success!'))
             });
         }

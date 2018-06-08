@@ -1,6 +1,6 @@
 import React from 'react'
 import listData from '../../componentLib/highOrder/listData'
-import {ListConfig, ListOption} from '../../../config/sysDefConfig'
+import {ListConfig, ListOption, SysFlag} from '../../../config/sysDefConfig'
 import {StateCode} from '../../../config/redux/listReducer'
 import {listService} from '../../service/listService'
 import renderBoot from './column/renderBoot'
@@ -100,7 +100,7 @@ class SearchTable extends React.Component {
                        dataSource={StateCode.suc === props.stateCode ? listService.bindData(formStructure, list.docs) : []}
                        onRow={this.handleRow}>
                     {formStructure.itemMeta.map(meta => {
-                        if (meta.listShow) {
+                        if (SysFlag.ENABLE === meta.listShow) {
                             return (<ColumnGroup key={meta.column}
                                                  title={this.searchObserver.createSearchInput(formStructure, meta, this.state.searchBar)}>
                                 <Column key={meta.column}

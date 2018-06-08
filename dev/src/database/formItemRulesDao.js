@@ -1,13 +1,21 @@
 import {crudSupport} from './crudSupport'
-import {insertFormItemStructure} from './initSql'
+import {insertFormItemRules} from './initSqlData'
 
-const Column = 'id,fsid,fsver,type,fk_itemid,comp_category,comp_type,label,column,l_show,l_search,l_sort,tip,op,modifyuser,modifytime,site'
-const CountSql = 'SELECT COUNT(*) AS count FROM B_FORM_ITEM_STRUCTURE WHERE 1 = 1';
-const QuerySql = `SELECT ${Column} FROM B_FORM_ITEM_STRUCTURE WHERE 1 = 1`;
 
-export const insert = () =>{};
+const Column = 'id,itemid,rule_category,rule_type,expression,op,modifyuser,modifytime,site';
+const CountSql = 'SELECT COUNT(*) AS count FROM B_FORM_ITEM_RULES WHERE 1 = 1';
+const QuerySql = `SELECT ${Column} FROM B_FORM_ITEM_RULES WHERE 1 = 1`;
 
-export const queryFormStructureItem = (condition, sort, cb, tx) => {
+export const getFormItemRulesByItemIds = (ids, cb, tx) =>{
+    crudSupport.multiInQuery(QuerySql, 'itemid', ids, (tx, result) => {
+        cb(null, result.rows);
+    }, (tx, err) => {
+        console.error('Sql:', QuerySql, err);
+        cb(err.message);
+    })
+}
+
+export const queryFormItemRules = (condition, sort, cb, tx) => {
     crudSupport.query(QuerySql, condition, false, (tx, result) => {
         cb(null, result.rows);
     }, (tx, err) => {
@@ -37,7 +45,7 @@ export const getCount = (condition, cb, tx) => {
 (() => {
     getCount([], (err, count) => {
         if (!err) {
-            0 === count && crudSupport.insertBatch('B_FORM_ITEM_STRUCTURE', insertFormItemStructure, (err, result)=>{
+            0 === count && crudSupport.insertBatch('B_FORM_ITEM_RULES', insertFormItemRules, (err, result)=>{
                 !err && (console.log('init menu success!'))
             });
         }

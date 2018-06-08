@@ -7,6 +7,25 @@ function ListService() {
 }
 
 /**
+ *
+ * @param {string} fsId 表单
+ * @param {array} cond 查询条件
+ * @param {string} cond.itemId 字段对应的id
+ * @param {string} cond.value 要搜索的值
+ * @param {string} cond.opts 查询操作:LIK|EQU，模糊匹配，精准匹配 {@link QueryOpt}
+ * @param {object} sort 排序操作
+ * @param {string} [sort.column] 排序字段
+ * @param {string} [sort.flag] 排序字段，取值['ASC'|'DESC']：升序或降序。默认'ASC'
+ * @param {object} page 分页标识
+ * @param {string} page.curPage 当前页
+ * @param {string} page.size 单页数据个数
+ * @param cb
+ */
+ListService.prototype.listQuery = function (fsId, cond, sort, page, cb) {
+
+}
+
+/**
  * 搜索数据
  * @param {string} fsId
  * @param {string} fsType

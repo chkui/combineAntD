@@ -73,6 +73,18 @@ export const FormItemType = {
     DYNAM:'DYNAM'  //动态结构，可以是以上任何类型，根据在具体数据项中存储数据而定。动态数据不能参与列表排序与查询。
 }
 
+/**
+ * 表单固定字段操作标记。
+ * 没一行数据的固定字段都记录在B_ROW表上。标记记录在B_FORM_STRUCTURE表
+ * @type {{READ: string, WRITE: string, LISTREAD: string, LISTWRITE: string}}
+ */
+export const FormRegularItemOptions = {
+    READ:'R', //只读
+    WRITE:'W', //读写
+    LISTREAD:'L', //列表显示并且表单可读
+    LISTWRITE:'T' //列表显示并且表单可读写
+}
+
 //--------------------------------------------------------------------------------------------------------------------
 
 /**

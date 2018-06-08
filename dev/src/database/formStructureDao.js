@@ -1,7 +1,7 @@
 import {crudSupport} from './crudSupport'
-import {insertFormStructure} from './initSql'
+import {insertFormStructure} from './initSqlData'
 
-const Column = 'id,ver,label,type,l_new,l_view,l_search,l_delete,op,createuser,createtime,modifyuser,modifytime,site'
+const Column = 'id,ver,label,l_new,l_view,l_search,l_delete,op,createuser,createtime,modifyuser,modifytime,site'
 const CountSql = 'SELECT COUNT(*) AS count FROM B_FORM_STRUCTURE WHERE 1 = 1';
 const QuerySql = `SELECT ${Column} FROM B_FORM_STRUCTURE WHERE 1 = 1`
 const GetLastSql = `SELECT ${Column} FROM B_FORM_STRUCTURE fs WHERE fs.id = ? AND fs.ver = (SELECT MAX(B.ver) FROM B_FORM_STRUCTURE B WHERE B.id = ?)`

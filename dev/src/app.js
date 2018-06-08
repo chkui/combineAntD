@@ -12,6 +12,9 @@ import Sider from './layout/sider'
 import * as UUID from 'uuidjs'
 const cn = require('classnames/bind').bind(require('./app.scss'));
 
+import './database/rowDao'
+import './database/rowValueDao'
+
 const element = (el) => {
     if (isElement(el)) {
         return el

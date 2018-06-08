@@ -16,6 +16,20 @@ function DataBindService() {
 }
 
 /**
+ * B_ROW_VALUE表数据转换为前端可操作数据
+ * @param docs
+ * @return {*}
+ */
+DataBindService.prototype.dataValue2Options = function (docs) {
+    return docs && docs.map(i=>({
+        id: i.id,
+        fsId: i.fsid,
+        rowId: i.rowid,
+        itemId: i.itemid
+    }))
+}
+
+/**
  * 列表数据库->列表组件转换。
  * 1)处理OP字段的数据格式/
  * 2)处理所有PK字段。

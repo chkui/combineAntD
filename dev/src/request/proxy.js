@@ -1,6 +1,7 @@
 import {urlBase, decode, encode} from '../../config/url'
 import {menuGetAll} from './serverProxy/menuServer'
-import {getStructureById} from './serverProxy/formStructureServer'
+import {getFormStructureById} from './serverProxy/formStructureServer'
+import {getAssociated} from './serverProxy/formDataServer'
 
 /**
  * 代理模式，浏览器模式或网络服务器模式
@@ -39,9 +40,11 @@ function LocalServerProxy(mode) {
     this.mode = mode;
     const map = this.LocalServerMapping = {},
         menu = urlBase.menu,
-        formStructure = urlBase.formStructure;
+        formStructure = urlBase.formStructure,
+        formData = urlBase.formData;
     map[menu.module + menu.options.getAll] = menuGetAll;
-    map[formStructure.module + formStructure.options.getOneById] = getStructureById;
+    map[formStructure.module + formStructure.options.getOneById] = getFormStructureById;
+    map[formData.module + formData.options.getAssociated] = getAssociated;
 }
 
 /**

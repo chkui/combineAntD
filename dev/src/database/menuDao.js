@@ -1,8 +1,8 @@
 import {crudSupport} from './crudSupport'
 import {SysFlag, QueryOpt} from '../../config/sysDefConfig'
-import {insertMenu} from './initSql'
+import {insertMenu} from './initSqlData'
 const CountSql = 'SELECT COUNT(*) AS count FROM B_MENU WHERE 1 = 1';
-const QuerySql = 'SELECT id,label,column,parent,link_type,link_url,op,sort,createuser,createtime,modifyuser,modifytime FROM B_MENU WHERE 1 = 1'
+const QuerySql = 'SELECT id,label,code,parent,link_type,link_url,op,sort,createuser,createtime,modifyuser,modifytime FROM B_MENU WHERE 1 = 1'
 
 /**
  * 添加一行菜单数据

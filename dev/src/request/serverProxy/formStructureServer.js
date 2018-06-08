@@ -1,16 +1,16 @@
-import {fluent} from 'es-optional'
 import {serialFuture} from '../../common/serialFuture'
 import {QueryOpt} from '../../../config/sysDefConfig'
 import {getLastFormStructure} from '../../database/formStructureDao'
-import {queryFormStructureItem} from '../../database/formStructureItemDao'
-import {getFormStructureItemRulesByItemIds} from '../../database/formStructureItemRulesDao'
+import {queryFormItem} from '../../database/formItemDao'
+import {getFormItemRulesByItemIds} from '../../database/formItemRulesDao'
+import '../../database/rowDao'
 
 /**
  * 根据ID获取表单结构
  * @param params
  * @param callback
  */
-export const getStructureById = (params, callback) => {
+export const getFormStructureById = (params, callback) => {
     serialFuture().then({
         form: (result, cb) => {
             getLastFormStructure(params.id, cb)
@@ -18,7 +18,7 @@ export const getStructureById = (params, callback) => {
     }).then({
         items: (result, cb) => {
             const row = result.form[0];
-            queryFormStructureItem([{
+            queryFormItem([{
                 column: 'fsid',
                 value: row.id,
                 opts: QueryOpt.EQU
@@ -34,7 +34,7 @@ export const getStructureById = (params, callback) => {
             for (let item of items) {
                 ids.push(item.id)
             }
-            getFormStructureItemRulesByItemIds(ids, cb);
+            getFormItemRulesByItemIds(ids, cb);
         }
     }).then({
         combine: (result, cb) => {
@@ -74,7 +74,10 @@ export const getStructureById = (params, callback) => {
                         sort:item.l_sort,
                         search:item.l_search,
                         tip:item.tip,
-                        dataType:item.type
+                        dataType:item.type,
+                        fkFsid:item.f_fsid,
+                        fkRowId:item.f_rowid,
+                        fkItemId:item.f_itemid,
                     },
                     metaRules = [];
                 for(let rule of rules){
