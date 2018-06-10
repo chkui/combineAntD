@@ -42,7 +42,8 @@ export const urlBase = {
     formData: {
         module: '/api/formData',
         options: {
-            getAssociated: '/getAssociated'
+            getAssociated: '/getAssociated',
+            listQuery:'/listQuery'
         }
     }
 }
@@ -80,6 +81,23 @@ export const urlBuilder = {
          * @param params.rowId
          * @param params.itemId
          */
-        getAssociated: params => `${urlBase.formData.module}${urlBase.formData.options.getAssociated}/${encode(params)}`
+        getAssociated: params => `${urlBase.formData.module}${urlBase.formData.options.getAssociated}/${encode(params)}`,
+        /**
+         * 根据条件查询列表数据
+         * @param {object} params
+         * @param {string} params.fsId 表单
+         * @param {array} [params.cond] 查询条件
+         * @param {string} params.cond.itemId 字段对应的id
+         * @param {string} params.cond.value 要搜索的值
+         * @param {string} params.cond.opts 查询操作:LIK|EQU，模糊匹配，精准匹配 {@link QueryOpt}
+         * @param {object} [params.sort] 排序操作
+         * @param {string} params.sort.column 排序字段
+         * @param {string} params.sort.flag 排序字段，取值['ASC'|'DESC']：升序或降序。默认'ASC'
+         * @param {object} params.page 分页标识
+         * @param {string} params.page.curPage 当前页
+         * @param {string} params.page.size 单页数据个数
+         * @returns {string}
+         */
+        listQuery: params => `${urlBase.formData.module}${urlBase.formData.options.listQuery}/${encode(params)}`
     }
 }

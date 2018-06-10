@@ -11,7 +11,7 @@ export const createMenuTable = 'CREATE TABLE IF NOT EXISTS B_MENU(' +
     'parent VARCHAR(20) NOT NULL,' +
     'link_type CHAR(1) NOT NULL,' + //菜单跳转类型，L=一个纯URL跳转，F=内部表单跳转，G=父组件，有叶节点，没有跳转功能
     'link_url VARCHAR(64),' + //跳转地址
-    'sort INT(10) NOT NULL,' + //排序字段
+    'sort FLOAT NOT NULL,' + //排序字段
     'op CHAR(1) NOT NULL,' + //是否在列表中显示 E启用、N停用、D删除
     'createuser VARCHAR(32) NOT NULL,' +
     'createtime INT(15) NOT NULL,' +
@@ -34,9 +34,9 @@ const createFormStructure = 'CREATE TABLE IF NOT EXISTS B_FORM_STRUCTURE(' +
     'l_delete CHAR(1) NOT NULL,' + //列表删除
     'op CHAR(1) NOT NULL,' + //是否在列表中显示 E启用、N停用、D删除
     'createuser VARCHAR(32) NOT NULL,' +
-    'createtime INT(15) NOT NULL,' +
+    'createtime INT(15) NOT NULL ,' +
     'modifyuser VARCHAR(32) NOT NULL,' +
-    'modifytime INT(15) NOT NULL,' +
+    'modifytime INT(15) NOT NULL ,' +
     'site VARCHAR(32) NOT NULL,' +
     'PRIMARY KEY(id,ver)' + //id与ver组成联合主键
     ')';
@@ -48,11 +48,12 @@ const createDataTable = 'CREATE TABLE IF NOT EXISTS B_ROW(' +
     'fsver INT(15) NOT NULL,' +  //关联表单版本号
     'label VARCHAR(32) NOT NULL,' +
     'code VARCHAR(32),' +
+    'sort FLOAT NOT NULL ,' + //排序字段
     'op CHAR(1) NOT NULL,' + //是否在列表中显示 E启用、N停用、D删除
     'createuser VARCHAR(32) NOT NULL,' +
-    'createtime INT(15) NOT NULL,' +
+    'createtime INT(15) NOT NULL ,' +
     'modifyuser VARCHAR(32) NOT NULL,' +
-    'modifytime INT(15) NOT NULL,' +
+    'modifytime INT(15) NOT NULL ,' +
     'site VARCHAR(32) NOT NULL' +
     ')';
 
@@ -93,11 +94,12 @@ const createFormItem = 'CREATE TABLE IF NOT EXISTS B_FORM_ITEM(' +
     'l_search CHAR(1) NOT NULL,' + //是否在列表中可以搜索 E启用、N停用
     'l_sort CHAR(1) NOT NULL,' + //是否在列表中可以搜索
     'tip VARCHAR(255),' + //组件输入提示信息
+    'sort FLOAT NOT NULL ,' + //排序字段
     'op CHAR(1) NOT NULL,' + //是否在列表中显示 E启用、N停用、D删除
     'createuser VARCHAR(32) NOT NULL,' +
-    'createtime INT(15) NOT NULL,' +
+    'createtime INT(15) NOT NULL ,' +
     'modifyuser VARCHAR(32) NOT NULL,' +
-    'modifytime INT(15) NOT NULL,' +
+    'modifytime INT(15) NOT NULL ,' +
     'site VARCHAR(32) NOT NULL' +
     ')';
 
@@ -115,9 +117,9 @@ const createDataItemValue = 'Create Table IF NOT EXISTS B_ROW_VALUE(' +
     'value VARCHAR(255) NOT NULL,' +
     'op CHAR(1) NOT NULL,' + //是否在列表中显示 E启用、N停用、D删除
     'createuser VARCHAR(32) NOT NULL,' +
-    'createtime INT(15) NOT NULL,' +
+    'createtime INT(15) NOT NULL ,' +
     'modifyuser VARCHAR(32) NOT NULL,' +
-    'modifytime INT(15) NOT NULL,' +
+    'modifytime INT(15) NOT NULL ,' +
     'site VARCHAR(32) NOT NULL' +
     ')';
 
@@ -145,11 +147,12 @@ const createFormItemRules = 'CREATE TABLE IF NOT EXISTS B_FORM_ITEM_RULES(' +
     'rule_category VARCHAR(32) NOT NULL,' + //前端校验规则对应的分类
     'rule_type VARCHAR(32) NOT NULL,' + //对应的类型
     'expression VARCHAR(32) NOT NULL,' + //校验对应的表达式，由前端直接传递JSON字符串
+    'sort FLOAT NOT NULL ,' + //排序字段
     'op CHAR(1) NOT NULL,' + //是否在列表中显示 E启用、N停用、D删除
     'createuser VARCHAR(32) NOT NULL,' +
-    'createtime INT(15) NOT NULL,' +
+    'createtime INT(15) NOT NULL ,' +
     'modifyuser VARCHAR(32) NOT NULL,' +
-    'modifytime INT(15) NOT NULL,' +
+    'modifytime INT(15) NOT NULL ,' +
     'site VARCHAR(32) NOT NULL' +
     ')';
 

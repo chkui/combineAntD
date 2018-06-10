@@ -2,6 +2,8 @@ import db from '../database/data'
 import {iocService} from './iocService'
 import {dataBindService} from './dataBindService'
 import {fluent} from 'es-optional'
+import {get} from '../request/net'
+import {urlBuilder, decode} from '../../config/url'
 
 function ListService() {
 }
@@ -22,7 +24,14 @@ function ListService() {
  * @param cb
  */
 ListService.prototype.listQuery = function (fsId, cond, sort, page, cb) {
+    get(urlBuilder.formData.listQuery({
+        fsId,
+        cond,
+        sort,
+        page
+    }), result=>{
 
+    })
 }
 
 /**

@@ -25,6 +25,12 @@ export const queryFormStructure = (condition, sort, cb, tx) => {
     })
 }
 
+/**
+ * 根据id获取最新版的表单结构
+ * @param fsid
+ * @param cb (err ,resultSet)
+ * @param tx
+ */
 export const getLastFormStructure = (fsid, cb, tx) => {
     crudSupport.exeQuery(GetLastSql, [fsid, fsid], (tx, result) => {
         cb(null, result.rows);

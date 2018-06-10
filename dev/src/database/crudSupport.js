@@ -39,26 +39,26 @@ CrudSupport.prototype.insertOne = function (table, params, callback, transaction
  */
 CrudSupport.prototype.insertBatch = function (table, paramsList, callback) {
     if (paramsList && 0 < paramsList.length) {
-        const params = preInsertParams(paramsList[0]);
-        preInsertParams(params);
-        const keys = Object.keys(params);
-        let column = '', index = '', cond = [];
-        for (let key of keys) {
-            column += `${key},`;
-            index += '?,';
-        }
-        const sql = `INSERT INTO ${table}(${column.substring(0, column.length - 1)})VALUES(${index.substring(0, index.length - 1)})`;
         mySqlSupport.transaction(tx => {
             for (let params of paramsList) {
-                const cond = [];
                 params = preInsertParams(params);
+                const keys = Object.keys(params);
+                let column = '', index = '';
+                for (let key of keys) {
+                    column += `${key},`;
+                    index += '?,';
+                }
+                const sql = `INSERT INTO ${table}(${column.substring(0, column.length - 1)})VALUES(${index.substring(0, index.length - 1)})`,
+                    cond = [];
                 for (let key of keys) {
                     cond.push(params[key])
                 }
                 tx.executeSql(sql, cond, (tx, result) => {
 
                 }, (tx, err) => {
-                    console.error(err)
+                    console.error('Error Sql:', sql);
+                    console.error('Error Condition:', cond);
+                    console.error('Error Info:', err);
                     callback(err.message);
                 })
             }
