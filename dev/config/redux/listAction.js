@@ -31,7 +31,7 @@ export const listDataAction = (stateCode, list = false) => ({
 export const loadListDataAction = (fsId, fsType, where, options) => {
     return dispatch => {
         dispatch(listDataAction(StateCode.init));
-        listService.listQuery(fsId, {}, {}, {}, (err, result) => {
+        listService.listQuery(fsId, {}, {}, {}, (err, total, docs) => {
             if (err) {
                 dispatch(listDataAction(StateCode.err));
             } else {

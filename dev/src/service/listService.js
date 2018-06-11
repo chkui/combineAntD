@@ -21,7 +21,7 @@ function ListService() {
  * @param {object} page 分页标识
  * @param {string} page.curPage 当前页
  * @param {string} page.size 单页数据个数
- * @param cb
+ * @param cb (err, total, docs)
  */
 ListService.prototype.listQuery = function (fsId, cond, sort, page, cb) {
     get(urlBuilder.formData.listQuery({
@@ -30,7 +30,9 @@ ListService.prototype.listQuery = function (fsId, cond, sort, page, cb) {
         sort,
         page
     }), result=>{
-
+        if(0 === result.code){
+            cb(null, 100, decode(result.data))
+        }
     })
 }
 
@@ -65,7 +67,11 @@ ListService.prototype.find = function (fsId, fsType, where, options, cb) {
  * @param formDocs 数据列表
  */
 ListService.prototype.bindData = function (formStructure, formDocs) {
-    return dataBindService.listData2Comp(formStructure, formDocs);
+    //return dataBindService.listData2Comp(formStructure, formDocs);
+    return formDocs.map(doc=>{
+        doc.key = doc.id;
+        return doc;
+    });
 };
 
 /**

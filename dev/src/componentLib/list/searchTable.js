@@ -101,13 +101,13 @@ class SearchTable extends React.Component {
                        onRow={this.handleRow}>
                     {formStructure.itemMeta.map(meta => {
                         if (SysFlag.ENABLE === meta.listShow) {
-                            return (<ColumnGroup key={meta.column}
+                            return (<ColumnGroup key={meta.id}
                                                  title={this.searchObserver.createSearchInput(formStructure, meta, this.state.searchBar)}>
-                                <Column key={meta.column}
+                                <Column key={meta.id}
                                         className={cn(viewDetail && 'column')}
                                         title={<span>{meta.label}</span>}
-                                        dataIndex={meta.column}
-                                        sorter={meta.sort} render={renderBoot(meta)}/>
+                                        dataIndex={meta.id}
+                                        sorter={SysFlag.ENABLE === meta.sort} render={renderBoot(meta)}/>
                             </ColumnGroup>)
                         } else {
                             return null;

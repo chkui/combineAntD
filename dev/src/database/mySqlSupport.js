@@ -27,7 +27,7 @@ MySqlSupport.prototype.init = function () {
             }
         }
         //insert();
-        let count = 0;
+        /*let count = 0;
         const len = initDropTableSql.length;
         for (let sql of initDropTableSql){
             tx.executeSql(sql, [], () => {
@@ -38,7 +38,7 @@ MySqlSupport.prototype.init = function () {
                 console.error('SQL ERROR:', sql, '!Error info:', e.message)
                 cb(e.message)
             })
-        }
+        }*/
     })
 }
 

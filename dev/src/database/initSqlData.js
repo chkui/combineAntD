@@ -128,7 +128,9 @@ export const insertFormItem = [
         l_sort: SysFlag.DISABLE,
         tip: '',
         sort: 50
-    }, {
+    },
+    //数据字典
+    {
         id: '861f89a7696411e8a492935266224f65',
         fsid: 'static_form_dd_2018_6_6_14_52',
         fsver: 1528274292559,
@@ -138,30 +140,13 @@ export const insertFormItem = [
         f_itemid: '',
         comp_category: 'Input',
         comp_type: 'PK',
-        label: '序列号',
+        label: '主键',
         column: 'id',
         l_show: SysFlag.DISABLE,
         l_search: SysFlag.DISABLE,
         l_sort: SysFlag.DISABLE,
         tip: '',
         sort: 0
-    }, {
-        id: '12fc5e7f6a0511e89aff79eafa1ffa12',
-        fsid: 'static_form_dd_2018_6_6_14_52',
-        fsver: 1528274292559,
-        type: FormItemType.VCHAR,
-        f_fsid: '',
-        f_rowid: '',
-        f_itemid: '',
-        comp_category: 'Input',
-        comp_type: 'Text',
-        label: '编码',
-        column: 'code',
-        l_show: SysFlag.ENABLE,
-        l_search: SysFlag.ENABLE,
-        l_sort: SysFlag.ENABLE,
-        tip: '编码，可以根据需要对菜单项进行编码，便于系统间数据统一',
-        sort: 10
     }, {
         id: '21aa9bd76a0511e8a81f078e4028a66a',
         fsid: 'static_form_dd_2018_6_6_14_52',
@@ -178,6 +163,23 @@ export const insertFormItem = [
         l_search: SysFlag.ENABLE,
         l_sort: SysFlag.ENABLE,
         tip: '数据字典数据项的名称，用于标记该项数据的内容，例如性别。',
+        sort: 10
+    }, {
+        id: '12fc5e7f6a0511e89aff79eafa1ffa12',
+        fsid: 'static_form_dd_2018_6_6_14_52',
+        fsver: 1528274292559,
+        type: FormItemType.VCHAR,
+        f_fsid: '',
+        f_rowid: '',
+        f_itemid: '',
+        comp_category: 'Input',
+        comp_type: 'Text',
+        label: '编码',
+        column: 'code',
+        l_show: SysFlag.ENABLE,
+        l_search: SysFlag.ENABLE,
+        l_sort: SysFlag.ENABLE,
+        tip: '编码，可以根据需要对菜单项进行编码，便于系统间数据统一',
         sort: 20
     }, {
         id: '2b5dabe16a0511e8838a57a01308399f',
@@ -230,7 +232,7 @@ export const insertRow = [
 export const insertRowValue = [
     {
         id: '3cc49a606ae611e8a3bdc34c85b0b4f1',
-        parent:'',
+        parent: '',
         rowid: 'aa401ea06ad411e89b304f2f8aebc133',
         itemid: '861f89a7696411e8a492935266224f65',
         itemtype: FormItemType.VCHAR,
@@ -238,15 +240,15 @@ export const insertRowValue = [
         value: 'a27a5a706ae611e88c7e11040ba987ef',
     }, {
         id: 'bedf2ec76ae611e894d97109c206da96',
-        parent:'',
+        parent: '',
         rowid: 'aa401ea06ad411e89b304f2f8aebc133',
         itemid: '12fc5e7f6a0511e89aff79eafa1ffa12',
         itemtype: FormItemType.VCHAR,
         type: FormItemType.VCHAR,
-        value: 'start',
+        value: 'enableOrDisable',
     }, {
         id: 'fdec15106ae611e884c41dd4189b4164',
-        parent:'',
+        parent: '',
         rowid: 'aa401ea06ad411e89b304f2f8aebc133',
         itemid: '21aa9bd76a0511e8a81f078e4028a66a',
         itemtype: FormItemType.VCHAR,
@@ -254,7 +256,7 @@ export const insertRowValue = [
         value: '启用/停用',
     }, {
         id: '455c0bdd6ae711e88cdb53482776c712',
-        parent:'',
+        parent: '',
         rowid: 'aa401ea06ad411e89b304f2f8aebc133',
         itemid: '2b5dabe16a0511e8838a57a01308399f',
         itemtype: FormItemType.DYNAM,
@@ -262,7 +264,7 @@ export const insertRowValue = [
         value: '启用',
     }, {
         id: '7185bda36ae711e8b3e97780241392f5',
-        parent:'',
+        parent: '',
         rowid: 'aa401ea06ad411e89b304f2f8aebc133',
         itemid: '2b5dabe16a0511e8838a57a01308399f',
         itemtype: FormItemType.DYNAM,
@@ -270,7 +272,7 @@ export const insertRowValue = [
         value: '停用',
     }, {
         id: '94cde0336ae711e895f57778a1c4ff53',
-        parent:'',
+        parent: '',
         rowid: 'aa401ea06ad411e89b304f2f8aebc133',
         itemid: '3e319e2f6a0511e8a81449dd5c0583b8',
         itemtype: FormItemType.VCHAR,

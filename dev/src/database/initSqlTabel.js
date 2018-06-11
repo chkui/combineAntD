@@ -59,6 +59,13 @@ const createDataTable = 'CREATE TABLE IF NOT EXISTS B_ROW(' +
 
 const createFormItem = 'CREATE TABLE IF NOT EXISTS B_FORM_ITEM(' +
     'id VARCHAR(32) NOT NULL PRIMARY KEY, ' +
+    /**
+     * column用于标记字段别名。
+     * 如果是固定字段，除了id之外，column都是固定的格式（id, label, op, createUser, createTime, modifyUser, modifyTime）。{@link RegularItemMeta}
+     * 这些固定的字段无法编辑对应的控件，由系统预设指定。
+     * 其他非必要字段，如果未设定column，这使用32位UUID代替。
+     */
+    'column VARCHAR(32) NOT NULL,' +
     'fsid VARCHAR(32) NOT NULL,' + //关联B_FORM_STRUCTURE的ID
     'fsver INT(15) NOT NULL,' + //关联B_FORM_STRUCTURE的VER
     /**
@@ -89,7 +96,6 @@ const createFormItem = 'CREATE TABLE IF NOT EXISTS B_FORM_ITEM(' +
     'comp_category VARCHAR(32) NOT NULL,' + //关联B_FORM_ITEM_STRUCTURE的主键
     'comp_type VARCHAR(32) NOT NULL,' +
     'label VARCHAR(32) NOT NULL,' +
-    'column VARCHAR(32) NOT NULL,' +
     'l_show CHAR(1) NOT NULL,' + //是否在列表中显示 E启用、N停用
     'l_search CHAR(1) NOT NULL,' + //是否在列表中可以搜索 E启用、N停用
     'l_sort CHAR(1) NOT NULL,' + //是否在列表中可以搜索
