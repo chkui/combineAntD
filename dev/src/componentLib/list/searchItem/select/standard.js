@@ -50,7 +50,7 @@ class StandardSelectComponent extends React.Component {
             col = fluent(search).then(search => search[itemMeta.column]).else(false)
         return (<div className={`${cn('standard-select')} ${com(show ? 'show' : 'hide')}`}>
             <Select className={cn('standard-select')}
-                    placeholder={`搜索${itemMeta.label}`}
+                    defaultValue= "未选择"
                     onChange={this.handleChange}
                     disabled={!col}>
                 {buildSelect(col)}

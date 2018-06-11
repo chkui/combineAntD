@@ -63,10 +63,12 @@ class SearchTable extends React.Component {
         result && this.load(result.where, result.options);
     }
 
-    handleRow(record, index){
+    handleRow(record, index) {
         const _this = this;
-        return{
-            onClick:()=>{console.log(record)}
+        return {
+            onClick: () => {
+                console.log(record)
+            }
         }
     }
 
@@ -75,9 +77,9 @@ class SearchTable extends React.Component {
             list = props.list,
             formStructure = props.formStructure,
             //标记是否可以查看表详情
-            viewDetail = fluent(formStructure.list).then(list=>list.options).then(options=>{
-                for(let opt of options){
-                    if(ListOption.VIEW === opt){
+            viewDetail = fluent(formStructure.list).then(list => list.options).then(options => {
+                for (let opt of options) {
+                    if (ListOption.VIEW === opt) {
                         return true;
                     }
                 }
@@ -90,7 +92,7 @@ class SearchTable extends React.Component {
         }
         return (
             <div>
-                <ButtonBar options={fluent(formStructure.list).then(list => list.options).else(false)}
+                <ButtonBar list={fluent(formStructure.list).then(list => list).else(false)}
                            onSearchEnable={this.handleSearchEnable}
                            onFresh={this.handleFresh}/>
                 <Table {...ListConfig.table}
@@ -106,7 +108,7 @@ class SearchTable extends React.Component {
                                 <Column key={meta.id}
                                         className={cn(viewDetail && 'column')}
                                         title={<span>{meta.label}</span>}
-                                        dataIndex={meta.id}
+                                        dataIndex={meta.column}
                                         sorter={SysFlag.ENABLE === meta.sort} render={renderBoot(meta)}/>
                             </ColumnGroup>)
                         } else {

@@ -8,7 +8,7 @@ const QuerySql = `SELECT ${Column} FROM B_FORM_ITEM WHERE 1 = 1`;
 export const insert = () =>{};
 
 export const queryFormItem = (condition, sort, cb, tx) => {
-    crudSupport.query(QuerySql, condition, false, (tx, result) => {
+    crudSupport.query(QuerySql, condition, [{column:'sort', flag:'ASC'}], (tx, result) => {
         cb(null, result.rows);
     }, (tx, err) => {
         console.error('Sql:', QuerySql, err);

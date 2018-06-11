@@ -25,7 +25,8 @@ DataBindService.prototype.dataValue2Options = function (docs) {
         id: i.id,
         fsId: i.fsid,
         rowId: i.rowid,
-        itemId: i.itemid
+        itemId: i.itemid,
+        value:i.value
     }))
 }
 

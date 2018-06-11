@@ -66,6 +66,7 @@ const createFormItem = 'CREATE TABLE IF NOT EXISTS B_FORM_ITEM(' +
      * 其他非必要字段，如果未设定column，这使用32位UUID代替。
      */
     'column VARCHAR(32) NOT NULL,' +
+    'code VARCHAR(32),' + //字段自定义编码，非关联项目
     'fsid VARCHAR(32) NOT NULL,' + //关联B_FORM_STRUCTURE的ID
     'fsver INT(15) NOT NULL,' + //关联B_FORM_STRUCTURE的VER
     /**

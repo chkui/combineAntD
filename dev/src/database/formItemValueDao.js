@@ -23,10 +23,11 @@ const SubItemValueSql = 'SELECT FROM B_ROW_VALUE '
 export const formItemValueResultQuery = (viewItemList, conditionList, sortList, pager, callback) => {
     let columnSql = '', conditionSql = '';
     const conditionIndex = [];
+    //组装显示字段
+    //
     for (let item of viewItemList) {
-        const id = item.id;
-        columnSql += `(SELECT rv.value FROM B_ROW_VALUE rv WHERE rv.itemid = ? AND rv.rowid = r.id) AS '${id}',`;
-        conditionIndex.push(id);
+        columnSql += `(SELECT rv.value FROM B_ROW_VALUE rv WHERE rv.itemid = ? AND rv.rowid = r.id) AS '${item.column}',`;
+        conditionIndex.push(item.id);
     }
     columnSql = columnSql.substr(0, columnSql.length - 1) + ' ';
     if (conditionList && 0 < conditionList.length) {
@@ -43,7 +44,6 @@ export const formItemValueResultQuery = (viewItemList, conditionList, sortList, 
                     conditionIndex.push(value);
                     conditionIndex.push(condition.itemId);
                 }
-                ;
             }
             conditionSql += ') ';
         }

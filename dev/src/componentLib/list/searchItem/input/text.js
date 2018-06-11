@@ -51,8 +51,7 @@ export class Text extends React.Component {
     render() {
         const {show, itemMeta} = this.props;
         return (<div className={`${cn('searchInput')} ${com(show ? 'show' : 'hide')}`}>
-            <Search enterButton
-                    placeholder={`搜索${itemMeta.label}`}
+            <Search placeholder={`搜索${itemMeta.label}`}
                     onSearch={this.handleSearch}
                     onChange={this.handleChange}/>
         </div>)
