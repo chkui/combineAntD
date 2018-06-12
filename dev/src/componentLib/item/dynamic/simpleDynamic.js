@@ -10,19 +10,21 @@ const Option = Select.Option;
  * 1)单项数据。
  * 2)多项数据。
  * 3)树。
- * 该组件会对Antd的Form高阶组件进行二次封装。满足对应的校验、验证提交等功能
+ * 该组件会对Antd的Form高阶组件进行二次封装。满足对应的校验、验证提交等功能。所有项目的数据都是同一种数据类型（组件）
  */
 export class SimpleDynamicEntry extends React.Component {
 
     render() {
         return (
             <span>
-                <Input type="text" {...this.props}/>
-                <Select defaultValue="singLine">
-                      <Option value="singLine">单项数</Option>
-                      <Option value="multiLine">多项数据</Option>
-                      <Option value="treeLine">树形结构</Option>
-                </Select>
+                <Input addonBefore={(
+                    <Select defaultValue="singLine">
+                        <Option value="singLine">单项数据</Option>
+                        <Option value="multiLine">多项数据</Option>
+                        <Option value="treeLine">树形结构</Option>
+                    </Select>
+                )} type="text" {...this.props}/>
+
             </span>
         );
     }

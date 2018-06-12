@@ -43,7 +43,8 @@ export const urlBase = {
         module: '/api/formData',
         options: {
             getAssociated: '/getAssociated',
-            listQuery:'/listQuery'
+            listQuery:'/listQuery',
+            checkItemDataExists:'/checkItemDataExists'
         }
     }
 }
@@ -98,6 +99,13 @@ export const urlBuilder = {
          * @param {string} params.page.size 单页数据个数
          * @returns {string}
          */
-        listQuery: params => `${urlBase.formData.module}${urlBase.formData.options.listQuery}/${encode(params)}`
+        listQuery: params => `${urlBase.formData.module}${urlBase.formData.options.listQuery}/${encode(params)}`,
+        /**
+         * 根据条件检查item列指定的值是否存在
+         * @param params.itemid
+         * @param params.value
+         * @returns {string}
+         */
+        checkItemDataExists:params => `${urlBase.formData.module}${urlBase.formData.options.checkItemDataExists}/${encode(params)}`
     }
 }

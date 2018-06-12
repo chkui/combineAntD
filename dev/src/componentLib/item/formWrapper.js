@@ -58,7 +58,7 @@ export default class FormWrapper extends React.Component {
                 }else{
                     one = false;
                 }
-                if(one){
+                if(one){ 
                     combineRules.push(one);
                 }else{
                     console.warn('rule', rule, 'not the specification way of using! please check it!')

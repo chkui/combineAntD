@@ -1,5 +1,5 @@
 import {QueryOpt, SysFlag} from '../../../config/sysDefConfig'
-import {queryFormItemValue} from '../../database/rowValueDao'
+import {queryFormItemValue, getCount} from '../../database/rowValueDao'
 import {getLastFormStructure} from '../../database/formStructureDao'
 import {resultToList} from './commonServer'
 import {serialFuture} from "../../common/serialFuture";
@@ -91,4 +91,21 @@ export const listQuery = (params, callback) =>{
             console.log(result)
         }
     })
+}
+
+/**
+ * 根据itemid和value值判断数据是否存在
+ * @param {object} params
+ * @param {string} params.itemId
+ * @param {string} params.value
+ * @param callback
+ */
+export const checkItemDataExists = (params, callback) =>{
+    getCount([{
+        column:'itemid',
+        value:params.itemId
+    },{
+        column:'value',
+        value:params.value
+    }], callback)
 }

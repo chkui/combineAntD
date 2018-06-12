@@ -259,7 +259,7 @@ export const insertFormItem = [
         l_search: SysFlag.ENABLE,
         l_sort: SysFlag.ENABLE,
         tip: '',
-        sort: 10060
+        sort: 10080
     }, {
         id: '12fc5e7f6a0511e89aff79eafa1ffa12',
         fsid: 'static_form_dd_2018_6_6_14_52',
@@ -412,7 +412,7 @@ export const insertFormItemRules = [
         itemid: '12fc5e7f6a0511e89aff79eafa1ffa12',
         rule_category: 'single',
         rule_type: 'unIdentical',
-        expression: encodeURI(JSON.stringify({formId: 'static_form_dd_2018_6_6_14_52', column: 'code'})),
+        expression: encodeURI(JSON.stringify({itemId: '12fc5e7f6a0511e89aff79eafa1ffa12'})),
         sort: 10
     }, {
         id: '4dd12429696711e88355e9ce8cd50ffb',

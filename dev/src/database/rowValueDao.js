@@ -2,7 +2,7 @@ import {crudSupport} from './crudSupport'
 import {insertRowValue} from './initSqlData'
 
 const Column = 'id,parent,rowid,itemid,itemtype,type,f_fsid,f_rowid,f_itemid,f_valueid,value,op,createuser,createtime,modifyuser,modifytime,site';
-const CountSql = 'SELECT COUNT(*) AS count FROM B_ROW_VALUE WHERE 1 = 1';
+const CountSql = 'SELECT COUNT(1) AS count FROM B_ROW_VALUE WHERE 1 = 1';
 const QuerySql = `SELECT ${Column} FROM B_ROW_VALUE WHERE 1 = 1`;
 
 /**
