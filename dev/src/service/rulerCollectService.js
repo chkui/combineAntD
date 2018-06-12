@@ -15,7 +15,7 @@ function RulerCollectService() {
  * @param cb (result)
  */
 RulerCollectService.prototype.checkTableSameValueExists = function (item, cb) {
-    
+
 }
 
 /**
