@@ -24,16 +24,8 @@ const ButtonBar = props => {
      * 列表功能的启用标记
      */
     const list = props.list;
-    const menu = (
-        <Menu>
-            <Menu.Item key="1">1st item</Menu.Item>
-            <Menu.Item key="2">2nd item</Menu.Item>
-            <Menu.Item key="3">3rd item</Menu.Item>
-        </Menu>
-    );
     return (<ButtonGroup size={ListConfig.button.size}>
         {list[ListConfig.options.new] && <New/>}
-        <BarButton key="retweet" icon="retweet" onClick={props.onFresh}>刷新</BarButton>
         {list[ListConfig.options.search] && (<SearchBar />)}
     </ButtonGroup>)
 }
@@ -58,23 +50,25 @@ const New = reRoute()(class extends React.Component{
 /**
  * 搜索相关按钮
  * @param props
- * @param props.onSearchEna
+ * @param props.onSearchEnable 搜索框展开与收起
+ * @param props.onReFresh 根据条件刷新数据
+ * @param props.onSearch 点击查询按钮进行搜索
  * @returns {*}
  * @constructor
  */
 const SearchBar = props =>{
     const menu = (
         <Menu>
-            <Menu.Item key="1"><Icon/>收起</Menu.Item>
-            <Menu.Item key="2"><Icon />刷新</Menu.Item>
-            <Menu.Item key="3">清空</Menu.Item>
+            <Menu.Item key="1"><Icon type="up" />收起</Menu.Item>
+            <Menu.Item key="2"><Icon type="retweet" />刷新</Menu.Item>
+            <Menu.Item key="3"><Icon type="delete" />清空</Menu.Item>
         </Menu>
     );
     return(
         <React.Fragment>
             <BarButton icon="search" onClick={props.onSearchEnable}>查询</BarButton>
             <Dropdown overlay={menu}>
-                <Button type="primary"><Icon type="down" /></Button>
+                <Button type="primary"><Icon type="setting" /></Button>
             </Dropdown>
         </React.Fragment>
     )

@@ -4,6 +4,7 @@ import {Form, Tooltip, Icon, Spin} from 'antd';
 import {FormConsumer} from '../formContext'
 import {formItemLayoutCol} from "../../../config/form";
 import rulerCollect from '../../rules/submitCollect'
+import {dataBindService} from '../../service/dataBindService'
 import {fluent} from 'es-optional'
 
 const Item = Form.Item;
@@ -23,7 +24,6 @@ const cn = require('classnames/bind').bind(require('./formWrapper.scss'));
  * @param {object} props.valuePropName 附加受控属性，用于标记特殊的子节点属性至
  * @param {string} props.initialValue
  * @param {array} props.defRules 默认校验规则，如果rules和defRules同时存在，会将2者进行合并，有限判断rules成立的规则
- * @param {string} props.tip 录入的提示信息
  * @Param {ReactNode|Element} props.children 包裹的子标签
  * @param {boolean} props.loading 现实是否正在加载状态
  *
@@ -42,13 +42,12 @@ export default class FormWrapper extends React.Component {
      * 构建校验规则链
      */
     buildOptions() {
-        const props = this.props,
-            defRules = props.defRules || [],
-            valuePropName = props.valuePropName,
-            initialValue = props.initialValue,
-            rules = [];
-        if(props.rules){
-            for(let rule of props.rules){
+        const {props} = this,
+            {rules, defRules, valuePropName, initialValue} = props,
+            combineRules = [];
+        if(rules){
+            const compRules = dataBindService.ruleDoc2Comp(rules)
+            for(let rule of compRules){
                 let one = false;
                 if(rule.category && rule.type && rule.options){
                     one = fluent(rulerCollect[rule.category]).then(category=>{
@@ -60,17 +59,13 @@ export default class FormWrapper extends React.Component {
                     one = false;
                 }
                 if(one){
-                    rules.push(one);
+                    combineRules.push(one);
                 }else{
                     console.warn('rule', rule, 'not the specification way of using! please check it!')
                 }
             }
         }
-        if (Array.isArray(rules) && Array.isArray(defRules)) {
-            this.options.rules = rules.concat(defRules);
-        } else {
-            throw 'Input params: "rules" and "defRules" must be array!'
-        }
+        this.options.rules = defRules && Array.isArray(defRules) ? combineRules.concat(defRules) : combineRules;
         valuePropName && (this.options.valuePropName = valuePropName);
         initialValue && (this.options.initialValue = initialValue);
     }

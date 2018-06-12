@@ -3,6 +3,7 @@ import {FormItemType} from '../../../../config/sysDefConfig'
 import {connect} from 'react-redux'
 import {fluent} from 'es-optional'
 import {StateCode} from "../../../../config/redux/listReducer";
+import {timestamp2Day} from '../../../common/timerFormat'
 
 
 /**
@@ -34,14 +35,13 @@ const DefColumn = connect(
 
 
 /**
- * 开关
+ * 时间处理
  * @param {number} props.text 时间戳
  * @param {object} props.record 单行数据
  * @constructor
  */
 const TimeStamp = props =>{
-    const date = new Date(Number.parseInt(props.text));
-    return (<span>{`${date.getFullYear()}.${date.getMonth() + 1}.${date.getDate()} ${date.getHours()}:${date.getMinutes()}`}</span>)
+    return (<span>{timestamp2Day(new Date(Number.parseInt(props.text)))}</span>)
 };
 
 const typeFactory = (itemMeta) =>{

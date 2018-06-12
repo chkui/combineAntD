@@ -67,8 +67,14 @@ export default Form.create()(HorizontalForm);
 function FormBuilder(formStructure, form) {
     const list = [];
     for (let item of formStructure.itemMeta) {
-        const Component = Items[item.category][item.type].Form;
-        list.push(<Component key={item.column}{...item} formStructure={formStructure} form={form}/>)
+        const Component = Items[item.category][item.type].Form,
+            inParams = {
+                column:item.column,
+                label:item.label,
+                tip:item.tip,
+                rules:item.rules
+            }
+        list.push(<Component key={item.column}{...inParams} formStructure={formStructure} form={form}/>)
     }
     return list;
 }

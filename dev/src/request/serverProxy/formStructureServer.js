@@ -41,9 +41,6 @@ export const getFormStructureById = (params, callback) => {
             const form = result.form[0],
                 items = result.items,
                 rules = result.rules;
-            console.log(form);
-            console.log(items);
-            console.log(rules);
             const formStructure = {
                     id: form.id,
                     ver: form.ver,
@@ -85,7 +82,7 @@ export const getFormStructureById = (params, callback) => {
                         metaRules.push(rule);
                     }
                 }
-                metaRules && 0 < metaRules.length && (meta.rules = rules)
+                metaRules && 0 < metaRules.length && (meta.rules = metaRules)
                 formItems.push(meta)
             }
             formStructure.itemMeta = formItems;

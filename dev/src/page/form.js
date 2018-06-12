@@ -17,7 +17,8 @@ class FormComponent extends React.Component {
     }
 
     render() {
-        return StateCode.suc === this.props.stateCode ? (<FormBoot/>) : null;
+        const {props} = this;
+        return StateCode.suc === props.stateCode ? (<FormBoot stateCode={props.stateCode} formStructure={props.formStructure}/>) : null;
     }
 }
 

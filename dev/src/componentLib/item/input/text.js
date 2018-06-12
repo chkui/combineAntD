@@ -14,7 +14,11 @@ import FormWrapper from '../formWrapper'
  * @param props.label 标签信息
  * @constructor
  */
-export const TextEntry = props => <Input type="text" {...props}/>;
+export class TextEntry extends React.Component{
+    render(){
+        return (<Input type="text" {...this.props}/>)
+    }
+}
 
 export const TextRead = props=><div>read</div>;
 
@@ -32,11 +36,6 @@ export const TextItem = props =>
         <TextEntry type="text"/>
     </FormWrapper>)
 
-TextItem.defaultProps = {
-    rules: [{
-        type: 'string', max: 32, message: '限定输入32个字符'
-    }]
-};
 TextItem.propTypes = {
     column: PropTypes.string.isRequired,
     label: PropTypes.string.isRequired,

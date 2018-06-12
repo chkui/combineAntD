@@ -10,7 +10,11 @@ import FormWrapper from '../formWrapper'
  * @param props
  * @constructor
  */
-export const TFSwitchEntry = props =>(<Switch {...props}/>)
+export class TFSwitchEntry extends React.Component{
+    render(){
+        return (<Switch {...this.props}/>)
+    }
+}
 
 /**
  * 标准开关

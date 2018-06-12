@@ -1,7 +1,7 @@
 import {userService} from './userService'
 import {DataFlag, RegularItemMeta, OPData} from '../../config/sysDefConfig'
 import {iocService} from './iocService'
-import {fluent} from 'es-optional'
+import {decode} from '../../config/url'
 
 /**
  * 用于处理数据绑定转换的服务对象
@@ -30,6 +30,20 @@ DataBindService.prototype.dataValue2Options = function (docs) {
     }))
 }
 
+
+/**
+ * ruler数据从数据库字段转换为前端组件使用的字段
+ * @param docs
+ * @return {*}
+ */
+DataBindService.prototype.ruleDoc2Comp = function (docs) {
+    return docs && docs.map(i=>({
+        category:i.rule_category,
+        type:i.rule_type,
+        options:decode(i.expression)
+    }))
+}
+
 /**
  * 列表数据库->列表组件转换。
  * 1)处理OP字段的数据格式/
@@ -37,7 +51,7 @@ DataBindService.prototype.dataValue2Options = function (docs) {
  * @param formStructure 表单结构
  * @param formDocs 查询结果集
  */
-DataBindService.prototype.listData2Comp = function (formStructure, formDocs) {
+/*DataBindService.prototype.listData2Comp = function (formStructure, formDocs) {
     const metas = formStructure.itemMeta,
         fks = metas.filter(meta => !!meta.fk) || [];
     return formDocs.map(d => {
@@ -51,7 +65,7 @@ DataBindService.prototype.listData2Comp = function (formStructure, formDocs) {
         }
         return doc;
     })
-}
+}*/
 
 /**
  * 提交表单时进行数据帮顶转换
@@ -78,7 +92,7 @@ DataBindService.prototype.Comp2formDoc = function (formStructure, formDoc) {
 }
 
 /**
- * 帮顶新建数据的固定字段
+ * 绑定新建数据的固定字段
  * @param formDoc 会直接修改原始数据，注意数据突变。
  */
 DataBindService.prototype.buildRegularMetaNew = function (formDoc) {

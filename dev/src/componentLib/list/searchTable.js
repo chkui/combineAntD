@@ -20,7 +20,7 @@ const {Column, ColumnGroup} = Table;
 class SearchTable extends React.Component {
     constructor(...props) {
         super(...props)
-        this.state = {searchBar: false};
+        this.state = {searchEnable: true};
         this.handleFresh = this.handleFresh.bind(this);
         this.handleSearchEnable = this.handleSearchEnable.bind(this);
         this.handleSearch = this.handleSearch.bind(this);
@@ -45,7 +45,7 @@ class SearchTable extends React.Component {
         this.load({}, {});
     }
 
-    handleSearchEnable() {
+    handleSearchEnable(searchEnable) {
         this.setState((prevState, props) => ({
             searchBar: !prevState.searchBar
         }));
@@ -93,6 +93,7 @@ class SearchTable extends React.Component {
         return (
             <div>
                 <ButtonBar list={fluent(formStructure.list).then(list => list).else(false)}
+                           defaultSearchEnable={this.state.searchBar}
                            onSearchEnable={this.handleSearchEnable}
                            onFresh={this.handleFresh}/>
                 <Table {...ListConfig.table}
@@ -104,7 +105,7 @@ class SearchTable extends React.Component {
                     {formStructure.itemMeta.map(meta => {
                         if (SysFlag.ENABLE === meta.listShow) {
                             return (<ColumnGroup key={meta.id}
-                                                 title={this.searchObserver.createSearchInput(formStructure, meta, this.state.searchBar)}>
+                                                 title={this.searchObserver.createSearchInput(formStructure, meta, this.state.searchEnable)}>
                                 <Column key={meta.id}
                                         className={cn(viewDetail && 'column')}
                                         title={<span>{meta.label}</span>}
