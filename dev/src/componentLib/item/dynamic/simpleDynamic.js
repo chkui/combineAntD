@@ -94,8 +94,8 @@ export class SimpleDynamicEntry extends React.Component {
                        onCancel={this.handleClose}
                        okText="确认"
                        cancelText="取消">
-                <Component ref={this.ref} onSubmit={this.handleSubmit} dataType={this.dataType}/>
-        </Modal>
+                        <Component ref={this.ref} onSubmit={this.handleSubmit} dataType={this.dataType}/>
+                </Modal>
             </span>
         );
     }
@@ -118,8 +118,8 @@ class SingLine extends React.Component {
         return [{value: this.state.value, type: this.props.dataType}]
     }
 
-    handelPress(e){
-        if(13 === e.charCode){
+    handelPress(e) {
+        if (13 === e.charCode) {
             this.props.onEntry();
         }
     }
@@ -165,10 +165,10 @@ const ComponentType = {
 
         render() {
             const {props} = this;
-            return <SingLine ref={ref=>this.ref = ref}
-                dataType={props.dataType}
-                placeholder={props.placeholder}
-                onEntry={props.onSubmit}/>
+            return <SingLine ref={ref => this.ref = ref}
+                             dataType={props.dataType}
+                             placeholder={props.placeholder}
+                             onEntry={props.onSubmit}/>
         }
     },
     [CompDefine.multiLine]: class extends React.Component {
