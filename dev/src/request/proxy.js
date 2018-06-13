@@ -2,7 +2,7 @@ import {urlBase, decode, encode} from '../../config/url'
 import {menuGetAll} from './serverProxy/menuServer'
 import {getFormStructureById} from './serverProxy/formStructureServer'
 import {getAssociated} from './serverProxy/formDataServer'
-import {listQuery} from './serverProxy/formDataServer'
+import {listQuery, checkItemDataExists} from './serverProxy/formDataServer'
 
 /**
  * 代理模式，浏览器模式或网络服务器模式
@@ -47,6 +47,7 @@ function LocalServerProxy(mode) {
     map[formStructure.module + formStructure.options.getOneById] = getFormStructureById;
     map[formData.module + formData.options.getAssociated] = getAssociated;
     map[formData.module + formData.options.listQuery] = listQuery;
+    map[formData.module + formData.options.checkItemDataExists] = checkItemDataExists;
 }
 
 /**

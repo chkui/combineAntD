@@ -386,7 +386,7 @@ export const insertRowValue = [
         rowid: 'aa401ea06ad411e89b304f2f8aebc133',
         itemid: '2b5dabe16a0511e8838a57a01308399f',
         itemtype: FormItemType.DYNAM,
-        type: FormItemType.ARRAY,
+        type: FormItemType.VCHAR,
         value: '启用',
     }, {//数据字典自定义字段，动态类型，数据
         id: '7185bda36ae711e8b3e97780241392f5',
@@ -394,7 +394,7 @@ export const insertRowValue = [
         rowid: 'aa401ea06ad411e89b304f2f8aebc133',
         itemid: '2b5dabe16a0511e8838a57a01308399f',
         itemtype: FormItemType.DYNAM,
-        type: FormItemType.ARRAY,
+        type: FormItemType.VCHAR,
         value: '停用',
     }
 ]
@@ -428,5 +428,12 @@ export const insertFormItemRules = [
         rule_type: 'max',
         expression: encodeURI(JSON.stringify({len: 32})),
         sort: 30
+    }, {
+        id: '69c122b56eae11e8b8fb917fdfed1114',
+        itemid: '2b5dabe16a0511e8838a57a01308399f',
+        rule_category: 'single',
+        rule_type: 'require',
+        expression: encodeURI(JSON.stringify({msg: '请输入数据'})),
+        sort: 0
     }
 ]

@@ -1,9 +1,24 @@
 import React from 'react'
 import FormWrapper from '../formWrapper'
-import {Form, Input, Select, Button} from 'antd';
+import {Form, Input, InputNumber, Select, Button, Modal, Icon} from 'antd';
+import {FormItemType} from '../../../../config/sysDefConfig'
+
+const cn = require('classnames/bind').bind(require('./simpleDynamic.scss'));
 
 const FormItem = Form.Item;
 const Option = Select.Option;
+
+const CompDefine = {
+    singLine: 'singLine',
+    multiLine: 'multiLine',
+    treeLine: 'treeLine'
+}
+
+const DataDefine = {
+    text: 'text',
+    number: 'number',
+    money: 'money'
+}
 
 /**
  * 简单动态数据框。提供一下的类型数据输入。
@@ -13,27 +28,177 @@ const Option = Select.Option;
  * 该组件会对Antd的Form高阶组件进行二次封装。满足对应的校验、验证提交等功能。所有项目的数据都是同一种数据类型（组件）
  */
 export class SimpleDynamicEntry extends React.Component {
+    constructor(...props) {
+        super(...props);
+        this.state = {showValue: this.props.value, visible: false};
+        this.value = this.props.value;
+        this.dataType = 'text';
+        this.compType = 'singLine';
+        this.ref = React.createRef();
+        this.handleClick = this.handleClick.bind(this);
+        this.handleCompTypeChange = this.handleCompTypeChange.bind(this);
+        this.handleDataTypeChange = this.handleDataTypeChange.bind(this);
+        this.handleClose = this.handleClose.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
+    }
+
+    handleClick() {
+        this.setState({visible: true})
+    }
+
+    handleClose() {
+        this.setState({visible: false})
+    }
+
+    handleSubmit() {
+        this.value = this.ref.current.getValue();
+        this.setState({
+            showValue: this.value,
+            visible: false
+        })
+    }
+
+    handleCompTypeChange(value) {
+        this.compType = value;
+    }
+
+    handleDataTypeChange(value) {
+        this.dataType = value;
+    }
 
     render() {
+        const Component = ComponentType[this.compType];
         return (
             <span>
                 <Input addonBefore={(
-                    <Select defaultValue="singLine">
-                        <Option value="singLine">单项数据</Option>
-                        <Option value="multiLine">多项数据</Option>
-                        <Option value="treeLine">树形结构</Option>
+                    <Select defaultValue={CompDefine.singLine}
+                            onSelect={this.handleCompTypeChange}>
+                        <Option value={CompDefine.singLine}>单项数据</Option>
+                        <Option value={CompDefine.multiLine}>多项数据</Option>
+                        <Option value={CompDefine.treeLine}>树形结构</Option>
                     </Select>
-                )} type="text" {...this.props}/>
-
+                )} addonAfter={(
+                    <Select defaultValue={DataDefine.text}
+                            onSelect={this.handleDataTypeChange}>
+                        <Option value={DataDefine.text}>文本</Option>
+                        <Option value={DataDefine.number}>数字</Option>
+                        <Option value={DataDefine.money}>金钱</Option>
+                    </Select>
+                )}
+                       value={this.state.showValue}
+                       onClick={this.handleClick}
+                />
+                <Modal title="请输入数据"
+                       visible={this.state.visible}
+                       onOk={this.handleSubmit}
+                       onCancel={this.handleClose}
+                       okText="确认"
+                       cancelText="取消">
+                {this.state.visible && <Component ref={this.ref} dataType={this.dataType}/>}
+        </Modal>
             </span>
         );
     }
 }
 
+/**
+ * @param props.dataType 对应的数据类型 {@link DataDefine}
+ * @param props.placeholder 默认输入显示内容。
+ */
+class SingLine extends React.Component {
+    constructor(...props) {
+        super(...props);
+        this.handleChange = this.handleChange.bind(this);
+        this.state = {value: this.props.value};
+    }
+
+    getValue() {
+        return [{value:this.state.value, type:this.props.dataType}]
+    }
+
+    handleChange(e) {
+        if ('object' === typeof e) {
+            this.setState({value: e.target.value});
+        } else if ('number' === typeof e) {
+            this.setState({value: e});
+        }
+    }
+
+    render() {
+        const params = Object.assign({}, this.props),
+            {dataType} = params,
+            Comp = DataType[dataType];
+        delete params.dataType;
+        return <Comp className={cn('component')} value={this.state.value} {...params} onChange={this.handleChange}/>
+    }
+}
+
+const DataType = {
+    [DataDefine.text]: props => (<Input {...props}/>),
+    [DataDefine.number]: props => (<InputNumber {...props} />),
+    [DataDefine.money]: props => (<InputNumber
+        defaultValue={0}
+        formatter={value => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+        parser={value => value.replace(/\$\s?|(,*)/g, '')}
+        {...props}
+    />),
+}
+
+const ComponentType = {
+    /**
+     * 单项数据输入框
+     */
+    [CompDefine.singLine]: SingLine,
+    [CompDefine.multiLine]: class extends React.Component {
+        constructor(...props) {
+            super(...props);
+            this.state = {children: []};
+            this.refObj = [];
+            this.handleAdd = this.handleAdd.bind(this);
+        }
+
+        getValue() {
+            let values = [], comps = this.refObj;
+            for(let comp of comps){
+                console.log(comp.getValue())
+                values = values.concat(comp.getValue());
+            }
+            return values;
+        }
+
+        handleAdd(e) {
+            const curChildren = this.state.children, len = curChildren.length;
+            this.setState({
+                children: curChildren.concat([<SingLine key={len}
+                                                        ref={ref => {this.refObj.push(ref)}}
+                                                        placeholder={`输入第${len + 1}项数据`}
+                                                        dataType={this.props.dataType}/>])
+            })
+        }
+
+        render() {
+            return (
+                <React.Fragment>
+                    <Button className={cn('add-btn')} type="dashed" onClick={this.handleAdd}>
+                        <Icon type="plus"/>添加输入框
+                    </Button>
+                    {this.state.children.map((Comp, index) => {
+                        return (
+                            <React.Fragment key={index}>
+                                <div className={cn('margin')}/>
+                                {Comp}
+                            </React.Fragment>);
+                    })}
+                </React.Fragment>)
+        }
+    }
+}
+
+
 export const SimpleDynamicItem = props => {
-    const params = Object.assign({}, props)
+    const params = Object.assign({}, props);
     delete params.formStructure;
-    return (<FormWrapper {...props} initialValue={'test'}>
+    return (<FormWrapper {...props}>
         <SimpleDynamicEntry {...params}/>
     </FormWrapper>)
 }

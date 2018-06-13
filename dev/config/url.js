@@ -57,7 +57,7 @@ const none = encodeURI(JSON.stringify('none'));
 /**
  * url命名暂定 '/api/模块[menu|site|formStrut]/操作[allMenu|list]等/传递参数[encodeURI(JSON.stringify(json))]'
  *      或 '/api/模块/子模块/传递参数[encodeURI(JSON.stringify(json))]'
- * @type {{menu: {getAll: (function(*=): string)}, formStructure: {getOneById: (function(*=): string)}, formData: {getAssociated: (function({fsId, rowId, itemId}): string)}}}
+ * @type {{menu: {getAll: (function(*=): string)}, formStructure: {getOneById: (function(*=): string)}, formData: {getAssociated: (function({fsId, rowId, itemId}): string), listQuery: (function({fsId: string, cond?: {itemId: string, value: string, opts: string}, sort?: {column: string, flag: string}, page: {curPage: string, size: string}}): string), checkItemDataExists: (function({itemid, value}): string)}}}
  */
 export const urlBuilder = {
     menu: {

@@ -31,12 +31,12 @@ export const single = {
     /**
      *检查在指定的表和字段处是否存在相同数据
      *
-     * @param options.formId 表单id
+     * @param options.itemId 表单id
      * @param options.formType 表单类型
      */
     unIdentical: (options) => {
         return (rule, value, cb) => {
-            rulerCollectService.checkTableSameValueExists(options.formId, options.formType, rule.field, value, (isExists) => {
+            rulerCollectService.checkTableSameValueExists(options.itemId, value, (err, isExists) => {
                 isExists ? cb(`${value} 已经存在`) : cb();
             })
         }
