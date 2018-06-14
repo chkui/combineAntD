@@ -1,6 +1,8 @@
 import React from 'react'
 import FormWrapper from '../formWrapper'
-import {Form, Input, InputNumber, Select, Button, Modal, Icon} from 'antd';
+import {Popconfirm, Form, Input, InputNumber, Select, Button, Modal, Icon, Radio} from 'antd';
+
+const ButtonGroup = Button.Group;
 import {FormItemType} from '../../../../config/sysDefConfig'
 
 const cn = require('classnames/bind').bind(require('./simpleDynamic.scss'));
@@ -9,9 +11,8 @@ const FormItem = Form.Item;
 const Option = Select.Option;
 
 const CompDefine = {
-    singLine: 'singLine',
-    multiLine: 'multiLine',
-    treeLine: 'treeLine'
+    multiLine: 'array',
+    treeLine: 'tree'
 }
 
 const DataDefine = {
@@ -30,16 +31,23 @@ const DataDefine = {
 export class SimpleDynamicEntry extends React.Component {
     constructor(...props) {
         super(...props);
-        this.state = {showValue: this.props.value, visible: false};
-        this.value = this.props.value;
-        this.dataType = 'text';
-        this.compType = 'singLine';
-        this.ref = React.createRef();
+        this.state = {
+            type: CompDefine.multiLine,
+            value: [],
+            visible: true
+        };
         this.handleClick = this.handleClick.bind(this);
         this.handleCompTypeChange = this.handleCompTypeChange.bind(this);
-        this.handleDataTypeChange = this.handleDataTypeChange.bind(this);
         this.handleClose = this.handleClose.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+    }
+
+    handleTree() {
+
+    }
+
+    handleLine() {
+
     }
 
     handleClick() {
@@ -50,60 +58,236 @@ export class SimpleDynamicEntry extends React.Component {
         this.setState({visible: false})
     }
 
-    handleSubmit() {
-        this.value = this.ref.current.getValue();
-        this.setState({
-            showValue: this.value.map(i => i.value).join('；'),
-            visible: false
-        })
+    handleSubmit(valueAndTypes) {
+
     }
 
     handleCompTypeChange(value) {
-        this.compType = value;
-    }
-
-    handleDataTypeChange(value) {
-        this.dataType = value;
+        this.setState({
+            compType: value
+        });
     }
 
     render() {
-        const Component = ComponentType[this.compType];
+        const {state} = this,
+            {type} = state;
         return (
             <span>
-                <Input addonBefore={(
-                    <Select defaultValue={CompDefine.singLine}
-                            onSelect={this.handleCompTypeChange}>
-                        <Option value={CompDefine.singLine}>单条数据</Option>
-                        <Option value={CompDefine.multiLine}>多条数据</Option>
-                        <Option value={CompDefine.treeLine}>树形结构</Option>
-                    </Select>
-                )} addonAfter={(
-                    <Select defaultValue={DataDefine.text}
-                            onSelect={this.handleDataTypeChange}>
-                        <Option value={DataDefine.text}>文本</Option>
-                        <Option value={DataDefine.number}>数字</Option>
-                        <Option value={DataDefine.money}>金钱</Option>
-                    </Select>
-                )}
-                       value={this.state.showValue}
-                       onClick={this.handleClick}
-                />
-                <Modal title="请输入数据"
-                       visible={this.state.visible}
-                       onOk={this.handleSubmit}
-                       onCancel={this.handleClose}
-                       okText="确认"
-                       cancelText="取消">
-                        <Component ref={this.ref} onSubmit={this.handleSubmit} dataType={this.dataType}/>
-                </Modal>
+                <ButtonGroup>
+                    {type === CompDefine.multiLine ? (<Button icon="profile">列表</Button>) :
+                        (<Popconfirm
+                            title="修改为列表数据后会丢失已编辑数据!"
+                            okText="修改" cancelText="取消"
+                            onConfirm={this.handleLine}>
+                            <Button icon="profile">列表</Button></Popconfirm>)
+                    }
+                    {type === CompDefine.treeLine ? (<Button icon="profile">树</Button>) :
+                        (<Popconfirm
+                            title="修改为树形数据后会丢失已编辑数据!"
+                            okText="修改" cancelText="取消"
+                            onConfirm={this.handleTree}>
+                            <Button icon="profile">树</Button></Popconfirm>)
+                    }
+                </ButtonGroup>
+                <div className={cn('btn-margin')}/>
+                <ButtonGroup>
+                    <Button type="primary" onClick={this.handleClick}>编辑</Button>
+                </ButtonGroup>
+
+                {CompDefine.multiLine ? (<MultiLine
+                    visible={state.visible}
+                />) : (<div>123</div>)}
+
+                <div>data</div>
             </span>
         );
     }
 }
 
 /**
+ * @param props
+ * @param props.visible 是否显示输入框
+ * @param props.onClose 关闭
+ * @param props.onSubmit 提交
+ */
+class MultiLine extends React.Component {
+    constructor(...props) {
+        super(...props)
+        this.state = {children: []}
+        this.childrenRef = {};
+        this.handleAdd = this.handleAdd.bind(this);
+    }
+
+    handleAdd() {
+        const curChildren = this.state.children, len = curChildren.length;
+        this.setState({
+            children: curChildren.concat([(
+                <Line key={len}
+                      id={len}
+                      ref={ref => {
+                          this.childrenRef[len] = ref;
+                      }}/>
+            )])
+        })
+    }
+
+    handleSubmit() {
+
+    }
+
+    handleCancel() {
+
+    }
+
+    render() {
+        const {props} = this;
+        return (
+            <Modal title="请输入数据"
+                   visible={props.visible}
+                   onOk={this.handleSubmit}
+                   onCancel={this.handleCancel}
+                   okText="确认"
+                   cancelText="取消">
+                <Button className={cn('add-btn')} type="dashed" onClick={this.handleAdd}>
+                    <Icon type="plus"/>添加输入框
+                </Button>
+                {this.state.children.map((Comp, index) => {
+                    return (
+                        <React.Fragment key={index}>
+                            <div className={cn('margin')}/>
+                            {Comp}
+                        </React.Fragment>);
+                })}
+            </Modal>
+        )
+    }
+}
+
+/**
+ *
+ */
+class Line extends React.Component {
+    constructor(...props) {
+        super(...props)
+        this.value = {
+            [DataDefine.text]: '',
+            [DataDefine.number]: '0',
+            [DataDefine.money]: '0',
+        }
+        this.state = {
+            data: {
+                [DataDefine.text]: '',
+                [DataDefine.number]: '0',
+                [DataDefine.money]: '￥0',
+            },
+            type: DataDefine.text
+        };
+        this.handleChange = this.handleChange.bind(this);
+        this.handleSelect = this.handleSelect.bind(this);
+    }
+
+    handleChange(e) {
+        this.setValue(e.target.value)
+    }
+
+    setValue(value) {
+        const {data, type} = this.state;
+        switch (type) {
+            case DataDefine.number:
+                this.value[type] = this.checkNumber(value);
+                data[type] = this.paramsNumber(this.value[type]);
+                break;
+            case DataDefine.money:
+                this.value[type] = this.checkNumber(value);
+                data[type] = `￥${this.paramsNumber(this.value[type])}`;
+                break;
+            default:
+                data[type] = value;
+                break;
+        }
+        this.setState({data})
+    }
+
+    paramsNumber(value) {
+        return value.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    }
+
+    checkNumber(value) {
+        return value.replace(/[^0-9]/ig, '');
+    }
+
+    handleSelect(type) {
+        this.setState({type});
+    }
+
+    render() {
+        const {data, type} = this.state;
+        return (
+            <Input addonAfter={(
+                <Select value={this.state.type}
+                        onSelect={this.handleSelect}>
+                    <Option value={DataDefine.text}>文本</Option>
+                    <Option value={DataDefine.number}>数字</Option>
+                    <Option value={DataDefine.money}>金钱</Option>
+                </Select>
+            )}
+                   value={data[type]}
+                   onChange={this.handleChange}
+            />
+        )
+    }
+}
+
+
+/*const addonAfter={(
+    <Select defaultValue={DataDefine.text}
+            onSelect={this.handleDataTypeChange}>
+        <Option value={DataDefine.text}>文本</Option>
+        <Option value={DataDefine.number}>数字</Option>
+        <Option value={DataDefine.money}>金钱</Option>
+    </Select>
+)}*/
+
+/**
+ * @param props
+ * @param props.visible 是否显示
+ * @param props.onSubmit 数据提交
+ * @param props.onCancel 取消选择
+ * @param props.compType 组建类型
+ * @param props.dataType 数据类型
+ */
+class PopInput extends React.Component {
+    constructor(...props) {
+        super(...props);
+        this.ref = React.createRef();
+        this.handleSubmit = this.handleSubmit.bind(this);
+    }
+
+    handleSubmit() {
+        this.props.onSubmit(this.ref.current.getValue())
+    }
+
+    render() {
+        const {props} = this;
+        const Component = ComponentType[props.compType];
+
+        return (
+            <Modal title="请输入数据"
+                   visible={props.visible}
+                   onOk={this.handleSubmit}
+                   onCancel={props.onCancel}
+                   okText="确认"
+                   cancelText="取消">
+                <Component ref={this.ref} onSubmit={this.handleSubmit} dataType={props.dataType}/>
+            </Modal>
+        )
+    }
+}
+
+/**
  * @param props.dataType 对应的数据类型 {@link DataDefine}
  * @param props.onEntry 键入回车
+ * @param props.className input框的样式
  * @param props.placeholder 默认输入显示内容。
  */
 class SingLine extends React.Component {
@@ -178,6 +362,7 @@ const ComponentType = {
             this.refObj = [];
             this.handleAdd = this.handleAdd.bind(this);
         }
+
         getValue() {
             let values = [], comps = this.refObj;
             for (let comp of comps) {
@@ -187,15 +372,22 @@ const ComponentType = {
             return values;
         }
 
-        handleAdd(e) {
+        handleAdd() {
+            this.addItem();
+        }
+
+        addItem() {
             const curChildren = this.state.children, len = curChildren.length;
             this.setState({
-                children: curChildren.concat([<SingLine key={len}
-                                                        ref={ref => {
-                                                            this.refObj.push(ref)
-                                                        }}
-                                                        placeholder={`输入第${len + 1}项数据`}
-                                                        dataType={this.props.dataType}/>])
+                children: curChildren.concat([(
+                    <SingLine key={len}
+                              ref={ref => {
+                                  this.refObj.push(ref)
+                              }}
+                              placeholder={`输入第${len + 1}项数据`}
+                              onEntry={this.handleAdd}
+                              dataType={this.props.dataType}/>
+                )])
             })
         }
 
