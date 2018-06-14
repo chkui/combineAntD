@@ -156,7 +156,6 @@ const ComponentType = {
             this.refObj = [];
             this.handleAdd = this.handleAdd.bind(this);
         }
-
         getValue() {
             let values = [], comps = this.refObj;
             for(let comp of comps){
