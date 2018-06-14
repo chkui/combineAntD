@@ -53,7 +53,7 @@ export class SimpleDynamicEntry extends React.Component {
     handleSubmit() {
         this.value = this.ref.current.getValue();
         this.setState({
-            showValue: this.value,
+            showValue: this.value.map(i => i.value).join('；'),
             visible: false
         })
     }
@@ -73,8 +73,8 @@ export class SimpleDynamicEntry extends React.Component {
                 <Input addonBefore={(
                     <Select defaultValue={CompDefine.singLine}
                             onSelect={this.handleCompTypeChange}>
-                        <Option value={CompDefine.singLine}>单项数据</Option>
-                        <Option value={CompDefine.multiLine}>多项数据</Option>
+                        <Option value={CompDefine.singLine}>单条数据</Option>
+                        <Option value={CompDefine.multiLine}>多条数据</Option>
                         <Option value={CompDefine.treeLine}>树形结构</Option>
                     </Select>
                 )} addonAfter={(
@@ -94,8 +94,8 @@ export class SimpleDynamicEntry extends React.Component {
                        onCancel={this.handleClose}
                        okText="确认"
                        cancelText="取消">
-                {this.state.visible && <Component ref={this.ref} dataType={this.dataType}/>}
-        </Modal>
+                        <Component ref={this.ref} onSubmit={this.handleSubmit} dataType={this.dataType}/>
+                </Modal>
             </span>
         );
     }
@@ -103,17 +103,25 @@ export class SimpleDynamicEntry extends React.Component {
 
 /**
  * @param props.dataType 对应的数据类型 {@link DataDefine}
+ * @param props.onEntry 键入回车
  * @param props.placeholder 默认输入显示内容。
  */
 class SingLine extends React.Component {
     constructor(...props) {
         super(...props);
         this.handleChange = this.handleChange.bind(this);
+        this.handelPress = this.handelPress.bind(this);
         this.state = {value: this.props.value};
     }
 
     getValue() {
-        return [{value:this.state.value, type:this.props.dataType}]
+        return [{value: this.state.value, type: this.props.dataType}]
+    }
+
+    handelPress(e) {
+        if (13 === e.charCode) {
+            this.props.onEntry();
+        }
     }
 
     handleChange(e) {
@@ -129,7 +137,9 @@ class SingLine extends React.Component {
             {dataType} = params,
             Comp = DataType[dataType];
         delete params.dataType;
-        return <Comp className={cn('component')} value={this.state.value} {...params} onChange={this.handleChange}/>
+        delete params.onEntry;
+        return <Comp className={cn('component')} value={this.state.value} {...params} onKeyPress={this.handelPress}
+                     onChange={this.handleChange}/>
     }
 }
 
@@ -148,7 +158,19 @@ const ComponentType = {
     /**
      * 单项数据输入框
      */
-    [CompDefine.singLine]: SingLine,
+    [CompDefine.singLine]: class extends React.Component {
+        getValue() {
+            return this.ref.getValue();
+        }
+
+        render() {
+            const {props} = this;
+            return <SingLine ref={ref => this.ref = ref}
+                             dataType={props.dataType}
+                             placeholder={props.placeholder}
+                             onEntry={props.onSubmit}/>
+        }
+    },
     [CompDefine.multiLine]: class extends React.Component {
         constructor(...props) {
             super(...props);
@@ -158,7 +180,7 @@ const ComponentType = {
         }
         getValue() {
             let values = [], comps = this.refObj;
-            for(let comp of comps){
+            for (let comp of comps) {
                 console.log(comp.getValue())
                 values = values.concat(comp.getValue());
             }
@@ -169,7 +191,9 @@ const ComponentType = {
             const curChildren = this.state.children, len = curChildren.length;
             this.setState({
                 children: curChildren.concat([<SingLine key={len}
-                                                        ref={ref => {this.refObj.push(ref)}}
+                                                        ref={ref => {
+                                                            this.refObj.push(ref)
+                                                        }}
                                                         placeholder={`输入第${len + 1}项数据`}
                                                         dataType={this.props.dataType}/>])
             })
