@@ -1,6 +1,8 @@
 import React from 'react'
 import FormWrapper from '../formWrapper'
-import {Popconfirm, Form, Select, Button,io} from 'antd';
+import MultiLine from './simpleDynamic/multiLine'
+import MultiLineView from './simpleDynamic/multiLineView'
+import {Popconfirm, Form, Select, Button, io} from 'antd';
 
 const ButtonGroup = Button.Group;
 import {FormItemType} from '../../../../config/sysDefConfig'
@@ -16,14 +18,15 @@ const Option = Select.Option;
  * 2)多项数据。
  * 3)树。
  * 该组件会对Antd的Form高阶组件进行二次封装。满足对应的校验、验证提交等功能。所有项目的数据都是同一种数据类型（组件）
+ * @param {array} value
+ * @param {function} onChange (value)
  */
 export class SimpleDynamicEntry extends React.Component {
     constructor(...props) {
         super(...props);
         this.state = {
             type: FormItemType.ARRAY,
-            value: [],
-            visible: true
+            visible: false
         };
         this.handleClick = this.handleClick.bind(this);
         this.handleCompTypeChange = this.handleCompTypeChange.bind(this);
@@ -32,11 +35,11 @@ export class SimpleDynamicEntry extends React.Component {
     }
 
     handleTree() {
-        this.setState({type:FormItemType.TREES})
+        this.setState({type: FormItemType.TREES})
     }
 
     handleLine() {
-        this.setState({type:FormItemType.ARRAY})
+        this.setState({type: FormItemType.ARRAY})
     }
 
     handleClick() {
@@ -48,7 +51,8 @@ export class SimpleDynamicEntry extends React.Component {
     }
 
     handleSubmit(valueAndTypes) {
-        this.setState({value:valueAndTypes, visible: false})
+        this.props.onChange(valueAndTypes);
+        this.setState({visible: false})
     }
 
     handleCompTypeChange(value) {
@@ -58,8 +62,7 @@ export class SimpleDynamicEntry extends React.Component {
     }
 
     render() {
-        const {state} = this,
-            {type} = state;
+        const {type, visible} = this.state;
         return (
             <span>
                 <ButtonGroup>
@@ -82,14 +85,17 @@ export class SimpleDynamicEntry extends React.Component {
                 <ButtonGroup>
                     <Button type="primary" onClick={this.handleClick}>编辑</Button>
                 </ButtonGroup>
-
-                {FormItemType.ARRAY ? (<MultiLine onClose={this.handleClose}
+                {visible && (FormItemType.ARRAY ? (<MultiLine valueAndTypes={this.props.value}
+                                                  onClose={this.handleClose}
                                                   onSubmit={this.handleSubmit}
-                    visible={state.visible}
-                />) : (<div>123</div>)}
-
-                <div>data</div>
+                />) : (<div>123</div>))}
+                {FormItemType.ARRAY ? (<MultiLineView valueAndTypes={this.props.value}/>) : null}
             </span>
         );
     }
 }
+
+export const SimpleDynamicItem = props =>
+    (<FormWrapper {...props} hasFeedback>
+        <SimpleDynamicEntry/>
+    </FormWrapper>)

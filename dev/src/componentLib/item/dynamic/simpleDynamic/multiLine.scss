@@ -1,0 +1,17 @@
+.margin{
+  height: .5rem;
+}
+.add-btn{
+  width: 100%;
+}
+.btn-margin{
+  display: inline-block;
+  width: .5rem;
+}
+.block{
+  display: block;
+  cursor: pointer;
+  &:hover{
+    font-weight: 800;
+  }
+}
