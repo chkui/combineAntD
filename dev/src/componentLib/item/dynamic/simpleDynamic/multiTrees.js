@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types';
-import {Modal, Tree, Button, Dropdown, Menu, Icon, Input} from 'antd';
+import {Modal, Tree, Button, Dropdown, Menu, Icon, Input, Popconfirm} from 'antd';
 import {valueAndTypes2View, view2ValueAndTypes, checkNumber} from './multiLineHelper'
 import {FormItemType} from "../../../../../config/sysDefConfig";
 import {idGen} from "../../../../database/idgenerator";
@@ -30,6 +30,7 @@ export default class MultiTrees extends React.Component {
         this.handleChange = this.handleChange.bind(this);
         this.handleAddChild = this.handleAddChild.bind(this);
         this.handleAddSibling = this.handleAddSibling.bind(this);
+        this.handleDelete = this.handleDelete.bind(this);
     }
 
     init() {
@@ -45,11 +46,11 @@ export default class MultiTrees extends React.Component {
     }
 
     handleCancel() {
-
+        this.props.onClose();
     }
 
     handleSubmit() {
-
+        this.props.onSubmit(this.state.tree);
     }
 
     handleChange(id, valueAndType) {
@@ -60,7 +61,7 @@ export default class MultiTrees extends React.Component {
     }
 
     handleAddChild(id) {
-        const item = {id: idGen(), value: '', type: FormItemType.VCHAR},
+        const item = {id: idGen(), value: '', type: FormItemType.VCHAR, parent: id},
             current = this.mapping[id];
         this.mapping[item.id] = item;
         current.children ? current.children.push(item) : current.children = [item];
@@ -71,13 +72,30 @@ export default class MultiTrees extends React.Component {
         const item = {id: idGen(), value: '', type: FormItemType.VCHAR},
             current = this.mapping[id],
             parent = current.parent,
-            children = parent ? this.mapping[parent] : this.state.tree,
+            children = parent ? this.mapping[parent].children : this.state.tree,
             len = children.length;
+        item.parent = parent;
         this.mapping[item.id] = item;
-        for(let i = 0; i < len; i++){
+        for (let i = 0; i < len; i++) {
             const child = children[i];
-            if(id === child.id){
-                children.splice(id, 0, item);
+            if (id === child.id) {
+                children.splice(i + 1, 0, item);
+                break;
+            }
+        }
+        this.setState({tree: this.state.tree})
+    }
+
+    handleDelete(id) {
+        const item = this.mapping[id],
+            parent = item.parent,
+            children = parent ? this.mapping[parent].children : this.state.tree,
+            len = children.length;
+        for (let i = 0; i < len; i++) {
+            const child = children[i];
+            if (id === child.id) {
+                children.splice(i, 1);
+                break;
             }
         }
         this.setState({tree: this.state.tree})
@@ -93,7 +111,7 @@ export default class MultiTrees extends React.Component {
                    okText="确认"
                    cancelText="取消">
                 <Tree>
-                    {this.state.tree.map(node => buildTreeNodeView(node, this.handleChange, this.handleAddChild, this.handleAddSibling))}
+                    {this.state.tree.map(node => buildTreeNodeView(node, this.handleChange, this.handleAddChild, this.handleAddSibling, this.handleDelete))}
                 </Tree>
             </Modal>)
     }
@@ -129,7 +147,7 @@ const buildFlatList = (valueAndTypes, parent = false) => {
     return list;
 }
 
-const buildTreeNodeView = (node, onChange, onAddChild, onAddSibling) => {
+const buildTreeNodeView = (node, onChange, onAddChild, onAddSibling, onDelete) => {
     return (
         <TreeNode key={node.id}
                   disableCheckbox
@@ -138,8 +156,9 @@ const buildTreeNodeView = (node, onChange, onAddChild, onAddSibling) => {
                                 valueAndType={{value: node.value, type: node.type}}
                                 onAddChild={onAddChild}
                                 onAddSibling={onAddSibling}
+                                onDelete={onDelete}
                                 onChange={onChange}/>)}>
-            {node.children && node.children.map(child => buildTreeNodeView(child, onChange, onAddChild, onAddSibling))}
+            {node.children && node.children.map(child => buildTreeNodeView(child, onChange, onAddChild, onAddSibling, onDelete))}
         </TreeNode>)
 }
 
@@ -157,6 +176,7 @@ class Leaf extends React.Component {
         this.handleChange = this.handleChange.bind(this);
         this.handleSelect = this.handleSelect.bind(this);
         this.handleOptions = this.handleOptions.bind(this);
+        this.handleDelete = this.handleDelete.bind(this);
     }
 
     handleChange(e) {
@@ -181,8 +201,13 @@ class Leaf extends React.Component {
         }
     }
 
+    handleDelete() {
+        const {props} = this;
+        props.onDelete(props.id);
+    }
+
     render() {
-        const {valueAndType, connectDragSource, isDragging} = this.props;
+        const {valueAndType} = this.props;
         return (
             <React.Fragment>
                 <Input size="small"
@@ -203,7 +228,12 @@ class Leaf extends React.Component {
                             <Menu.Item key={Options.ADDLEAF}>节点</Menu.Item>
                             <Menu.Item key={Options.ADDCHILDLEAD}>子节点</Menu.Item>
                         </SubMenu>
-                        <Menu.Item key={Options.DELETE}>删除</Menu.Item>
+                        <Menu.Item key={Options.DELETE}>
+                            <Popconfirm title="删除这个节点?" onConfirm={this.handleDelete}
+                                        okText="确定" cancelText="取消">
+                                <a href="#">删除</a>
+                            </Popconfirm>
+                        </Menu.Item>
                     </Menu>)}>
                         <Button style={btnStyle} icon="setting" size="small"/>
                     </Dropdown>

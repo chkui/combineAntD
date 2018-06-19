@@ -100,6 +100,6 @@ export class SimpleDynamicEntry extends React.Component {
 }
 
 export const SimpleDynamicItem = props =>
-    (<FormWrapper {...props} hasFeedback>
+    (<FormWrapper {...props}>
         <SimpleDynamicEntry/>
     </FormWrapper>)
