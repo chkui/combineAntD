@@ -2,6 +2,7 @@ import React from 'react'
 import FormWrapper from '../formWrapper'
 import MultiLine from './simpleDynamic/multiLine'
 import MultiLineView from './simpleDynamic/multiLineView'
+import MultiTrees from './simpleDynamic/multiTrees'
 import {Popconfirm, Form, Select, Button, io} from 'antd';
 
 const ButtonGroup = Button.Group;
@@ -25,9 +26,11 @@ export class SimpleDynamicEntry extends React.Component {
     constructor(...props) {
         super(...props);
         this.state = {
-            type: FormItemType.ARRAY,
-            visible: false
+            type: FormItemType.TREES,
+            visible: true
         };
+        this.handleTree = this.handleTree.bind(this);
+        this.handleLine = this.handleLine.bind(this);
         this.handleClick = this.handleClick.bind(this);
         this.handleCompTypeChange = this.handleCompTypeChange.bind(this);
         this.handleClose = this.handleClose.bind(this);
@@ -62,18 +65,18 @@ export class SimpleDynamicEntry extends React.Component {
     }
 
     render() {
-        const {type, visible} = this.state;
+        const {type, visible} = this.state, isArray = type === FormItemType.ARRAY;
         return (
             <span>
                 <ButtonGroup>
-                    {type === FormItemType.ARRAY ? (<Button icon="profile">列表</Button>) :
+                    {isArray ? (<Button icon="profile">列表</Button>) :
                         (<Popconfirm
                             title="修改为列表数据后会丢失已编辑数据!"
                             okText="修改" cancelText="取消"
                             onConfirm={this.handleLine}>
                             <Button icon="profile">列表</Button></Popconfirm>)
                     }
-                    {type === FormItemType.TREES ? (<Button icon="profile">树</Button>) :
+                    {!isArray ? (<Button icon="profile">树</Button>) :
                         (<Popconfirm
                             title="修改为树形数据后会丢失已编辑数据!"
                             okText="修改" cancelText="取消"
@@ -85,11 +88,12 @@ export class SimpleDynamicEntry extends React.Component {
                 <ButtonGroup>
                     <Button type="primary" onClick={this.handleClick}>编辑</Button>
                 </ButtonGroup>
-                {visible && (FormItemType.ARRAY ? (<MultiLine valueAndTypes={this.props.value}
+                {visible && (isArray ? (<MultiLine valueAndTypes={this.props.value}
                                                   onClose={this.handleClose}
                                                   onSubmit={this.handleSubmit}
-                />) : (<div>123</div>))}
-                {FormItemType.ARRAY ? (<MultiLineView valueAndTypes={this.props.value}/>) : null}
+                />) : (<MultiTrees onClose={this.handleClose}
+                                   onSubmit={this.handleSubmit}/>))}
+                {isArray ? (<MultiLineView valueAndTypes={this.props.value}/>) : null}
             </span>
         );
     }

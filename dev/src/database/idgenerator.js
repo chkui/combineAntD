@@ -8,3 +8,7 @@ export function idGenerator(cb) {
     const uuid = UUID.genV1();
     cb(uuid.hexNoDelim);
 }
+
+export function idGen() {
+    return UUID.genV1().hexNoDelim;
+}

@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types';
 import {Input, Select, Button, Modal, Icon} from 'antd';
 import {FormItemType} from "../../../../../config/sysDefConfig";
-import {valueAndTypes2View, view2ValueAndTypes} from './multiLineHelper'
+import {valueAndTypes2View, view2ValueAndTypes, checkNumber} from './multiLineHelper'
 
 const Option = Select.Option;
 const cn = require('classnames/bind').bind(require('./multiLine.scss'));
@@ -137,7 +137,7 @@ class Line extends React.Component {
     }
 
     render() {
-        const {valueAndType, connectDragSource, isDragging} = this.props;
+        const {valueAndType} = this.props;
         return (
             <div>
                 <Input
@@ -162,7 +162,6 @@ class Line extends React.Component {
     }
 }
 
-const checkNumber = valueAndType => {
-    const {type, value} = valueAndType;
-    return {type, value: type === FormItemType.VCHAR ? value : value.replace(/[^0-9]/ig, '')};
-}
+Line.defaultProps = {
+    valueAndType: {value: '', type: FormItemType.VCHAR}
+};
