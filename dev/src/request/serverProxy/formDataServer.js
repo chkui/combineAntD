@@ -1,4 +1,4 @@
-import {QueryOpt, SysFlag} from '../../../config/sysDefConfig'
+import {QueryOpt, SysFlag, RegularItemMeta} from '../../../config/sysDefConfig'
 import {queryFormItemValue, getCount} from '../../database/rowValueDao'
 import {getLastFormStructure} from '../../database/formStructureDao'
 import {resultToList} from './commonServer'
@@ -18,21 +18,21 @@ export const getAssociated = (params, callback) => {
     const {fsId, rowId, itemId} = params;
 
     queryFormItemValue([{
-        column:'rowid',
-        value:rowId,
-        opts:QueryOpt.EQU
-    },{
-        column:'itemid',
-        value:itemId,
-        opts:QueryOpt.EQU
+        column: 'rowid',
+        value: rowId,
+        opts: QueryOpt.EQU
+    }, {
+        column: 'itemid',
+        value: itemId,
+        opts: QueryOpt.EQU
     }], false, (err, resultSet) => {
-        if(!err){
-            const list = resultToList(resultSet).map(item=>{
+        if (!err) {
+            const list = resultToList(resultSet).map(item => {
                 item.fsid = fsId;
                 return item;
             });
             callback(null, list)
-        }else{
+        } else {
             callback(err);
         }
     }, false);
@@ -59,7 +59,7 @@ export const getAssociated = (params, callback) => {
  *      result.rows 分页对应的行
  *      result.total 分页对应的数据量总数
  */
-export const listQuery = (params, callback) =>{
+export const listQuery = (params, callback) => {
     serialFuture().then({
         form: (result, cb) => {
             getLastFormStructure(params.fsId, cb)
@@ -78,14 +78,14 @@ export const listQuery = (params, callback) =>{
             }], false, cb)
         }
     }).then({
-        query:(result, cb)=>{
+        query: (result, cb) => {
             const items = result.items, viewList = [];
-            for(let item of items){
-                if(SysFlag.ENABLE === item.l_show){
+            for (let item of items) {
+                if (SysFlag.ENABLE === item.l_show) {
                     viewList.push(item);
                 }
             }
-            formItemValueResultQuery(viewList, [], [], {} ,(err, result)=>{
+            formItemValueResultQuery(viewList, [], [], {}, (err, result) => {
                 callback(err, resultToList(result.rows))
             });
             console.log(result)
@@ -100,12 +100,50 @@ export const listQuery = (params, callback) =>{
  * @param {string} params.value
  * @param callback
  */
-export const checkItemDataExists = (params, callback) =>{
+export const checkItemDataExists = (params, callback) => {
     getCount([{
-        column:'itemid',
-        value:params.itemId
-    },{
-        column:'value',
-        value:params.value
+        column: 'itemid',
+        value: params.itemId
+    }, {
+        column: 'value',
+        value: params.value
     }], callback)
+}
+
+/**
+ * 提交查询的数据
+ * @param params
+ * @param params.fsId
+ * @param params.fsVer
+ * @param params.fsData
+ * @param callback
+ */
+export const submitData = (params, callback) => {
+    serialFuture().then({
+        items: (result, cb) => {
+            queryFormItem([{
+                column: 'fsid',
+                value: params.fsId,
+            }, {
+                column: 'fsver',
+                value: params.fsVer,
+            }], false, cb)
+        }
+    }).then({
+        trans: (result, cb) => {
+            const rows = result.items,
+                data = params.data,
+                submitList = [];
+            for (let item of rows) {
+                submitList.push({itemId:item.id, data: data[item.column]})
+            }
+            cb(null, submitList)
+        }
+    }).then({
+        submit: (result, cb) => {
+            console.log(result)
+        }
+    })
+
+    console.log(params);
 }

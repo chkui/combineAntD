@@ -433,7 +433,7 @@ export const insertFormItemRules = [
         itemid: '2b5dabe16a0511e8838a57a01308399f',
         rule_category: 'single',
         rule_type: 'require',
-        expression: encodeURI(JSON.stringify({msg: '请输入数据'})),
+        expression: encodeURI(JSON.stringify({type: 'array', msg: '请输入数据'})),
         sort: 0
     }
 ]

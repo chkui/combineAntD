@@ -26,7 +26,7 @@ export const single = {
      * @returns {{required: *}}
      */
     require: (options) => {
-        return {required: true, whitespace: true, message: options.msg}
+        return {required: true, whitespace: true, type: options.type || 'string', message: options.msg || '请输入数据'}
     },
     /**
      *检查在指定的表和字段处是否存在相同数据

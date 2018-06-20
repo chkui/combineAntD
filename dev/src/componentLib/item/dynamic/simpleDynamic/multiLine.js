@@ -2,6 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types';
 import {Input, Select, Button, Modal, Icon} from 'antd';
 import {FormItemType} from "../../../../../config/sysDefConfig";
+import {idGen} from "../../../../database/idgenerator";
 import {valueAndTypes2View, view2ValueAndTypes, checkNumber} from './multiLineHelper'
 
 const Option = Select.Option;
@@ -27,7 +28,7 @@ export default class MultiLine extends React.Component {
 
     handleAdd() {
         const {valueAndTypes} = this.state;
-        valueAndTypes.push({value: '', type: FormItemType.VCHAR});
+        valueAndTypes.push({id: idGen(), value: '', type: FormItemType.VCHAR});
         this.setState({valueAndTypes})
     }
 
@@ -39,27 +40,27 @@ export default class MultiLine extends React.Component {
         this.props.onClose();
     }
 
-    handleChange(id, typeAndValue) {
+    handleChange(pos, typeAndValue) {
         const {valueAndTypes} = this.state;
-        valueAndTypes[id] = typeAndValue;
+        valueAndTypes[pos] = typeAndValue;
         this.setState({valueAndTypes});
     }
 
-    handleUp(id) {
-        if(0 < id){
-            const {valueAndTypes} = this.state, tmp = valueAndTypes[id];
-            valueAndTypes[id] = valueAndTypes[id - 1];
-            valueAndTypes[id - 1] = tmp;
+    handleUp(pos) {
+        if (0 < pos) {
+            const {valueAndTypes} = this.state, tmp = valueAndTypes[pos];
+            valueAndTypes[pos] = valueAndTypes[pos - 1];
+            valueAndTypes[pos - 1] = tmp;
             this.setState({valueAndTypes});
         }
     }
 
-    handleDown(id) {
+    handleDown(pos) {
         const {valueAndTypes} = this.state
-        if(valueAndTypes.length > id){
-            const tmp = valueAndTypes[id];
-            valueAndTypes[id] = valueAndTypes[id + 1];
-            valueAndTypes[id + 1] = tmp;
+        if (valueAndTypes.length > pos + 1) {
+            const tmp = valueAndTypes[pos];
+            valueAndTypes[pos] = valueAndTypes[pos + 1];
+            valueAndTypes[pos + 1] = tmp;
             this.setState({valueAndTypes});
         }
     }
@@ -77,11 +78,12 @@ export default class MultiLine extends React.Component {
                     <Icon type="plus"/>添加输入框
                 </Button>
                 {this.state.valueAndTypes.map((valueAndType, index) => {
+                    const id = valueAndType.id;
                     return (
                         <React.Fragment key={index}>
                             <div className={cn('margin')}/>
-                            <Line key={index}
-                                  id={index}
+                            <Line key={id}
+                                  pos={index}
                                   valueAndType={valueAndType}
                                   onChange={this.handleChange}
                                   onUp={this.handleUp} onDown={this.handleDown}/>
@@ -99,7 +101,7 @@ MultiLine.propTypes = {
 }
 
 /**
- * @param props.id
+ * @param props.pos
  * @param props.valueAndType
  * @param props.valueAndType.type
  * @param props.valueAndType.value
@@ -118,22 +120,22 @@ class Line extends React.Component {
 
     handleUp() {
         const {props} = this;
-        props.onUp(props.id);
+        props.onUp(props.pos);
     }
 
     handleDown() {
         const {props} = this;
-        props.onDown(props.id);
+        props.onDown(props.pos);
     }
 
     handleChange(e) {
         const {props} = this;
-        props.onChange(props.id, view2ValueAndTypes({type: props.valueAndType.type, value: e.target.value}))
+        props.onChange(props.pos, view2ValueAndTypes({type: props.valueAndType.type, value: e.target.value}))
     }
 
     handleSelect(type) {
         const {props} = this;
-        props.onChange(props.id, {type, value: ''})
+        props.onChange(props.pos, {type, value: ''})
     }
 
     render() {

@@ -29,7 +29,7 @@ class HorizontalForm extends React.Component {
                 message.error('提交的数据项存在错误，请按提示检查！');
                 _this.setState({onSubmit: false})
             } else {
-                formDataService.submit(props.formStructure, values, (err, docs) => {
+                formDataService.submit(props.formStructure.id, props.formStructure.ver, values, (err, docs) => {
                     if(err){
                         message.error(`提交数据错误：${err}`);
                         _this.setState({onSubmit: false})

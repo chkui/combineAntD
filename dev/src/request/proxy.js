@@ -2,7 +2,7 @@ import {urlBase, decode, encode} from '../../config/url'
 import {menuGetAll} from './serverProxy/menuServer'
 import {getFormStructureById} from './serverProxy/formStructureServer'
 import {getAssociated} from './serverProxy/formDataServer'
-import {listQuery, checkItemDataExists} from './serverProxy/formDataServer'
+import {listQuery, checkItemDataExists, submitData} from './serverProxy/formDataServer'
 
 /**
  * 代理模式，浏览器模式或网络服务器模式
@@ -48,6 +48,7 @@ function LocalServerProxy(mode) {
     map[formData.module + formData.options.getAssociated] = getAssociated;
     map[formData.module + formData.options.listQuery] = listQuery;
     map[formData.module + formData.options.checkItemDataExists] = checkItemDataExists;
+    map[formData.module + formData.options.submitData] = submitData;
 }
 
 /**
@@ -78,8 +79,24 @@ LocalServerProxy.prototype.get = function (url, cb) {
         }
     })
 };
-LocalServerProxy.prototype.post = function (url, cb) {
 
+/**
+ * 处理post接口
+ * @param url
+ * @param params
+ * @param cb
+ */
+LocalServerProxy.prototype.post = function (url, params, cb) {
+    this.LocalServerMapping[url](decode(params), (err, result) => {
+        if (err) {
+            cb({code: -1, msg: err})
+        } else {
+            cb({
+                code: 0,
+                data: encode(result)
+            })
+        }
+    })
 };
 
 

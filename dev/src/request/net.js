@@ -1,5 +1,5 @@
 import {proxyFactory, ProxyMode} from './proxy'
-
+import {encode} from '../../config/url'
 const proxy = proxyFactory(ProxyMode.Browser);
 
 /**
@@ -14,6 +14,12 @@ const proxy = proxyFactory(ProxyMode.Browser);
 export const get = (url, cb) => {
     proxy.get(url, cb)
 };
+/**
+ * 服务器POST借口
+ * @param url post的url
+ * @param params post要传递的参数
+ * @param cb (err, result)
+ */
 export const post = (url, params, cb) => {
-    proxy.post(url, params, cb)
+    proxy.post(url, encode(params), cb)
 };

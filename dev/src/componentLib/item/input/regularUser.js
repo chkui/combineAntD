@@ -18,7 +18,7 @@ export const RegularUserEntry = ReadOnlyInput;
 export const RegularUserItem = props =>{
     const params = Object.assign({}, props)
     delete params.formStructure;
-    return (<FormWrapper {...props} initialValue={userService.currentUser()}>
+    return (<FormWrapper {...props} initialValue={userService.currentUserName()}>
         <ReadOnlyInput {...params}/>
     </FormWrapper>)
 }

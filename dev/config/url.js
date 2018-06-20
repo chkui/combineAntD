@@ -44,7 +44,8 @@ export const urlBase = {
         options: {
             getAssociated: '/getAssociated',
             listQuery:'/listQuery',
-            checkItemDataExists:'/checkItemDataExists'
+            checkItemDataExists:'/checkItemDataExists',
+            submitData:'/submitData',
         }
     }
 }
@@ -55,9 +56,10 @@ export const decode = code => JSON.parse(decodeURI(code));
 const none = encodeURI(JSON.stringify('none'));
 
 /**
+ *
  * url命名暂定 '/api/模块[menu|site|formStrut]/操作[allMenu|list]等/传递参数[encodeURI(JSON.stringify(json))]'
  *      或 '/api/模块/子模块/传递参数[encodeURI(JSON.stringify(json))]'
- * @type {{menu: {getAll: (function(*=): string)}, formStructure: {getOneById: (function(*=): string)}, formData: {getAssociated: (function({fsId, rowId, itemId}): string), listQuery: (function({fsId: string, cond?: {itemId: string, value: string, opts: string}, sort?: {column: string, flag: string}, page: {curPage: string, size: string}}): string), checkItemDataExists: (function({itemid, value}): string)}}}
+ * @type {{menu: {getAll: (function(*=): string)}, formStructure: {getOneById: (function(*=): string)}, formData: {getAssociated: (function({fsId, rowId, itemId}): string), listQuery: (function({fsId: string, cond?: {itemId: string, value: string, opts: string}, sort?: {column: string, flag: string}, page: {curPage: string, size: string}}): string), checkItemDataExists: (function({itemid, value}): string), submitData: (function(): string)}}}
  */
 export const urlBuilder = {
     menu: {
@@ -106,6 +108,15 @@ export const urlBuilder = {
          * @param params.value
          * @returns {string}
          */
-        checkItemDataExists:params => `${urlBase.formData.module}${urlBase.formData.options.checkItemDataExists}/${encode(params)}`
+        checkItemDataExists:params => `${urlBase.formData.module}${urlBase.formData.options.checkItemDataExists}/${encode(params)}`,
+
+        /**
+         * 提交单个表单数据，这是一个post接口
+         * @param {object} params 列表 {key:value}
+         * @param {string} params.fsId 表单ID
+         * @param {number} params.fsVer 表单版本
+         * @param {object} params.values 列表 {key:data}
+         */
+        submitData: () => `${urlBase.formData.module}${urlBase.formData.options.submitData}`
     }
 }

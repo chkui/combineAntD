@@ -3,6 +3,7 @@ import FormWrapper from '../formWrapper'
 import MultiLine from './simpleDynamic/multiLine'
 import MultiLineView from './simpleDynamic/multiLineView'
 import MultiTrees from './simpleDynamic/multiTrees'
+import MultiTreesView from './simpleDynamic/multiTreesView'
 import {Popconfirm, Form, Select, Button, io} from 'antd';
 
 const ButtonGroup = Button.Group;
@@ -26,8 +27,8 @@ export class SimpleDynamicEntry extends React.Component {
     constructor(...props) {
         super(...props);
         this.state = {
-            type: FormItemType.TREES,
-            visible: true
+            type: FormItemType.ARRAY,
+            visible: false
         };
         this.handleTree = this.handleTree.bind(this);
         this.handleLine = this.handleLine.bind(this);
@@ -38,10 +39,12 @@ export class SimpleDynamicEntry extends React.Component {
     }
 
     handleTree() {
+        this.props.onChange(null);
         this.setState({type: FormItemType.TREES})
     }
 
     handleLine() {
+        this.props.onChange(null);
         this.setState({type: FormItemType.ARRAY})
     }
 
@@ -89,11 +92,13 @@ export class SimpleDynamicEntry extends React.Component {
                     <Button type="primary" onClick={this.handleClick}>编辑</Button>
                 </ButtonGroup>
                 {visible && (isArray ? (<MultiLine valueAndTypes={this.props.value}
-                                                  onClose={this.handleClose}
-                                                  onSubmit={this.handleSubmit}
-                />) : (<MultiTrees onClose={this.handleClose}
+                                                   onClose={this.handleClose}
+                                                   onSubmit={this.handleSubmit}
+                />) : (<MultiTrees valueAndTypes={this.props.value}
+                                   onClose={this.handleClose}
                                    onSubmit={this.handleSubmit}/>))}
-                {isArray ? (<MultiLineView valueAndTypes={this.props.value}/>) : null}
+                {isArray ? (<MultiLineView valueAndTypes={this.props.value}/>) :
+                    (<MultiTreesView valueAndTypes={this.props.value}/>)}
             </span>
         );
     }

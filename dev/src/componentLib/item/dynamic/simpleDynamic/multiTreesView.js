@@ -1,15 +1,10 @@
 import React from 'react'
-import {List} from 'antd';
-import {valueAndTypes2View} from './multiLineHelper'
-const cn = require('classnames/bind').bind(require('./multiLineView.scss'));
+import {Tree} from 'antd';
 
-const data = [
-    'Racing car sprays burning fuel into crowd.',
-    'Japanese princess to wed commoner.',
-    'Australian walks 100km after outback crash.',
-    'Man charged over missing wedding girl.',
-    'Los Angeles battles huge wildfires.',
-];
+const TreeNode = Tree.TreeNode;
+import {valueAndTypes2View} from './multiLineHelper'
+
+const cn = require('classnames/bind').bind(require('./multiTreesView.scss'));
 
 /**
  *
@@ -17,21 +12,25 @@ const data = [
  * @param {array} props.valueAndTypes 数据与类型列表
  * @constructor
  */
-const MultiTreesView = props =>{
+const MultiTreesView = props => {
     let count = 0;
     return (
-        <List
-            size="small"
-            bordered
-            dataSource={valueAndTypes2View(props.valueAndTypes)}
-            renderItem={item => {
-                return (<List.Item>
-                    <span className={cn('num')}>{++count}</span>
-                    <span className={cn('data')}>{item}</span>
-                </List.Item>)
-            }}
-        />
+        <div className={cn('multi-trees-view')}>
+            <Tree>
+                {props.valueAndTypes ? props.valueAndTypes.map(node => buildTreeView(node)) :
+                    <TreeNode key="no" disableCheckbox title="No Data!"/>
+                }
+            </Tree>
+        </div>
     )
+}
+
+const buildTreeView = (node) => {
+    return (<TreeNode key={node.id}
+                      disableCheckbox
+                      title={valueAndTypes2View({value: node.value, type: node.type})}>
+        {node.children && node.children.map(child => buildTreeView(child))}
+    </TreeNode>)
 }
 
 export default MultiTreesView

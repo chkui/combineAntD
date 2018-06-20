@@ -45,9 +45,9 @@ export const view2ValueAndTypes = valueAndType => {
     const {value, type} = valueAndType;
     switch (type) {
         case FormItemType.DOUBL:
-            return {value: value.replace(/,/g, 'o'), type: valueAndType.type};
+            return {value: value.replace(/,/g, ''), type: valueAndType.type};
         case FormItemType.MONEY:
-            return {value: value.replace(/￥/g, 'o'), type: valueAndType.type};
+            return {value: value.replace(/[￥,]/g, ''), type: valueAndType.type};
         default:
             return valueAndType;
     }

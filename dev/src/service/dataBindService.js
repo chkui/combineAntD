@@ -1,5 +1,5 @@
 import {userService} from './userService'
-import {DataFlag, RegularItemMeta, OPData} from '../../config/sysDefConfig'
+import {DataFlag, RegularItemMeta, SysFlag} from '../../config/sysDefConfig'
 import {iocService} from './iocService'
 import {decode} from '../../config/url'
 
@@ -75,11 +75,11 @@ DataBindService.prototype.ruleDoc2Comp = function (docs) {
  * @param formDoc 处理的单条数据，方法会在原始数据上进行修改，注意苏话剧突变的问题。
  * @constructor
  */
-DataBindService.prototype.Comp2formDoc = function (formStructure, formDoc) {
+/*DataBindService.prototype.Comp2formDoc = function (formStructure, formDoc) {
     const itemMeta = formStructure.itemMeta;
     let value, options;
     for (let item of itemMeta) {
-        //处理下拉菜单的关联外键盘
+        //处理下拉菜单的关联外键
         if (item.fk && (value = formDoc[item.column]) && (DataFlag.EMPTY !== value) && (options = item.selectOptions)) {
             const i = options.filter(opt => value === opt.value)[0];
             formDoc[item.column] = {id: value, label: i.label};
@@ -89,17 +89,18 @@ DataBindService.prototype.Comp2formDoc = function (formStructure, formDoc) {
         }
     }
     return formDoc;
-}
+}*/
 
 /**
  * 绑定新建数据的固定字段
  * @param formDoc 会直接修改原始数据，注意数据突变。
  */
 DataBindService.prototype.buildRegularMetaNew = function (formDoc) {
-    !formDoc[RegularItemMeta.createUser] && (formDoc[RegularItemMeta.createUser] = userService.currentUser);
-    formDoc[RegularItemMeta.modifyUser] = formDoc[RegularItemMeta.createUser];
-    !formDoc[RegularItemMeta.createTime] && (formDoc[RegularItemMeta.createTime] = new Date().getTime());
-    formDoc[RegularItemMeta.modifyTime] = formDoc[RegularItemMeta.createTime];
+    formDoc[RegularItemMeta.createuser] = userService.currentUserId();
+    formDoc[RegularItemMeta.modifyuser] = userService.currentUserId();
+    formDoc[RegularItemMeta.createtime] = new Date().getTime();
+    formDoc[RegularItemMeta.modifytime] = formDoc[RegularItemMeta.modifytime];
+    formDoc[RegularItemMeta.op] = formDoc[RegularItemMeta.op] ? SysFlag.ENABLE : SysFlag.DISABLE;
     return formDoc;
 }
 
@@ -108,8 +109,8 @@ DataBindService.prototype.buildRegularMetaNew = function (formDoc) {
  * @param formDoc 会直接修改原始数据，注意数据突变。
  */
 DataBindService.prototype.buildRegularMetaEdit = function (formDoc) {
-    !formDoc[RegularItemMeta.modifyUser] && (formDoc[RegularItemMeta.modifyUser] = userService.currentUser);
-    !formDoc[RegularItemMeta.modifyTime] && (formDoc[RegularItemMeta.modifyTime] = new Date().getTime());
+    !formDoc[RegularItemMeta.modifyuser] && (formDoc[RegularItemMeta.modifyuser] = userService.currentUser);
+    !formDoc[RegularItemMeta.modifytime] && (formDoc[RegularItemMeta.modifytime] = new Date().getTime());
     return formDoc;
 }
 

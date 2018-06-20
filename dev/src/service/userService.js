@@ -3,8 +3,12 @@ import {iocService} from './iocService'
 function UserService() {
 }
 
-UserService.prototype.currentUser = function () {
+UserService.prototype.currentUserId = function () {
     return 'admin'
+}
+
+UserService.prototype.currentUserName = function () {
+    return '管理员'
 }
 
 /**

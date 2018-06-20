@@ -92,7 +92,41 @@ export const FormRegularItemOptions = {
     LISTWRITE: 'T' //列表显示并且表单可读写
 }
 
-
+/**
+ * 数据集固定字段，所有的数据集都必须包含子些字段
+ * @type {{id: string, label: string, op: string, createuser: string, createtime: string, modifyuser: string, modifytime: string}}
+ */
+export const RegularItemMeta = {
+    /**
+     * 主键，使用19位Object-id
+     */
+    id: 'id',
+    /**
+     * 标题名称，用于标记业务内容
+     */
+    label: 'label',
+    /**
+     * 操作标志
+     * {@link OPData}
+     */
+    op: 'op',
+    /**
+     * 该项数据的创建者
+     */
+    createuser: 'createuser',
+    /**
+     * 数据创建时间，时间戳
+     */
+    createtime: 'createtime',
+    /**
+     * 该项数据的最后修改者
+     */
+    modifyuser: 'modifyuser',
+    /**
+     * 该项数据的最后修改时间，时间戳
+     */
+    modifytime: 'modifytime'
+}
 
 //--------------------------------------------------------------------------------------------------------------------
 
@@ -110,42 +144,6 @@ export const OPTrans = {
         true: 'E',
         false: 'N'
     }
-}
-
-/**
- * 数据集固定字段，所有的数据集都必须包含子些字段
- * @type {{id: string, label: string, OP: string, createUser: string, createTime: string, modifyUser: string, modifyTime: string}}
- */
-export const RegularItemMeta = {
-    /**
-     * 主键，使用19位Object-id
-     */
-    id: 'id',
-    /**
-     * 标题名称，用于标记业务内容
-     */
-    label: 'label',
-    /**
-     * 操作标志
-     * {@link OPData}
-     */
-    OP: 'OP',
-    /**
-     * 该项数据的创建者
-     */
-    createUser: 'createUser',
-    /**
-     * 数据创建时间，时间戳
-     */
-    createTime: 'createTime',
-    /**
-     * 该项数据的最后修改者
-     */
-    modifyUser: 'modifyUser',
-    /**
-     * 该项数据的最后修改时间，时间戳
-     */
-    modifyTime: 'modifyTime'
 }
 
 /**
