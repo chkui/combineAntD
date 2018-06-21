@@ -1,12 +1,13 @@
 import React from 'react'
 import PropTypes from 'prop-types';
-import {idGenerator} from '../../../database/idgenerator'
+import {idGen} from '../../../database/idgenerator'
 import ReadOnlyInput from '../readOnly/readOnlyInput'
 import FormWrapper from '../formWrapper'
 
 const cn = require('classnames/bind').bind(require('./regularId.scss'));
 
 export const RegularIdEntry = ReadOnlyInput;
+
 /**
  * 用于表单域的主键包装组件，用于显示或生成主键
  * @param props
@@ -21,22 +22,9 @@ export class RegularIdItem extends React.Component {
         super(...props)
     }
 
-    componentDidMount() {
-        const _this = this,
-            props = this.props;
-        idGenerator(uuid => {
-            const field = {};
-            field[props.column] = uuid;
-            props.form.setFieldsValue(field);
-        });
-    }
-
     render() {
-        const state = this.state,
-            params = Object.assign({}, this.props)
-            delete params.formStructure;
-        return (<FormWrapper {...this.props}>
-            <ReadOnlyInput {...params}/>
+        return (<FormWrapper initialValue={idGen()} {...this.props}>
+            <ReadOnlyInput {...this.props}/>
         </FormWrapper>)
     }
 }

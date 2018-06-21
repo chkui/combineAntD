@@ -2,6 +2,7 @@ import React from 'react'
 import {Form, Button, message} from 'antd';
 import Items from '../item/items'
 import {FormProvider} from '../formContext'
+import {ItemProvider} from '../itemContext'
 import {formButtonLayoutCol} from '../../../config/form'
 import {formDataService} from '../../service/formDataService'
 
@@ -30,10 +31,10 @@ class HorizontalForm extends React.Component {
                 _this.setState({onSubmit: false})
             } else {
                 formDataService.submit(props.formStructure.id, props.formStructure.ver, values, (err, docs) => {
-                    if(err){
+                    if (err) {
                         message.error(`提交数据错误：${err}`);
                         _this.setState({onSubmit: false})
-                    }else{
+                    } else {
                         message.success('提交数据成功');
                         props.browser.back();
                         _this.setState({onSubmit: false})
@@ -46,9 +47,20 @@ class HorizontalForm extends React.Component {
     render() {
         const props = this.props;
         return (
-            <FormProvider value={props.form}>
+            <FormProvider value={{form: props.form, formStructure: props.formStructure}}>
                 <Form onSubmit={this.handleSubmit}>
-                    {FormBuilder(props.formStructure, props.form)}
+                    {props.formStructure.itemMeta.map(item => {
+                        const Component = Items[item.category][item.type].Form,
+                            inParams = {
+                                column: item.column,
+                                label: item.label,
+                                tip: item.tip,
+                                rules: item.rules
+                            };
+                        return (<ItemProvider key={item.column} value={{item:item}}>
+                            <Component {...inParams} />
+                        </ItemProvider>)
+                    })}
                     <FormItem {...formButtonLayoutCol}>
                         <Button className={cn('btn')} type="primary" htmlType="submit"
                                 loading={this.state.onSubmit}>提交</Button>
@@ -63,18 +75,3 @@ class HorizontalForm extends React.Component {
  * Form.create的作用是向子组件注入已经定义好验证和操作高阶组件
  */
 export default Form.create()(HorizontalForm);
-
-function FormBuilder(formStructure, form) {
-    const list = [];
-    for (let item of formStructure.itemMeta) {
-        const Component = Items[item.category][item.type].Form,
-            inParams = {
-                column:item.column,
-                label:item.label,
-                tip:item.tip,
-                rules:item.rules
-            }
-        list.push(<Component key={item.column}{...inParams} formStructure={formStructure} form={form}/>)
-    }
-    return list;
-}

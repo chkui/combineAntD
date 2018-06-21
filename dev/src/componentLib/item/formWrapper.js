@@ -74,12 +74,12 @@ export default class FormWrapper extends React.Component {
         const props = this.props;
         return (
             <FormConsumer>
-                {form => (<Item colon
+                {context => (<Item colon
                                 label={(<span>{props.label}{props.tip && (
                                     <Tooltip title={props.tip}>&nbsp;<Icon
                                         type="question-circle-o"/></Tooltip>)}</span>)}
                                 hasFeedback={props.hasFeedback} {...formItemLayoutCol}>
-                    {form.getFieldDecorator(props.column, this.options)(props.children)}
+                    {context.form.getFieldDecorator(props.column, this.options)(props.children)}
                     {props.loading && (
                         <Loading/>
                     )}

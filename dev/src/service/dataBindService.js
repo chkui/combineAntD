@@ -99,7 +99,7 @@ DataBindService.prototype.buildRegularMetaNew = function (formDoc) {
     formDoc[RegularItemMeta.createuser] = userService.currentUserId();
     formDoc[RegularItemMeta.modifyuser] = userService.currentUserId();
     formDoc[RegularItemMeta.createtime] = new Date().getTime();
-    formDoc[RegularItemMeta.modifytime] = formDoc[RegularItemMeta.modifytime];
+    formDoc[RegularItemMeta.modifytime] = formDoc[RegularItemMeta.createtime];
     formDoc[RegularItemMeta.op] = formDoc[RegularItemMeta.op] ? SysFlag.ENABLE : SysFlag.DISABLE;
     return formDoc;
 }

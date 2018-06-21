@@ -88,7 +88,6 @@ export const listQuery = (params, callback) => {
             formItemValueResultQuery(viewList, [], [], {}, (err, result) => {
                 callback(err, resultToList(result.rows))
             });
-            console.log(result)
         }
     })
 }
@@ -146,4 +145,8 @@ export const submitData = (params, callback) => {
     })
 
     console.log(params);
+}
+
+const AndRowValue = () =>{
+
 }

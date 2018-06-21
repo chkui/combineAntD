@@ -26,6 +26,14 @@ export const queryFormItemValue = (condition, sort, cb, tx) => {
     })
 };
 
+export const insert = (columnValue, cb, tx) => {
+    crudSupport.insertOne('B_ROW_VALUE', columnValue, cb, tx)
+}
+
+export const update = (columnValue, tx) => {
+
+}
+
 /**
  * 根据查询条件获取总数
  * @param {array} condition [{column, value, opts}] 查询字段\查询条件\查询操作:LIK|EQU，模糊匹配，精准匹配
@@ -47,7 +55,7 @@ export const getCount = (condition, cb, tx) => {
 (() => {
     getCount([], (err, count) => {
         if (!err) {
-            0 === count && crudSupport.insertBatch('B_ROW_VALUE', insertRowValue, (err, result)=>{
+            0 === count && crudSupport.insertBatch('B_ROW_VALUE', insertRowValue, (err, result) => {
                 !err && (console.log('init menu success!'))
             });
         }
